@@ -2,9 +2,8 @@
 var app = require('./app');
 
 // Setting port for web app
-// process.env.PORT lets the port be set by Heroku
-var port = 6184;
+var port = 6194;
 
-app.listen(port, function() {
-  console.log('Server started on http://localhost:' + port);
+app.listen(3000, '0,0,0,0', () => {
+  console.log('Server started on port#' + port);
 });
