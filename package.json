@@ -18,8 +18,12 @@
   },
   "homepage": "https://github.com/steaward/StudentWorks#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.16.3",
     "fs": "0.0.1-security",
+    "mysql": "^2.15.0",
+    "nev": "0.0.0",
+    "nodemailer": "^4.6.4",
     "path": "^0.12.7"
   }
 }
