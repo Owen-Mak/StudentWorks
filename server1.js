@@ -1,6 +1,7 @@
 var express=require('express');
 var nodemailer = require("nodemailer");
 var app=express();
+var auth = require('./auth');
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -14,6 +15,7 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
+app.use(auth);
 
 /*------------------Routing Started ------------------------*/
 
@@ -43,13 +45,19 @@ app.get('/send',function(req,res){
 
 app.get('/verify',function(req,res){
 console.log(req.protocol+":/"+req.get('host'));
+
 if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
     console.log("Domain is matched. Information is from Authentic email");
     if(req.query.id==rand)
     {
         console.log("email is verified");
-        res.end("<h1>Email "+mailOptions.to+" is been Successfully verified");
+        res.send("<h1>Verified</h1>")
+        setTimeout(()=>{
+            res.redirect('..');
+        },1500);
+        
+        
     }
     else
     {
