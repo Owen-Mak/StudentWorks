@@ -53,11 +53,6 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     {
         console.log("email is verified");
         res.send("<h1>Verified</h1>")
-        setTimeout(()=>{
-            res.redirect('..');
-        },1500);
-        
-        
     }
     else
     {
