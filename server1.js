@@ -66,6 +66,10 @@ else
 }
 });
 
+app.use(function(req, res){
+    res.status(404).send("Page not found");
+});
+
 /*--------------------Routing Over----------------------------*/
 
 app.listen(3000,function(){
