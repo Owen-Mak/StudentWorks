@@ -7,3 +7,6 @@ logs
 
 #Dependencies
 node_modules
+
+#ignore pacakges
+package-lock.json

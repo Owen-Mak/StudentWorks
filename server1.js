@@ -20,7 +20,7 @@ app.use(auth);
 /*------------------Routing Started ------------------------*/
 
 app.get('/',function(req,res){
-    res.sendfile('views/index1.html');
+    res.sendFile('views/index1.html');
 });
 app.get('/send',function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
@@ -66,6 +66,10 @@ else
 }
 });
 
+/* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use(express.static('public'));
+
+/* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");
 });
