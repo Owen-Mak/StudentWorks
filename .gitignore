@@ -7,3 +7,9 @@ logs
 
 #Dependencies
 node_modules
+
+#Ignore videos
+video
+
+#ignore pacakges
+package-lock.json
