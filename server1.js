@@ -2,6 +2,7 @@ var express=require('express');
 var nodemailer = require("nodemailer");
 var app=express();
 var auth = require('./auth');
+var dbconnect = require ('./db_connect');
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -20,8 +21,10 @@ app.use(auth);
 /*------------------Routing Started ------------------------*/
 
 app.get('/',function(req,res){
-    res.sendFile('views/index1.html');
+    res.sendfile('views/index1.html');
 });
+
+/* Email verification  start*/
 app.get('/send',function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
@@ -34,12 +37,29 @@ app.get('/send',function(req,res){
     console.log(mailOptions);
     smtpTransport.sendMail(mailOptions, function(error, response){
      if(error){
-            console.log(error);
+        console.log(error);
         res.end("error");
-     }else{
+     } else {
             console.log("Message sent: " + response.message);
-        res.end("sent");
-         }
+            //Create user account in database
+            //testing with sample user data   ----> will use data from front end later on when it is available
+            console.log ("Create sample user");
+            var user = {
+                firstName: 'Owen',
+                lastName: 'Mak',
+                password: 'password123',
+                email: 'omak@myseneca.ca',
+                username: 'omak',
+                userType: 'Admin',
+                program: 'CPA',             
+                registrationHashCode : "81dc9bdb52"
+            };
+            console.log ("Done Create sample user");
+            dbconnect.connect();
+            dbconnect.createUser(user);
+            dbconnect.end();
+            res.end("sent");
+    }
 });
 });
 
@@ -52,6 +72,7 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     if(req.query.id==rand)
     {
         console.log("email is verified");
+        //Update emailRegistration status in database
         res.send("<h1>Verified</h1>")
     }
     else
@@ -64,6 +85,27 @@ else
 {
     res.end("<h1>Request is from unknown source");
 }
+});   //email verification end
+
+/* Attempt to get all users   WIP - Owen*/
+app.get('/login', function(req, res){
+    dbconnect.connect();
+    console.log ('post request received');    
+    var results = dbconnect.getAllUsers(function(err,data){
+        if (err){
+            console.log ("ERROR: ", err);
+        }else{
+            console.log("result:", data);
+            /* example for traversing the query results
+            data.forEach((data) => {
+                console.log(data.firstName);
+            });
+            */
+        }
+    });
+    res.send("Successful query!");    
+    dbconnect.end();
+    console.log ("login response concluded");
 });
 
 /* Used to serve static content (images/css/javascript) in a folder called public*/
