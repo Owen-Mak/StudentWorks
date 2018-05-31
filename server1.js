@@ -17,7 +17,9 @@ var smtpTransport = nodemailer.createTransport({
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
 app.use(auth);
-
+app.use(express.static('video'));
+/* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use(express.static('public'));
 /*------------------Routing Started ------------------------*/
 
 app.get('/',function(req,res){
@@ -88,7 +90,7 @@ else
 });   //email verification end
 
 /* Attempt to get all users   WIP - Owen*/
-app.get('/login', function(req, res){
+app.get('/getAllUsers', function(req, res){
     dbconnect.connect();
     console.log ('post request received');    
     var results = dbconnect.getAllUsers(function(err,data){
@@ -96,6 +98,8 @@ app.get('/login', function(req, res){
             console.log ("ERROR: ", err);
         }else{
             console.log("result:", data);
+			res.writeHead(200, {"Content-type":"application/json"});
+			res.end(JSON.stringify(data));
             /* example for traversing the query results
             data.forEach((data) => {
                 console.log(data.firstName);
@@ -103,13 +107,11 @@ app.get('/login', function(req, res){
             */
         }
     });
-    res.send("Successful query!");    
+   // res.send("Successful query!");    
     dbconnect.end();
     console.log ("login response concluded");
 });
 
-/* Used to serve static content (images/css/javascript) in a folder called public*/
-app.use(express.static('public'));
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>StudentWorks-Register</title>
+    <meta charset="UTF-8">
+    
+	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
+
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+	
+	<div class="app">
+		<div class="container">
+			<div class="content-wrapper">
+				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()">
+                    
+                    <span style="color:#b60909" class="title"> - REGISTRATION - </span>
+                    <span class="title">
+                        STUDENT WORKS
+						<span class="txt2" >By <span style="color:#b60909" >Students</span> For <span style="color:#b60909">Students</span></span>
+					</span>
+
+					<span class="txt1" style="font-weight: bold">
+						NAME <span id="errorMsg" style="color:#D22822"></span>
+					</span> 
+
+
+					<div class="input-wrapper validate-input">
+						<input class="input" type="text" name="name" id="NAME">
+						<span class="focus-input"></span>
+					</div>
+					
+					<span class="txt1" style="font-weight: bold">
+						EMAIL <span id="errorMsg2" style="color:#D22822"></span>
+					</span>
+
+					<div class="input-wrapper validate-input">
+						<input class="input" type="email" name="email" id="EMAIL">
+						<span class="focus-input"></span>
+					</div>
+
+					<div class="container-register-form-btn">
+						<a href="complete.html" class="register-form-btn">SUBMIT</a></div>				
+				</form>
+			</div>
+		</div>
+	</div>
+	<script src="js/main.js"></script>
+
+	<div id="dropDownSelect1"></div>
+
+</body>
+</html>
