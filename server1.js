@@ -17,9 +17,10 @@ var smtpTransport = nodemailer.createTransport({
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
 app.use(auth);
-app.use(express.static('video'));
+//app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
-app.use(express.static('public'));
+//app.use(express.static('public'));
+app.use(express.static('project'));
 /*------------------Routing Started ------------------------*/
 
 app.get('/',function(req,res){
