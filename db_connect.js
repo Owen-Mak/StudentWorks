@@ -68,6 +68,19 @@ module.exports.createUser = function (user) {
     });
 };
 
+module.exports.getAllProjects = function (callback) {
+	var sql = 'SELECT * FROM PROJECTS';
+	connection.query(sql, (err, result) => {
+		if (err) {
+			console.log ("Failed query: ", sql);
+			throw err;
+		} else {
+			callback (null, result);
+			console.log ("Query success: ", sql);
+		}
+	});
+};
+
 module.exports.end = function (){
     console.log ("Disconnect!");
     connection.end();

@@ -92,7 +92,7 @@ else
 /* Attempt to get all users   WIP - Owen*/
 app.get('/getAllUsers', function(req, res){
     dbconnect.connect();
-    console.log ('post request received');    
+    console.log ('getAllUsers request received');    
     var results = dbconnect.getAllUsers(function(err,data){
         if (err){
             console.log ("ERROR: ", err);
@@ -112,6 +112,17 @@ app.get('/getAllUsers', function(req, res){
     console.log ("login response concluded");
 });
 
+app.get('/getAllProjects', function(req, res) {
+	dbconnect.connect();
+	var results = dbconnect.getAllProjects(function(err, data){
+		if (err) {
+			console.log ("ERROR: ", err);
+		} else {
+			res.writeHead(200, {"Content-type":"application/json"});
+			res.end(JSON.stringify(data));
+		}
+	});	
+});
 
 /* Catches all unhandled requests */
 app.use(function(req, res){
