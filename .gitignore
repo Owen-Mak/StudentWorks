@@ -8,8 +8,8 @@ logs
 #Dependencies
 node_modules
 
-#Ignore videos
-video
+#ignore project media content
+project
 
 #ignore pacakges
 package-lock.json
