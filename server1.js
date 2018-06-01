@@ -91,7 +91,7 @@ else
 });   //email verification end
 
 /* Attempt to get all users   WIP - Owen*/
-app.get('/getAllUsers', function(req, res){
+app.get('/api/getAllUsers', function(req, res){
     dbconnect.connect();
     console.log ('getAllUsers request received');    
     var results = dbconnect.getAllUsers(function(err,data){
@@ -113,7 +113,7 @@ app.get('/getAllUsers', function(req, res){
     console.log ("login response concluded");
 });
 
-app.get('/getAllProjects', function(req, res) {
+app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
