@@ -19,7 +19,7 @@ var rand,mailOptions,host,link;
 app.use(auth);
 //app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
-//app.use(express.static('public'));
+app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 /*------------------Routing Started ------------------------*/
 
@@ -27,6 +27,7 @@ app.use(express.static('project'));
 app.get('/',function(req,res){
     res.sendfile('views/index.html');
 });
+
 
 /* Email verification  start*/
 app.get('/send',function(req,res){
