@@ -23,8 +23,9 @@ app.use(auth);
 app.use(express.static('project'));
 /*------------------Routing Started ------------------------*/
 
+// Main Page
 app.get('/',function(req,res){
-    res.sendfile('views/index1.html');
+    res.sendfile('views/index.html');
 });
 
 /* Email verification  start*/
