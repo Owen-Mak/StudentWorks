@@ -1,11 +1,10 @@
-tion myFunction() {
+function myFunction() {
     var x, y, text, text2;
 
     x = document.getElementById("usrname").value;
     x = document.getElementById("psword").value;
 
 
-    // If x is Not a Number or less than one or greater than 10
     if (x == '') {
         text = "- This field is required";
     } else {
