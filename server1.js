@@ -16,7 +16,7 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-//app.use(auth);
+app.use(auth);
 //app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
 app.use('/js', express.static('js'));
