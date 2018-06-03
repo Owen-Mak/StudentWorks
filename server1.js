@@ -16,9 +16,10 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-app.use(auth);
+//app.use(auth);
 //app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 /*------------------Routing Started ------------------------*/
@@ -26,6 +27,10 @@ app.use(express.static('project'));
 // Main Page
 app.get('/',function(req,res){
     res.sendfile('views/index.html');
+});
+
+app.get('/js/main.js',function(req,res){
+    res.sendfile('js/main.js');
 });
 
 
