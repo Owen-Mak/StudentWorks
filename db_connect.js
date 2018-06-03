@@ -24,8 +24,7 @@ if (process.env.HOSTNAME === 'studentworks'){
 
 //connects to the database
 module.exports.connect = function(err) {
-      if (err) throw err;
-      console.log (connectInfo);
+      if (err) throw err;     
       connection = mysql.createConnection({
         host: connectInfo.host,
         user: connectInfo.user,
@@ -39,15 +38,7 @@ module.exports.connect = function(err) {
 module.exports.getAllUsers = function (callback) {
     var sql =  'SELECT * FROM USERS';
     //performs query to get all users   
-    connection.query(sql, (err, result) => {
-        if (err) {
-            throw err;
-        } else{
-            callback(null, result);
-        }
-        //console.log ("Query result:\n", result);
-        //console.log ("Accessing first element, first name:\n", result[0].firstName);               
-    }); 
+    runQuery (sql, callback);
 };
 
 /* Creates a new user into the database based on information in the 'user' parameter
@@ -58,19 +49,21 @@ module.exports.createUser = function (user) {
     console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationHashCode) \
     VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now(), '${user.registrationHashCode}')`;
-    connection.query(sql, (err, result) => {
-        if (err) {
-            console.log ("Failed to create user:", user.firstName);
-            throw err;
-        } else {
-            console.log (`${user.firstName} is added to database`);
-        }
-    });
+    runQuery(sql, callback);
 };
 
 module.exports.getAllProjects = function (callback) {
 	var sql = 'SELECT * FROM PROJECTS';
-	connection.query(sql, (err, result) => {
+    runQuery(sql, callback);
+};
+
+module.exports.getOneUser = function (username, callback){
+    var sql = `SELECT * FROM USERS WHERE userName = '${username}';`;       
+    runQuery (sql, callback);
+};
+
+function runQuery(sql, callback){
+    connection.query(sql, (err, result) => {
 		if (err) {
 			console.log ("Failed query: ", sql);
 			throw err;
@@ -79,7 +72,7 @@ module.exports.getAllProjects = function (callback) {
 			console.log ("Query success: ", sql);
 		}
 	});
-};
+}
 
 module.exports.end = function (){
     console.log ("Disconnect!");
