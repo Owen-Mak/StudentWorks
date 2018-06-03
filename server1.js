@@ -3,6 +3,7 @@ var nodemailer = require("nodemailer");
 var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
+const path = require("path");
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -16,7 +17,7 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-app.use(auth);
+//app.use(auth);
 //app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
 app.use('/js', express.static('js'));
@@ -26,11 +27,11 @@ app.use(express.static('project'));
 
 // Main Page
 app.get('/',function(req,res){
-    res.sendfile('views/index.html');
+    res.sendfile(path.join(__dirname, 'views/index.html'));
 });
 
 app.get('/js/main.js',function(req,res){
-    res.sendfile('js/main.js');
+    res.sendfile(path.join(__dirname, 'js/main.js'));
 });
 
 
@@ -121,6 +122,7 @@ app.get('/api/getAllUsers', function(req, res){
 });
 
 app.get('/api/getAllProjects', function(req, res) {
+    console.log("API request received");
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
@@ -142,3 +144,4 @@ app.use(function(req, res){
 app.listen(3000,function(){
     console.log("Express Started on Port 3000");
 });
+
