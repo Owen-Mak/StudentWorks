@@ -12,8 +12,8 @@ $(document).ready(() => {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 
@@ -74,23 +74,25 @@ function showContents() {
             $.each(jsData, (key, value) =>{
                 var title = value.title;
                 var image = value.ImageFilePath; 
-                console.log(image);
+
                 var year = value.creationDate.substring(0, 4);
                 var framework = value.framework;
                 var language = value.language;
                 var html = "";
 
+                var finalIm = '<img src="' + image + '"';
+                finalIm += ' class="img-responsive center-block" alt="icon" >';
+                console.log(finalIm);
+
                 html += "<div class='col-md-4'>";
-                html += "<div class='panel panel-default'>";
-                html += "<div class='panel-heading'>";
-                html += "<h4 class='text-centre'>" + title + "</h4></div>";
-                html += "<div class='panel-body text-center'>";
-                html += "<p class='lead'> <strong> <img src='" + image + "' alt='icon'> </strong> </p> </div>";
-                html += "<ul class='list-group list-group-flush text-center'>";
-                html += "<li class='list-group-item'> <i class='icon-ok text-danger'></i>" + language + "</li>";
-                html += "<li class='list-group-item'> <i class='icon-ok text-danger'></i>" + framework + "</li>";
-                html += "<li class='list-group-item'> <i class='icon-ok text-danger'></i>" + year + "</li>";
-                html += "</ul></div>";
+                html += "<div class='panel panel-default' style='width:360px;' >";
+                html += "   <div class='panel-heading'><h4>" + title + " ( " +year +" )</h4></div>";
+                html += "   <div class='panel-body' style='height:300px; '>" + finalIm + "</div>";
+                html += "   <div class='panel-footer'> <b>Language: </b>" + language
+                 + ", <b>Framework: </b> " + framework + "</div>"
+                html += "</div>";
+
+
 
                 count++;
 
