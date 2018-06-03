@@ -27,11 +27,15 @@ app.use(express.static('project'));
 
 // Main Page
 app.get('/',function(req,res){
-    res.sendfile(path.join(__dirname, 'views/index.html'));
+    res.status(200).sendfile(path.join(__dirname, 'views/index.html'));
 });
 
-app.get('/js/main.js',function(req,res){
-    res.sendfile(path.join(__dirname, 'js/main.js'));
+app.get('/main.js',function(req,res){
+    res.sendfile(path.join(__dirname, 'views/main/main.js'));
+});
+
+app.get('/main.css',function(req,res){
+    res.sendfile(path.join(__dirname, 'views/main/main.css'));
 });
 
 
@@ -98,10 +102,10 @@ else
 }
 });   //email verification end
 
+
 /* Attempt to get all users   WIP - Owen*/
 app.get('/api/getAllUsers', function(req, res){
-    dbconnect.connect();
-    console.log ('getAllUsers request received');    
+    dbconnect.connect(); 
     var results = dbconnect.getAllUsers(function(err,data){
         if (err){
             console.log ("ERROR: ", err);
@@ -144,4 +148,3 @@ app.use(function(req, res){
 app.listen(3000,function(){
     console.log("Express Started on Port 3000");
 });
-
