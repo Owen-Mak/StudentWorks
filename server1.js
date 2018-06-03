@@ -4,6 +4,15 @@ var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
 const path = require("path");
+
+var bodyParser = require('body-parser');
+
+//This is for parsing json POST requests in text
+// create application/json parser
+var jsonParser = bodyParser.json();
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -23,6 +32,7 @@ var rand,mailOptions,host,link;
 app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
+app.use('/js', express.static('js/main.js'));
 /*------------------Routing Started ------------------------*/
 
 // Main Page
@@ -34,6 +44,32 @@ app.get('/js/main.js',function(req,res){
     res.sendfile(path.join(__dirname, 'js/main.js'));
 });
 
+//login page
+app.get('/login', function(req, res){
+    res.sendfile('views/login/index.html');
+});
+
+//this is for handling the POST data from login webform
+app.post('/login', urlencodedParser, function(req, res){
+    dbconnect.connect();
+    if (!req.body) {
+        return res.sendStatus(400);
+    }
+    var username = req.body.username;
+    var results = dbconnect.getOneUser(username, function (err, data) {
+        if (err) { 
+            console.log (err); throw err;
+        } else {            
+            console.log("result:", data);            
+            //console.log("username: ", data[0].userName, "\tpassword: ", data[0].password);
+            //validate the data here!!
+            
+            res.writeHead(200, {"Content-type":"application/json"});
+            res.end(JSON.stringify(data));
+        }        
+    });
+    dbconnect.end();
+});
 
 /* Email verification  start*/
 app.get('/send',function(req,res){
@@ -133,6 +169,7 @@ app.get('/api/getAllProjects', function(req, res) {
 		}
 	});	
 });
+
 
 /* Catches all unhandled requests */
 app.use(function(req, res){
