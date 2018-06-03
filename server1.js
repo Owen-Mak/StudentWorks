@@ -3,6 +3,8 @@ var nodemailer = require("nodemailer");
 var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
+const path = require("path");
+
 var bodyParser = require('body-parser');
 
 //This is for parsing json POST requests in text
@@ -24,9 +26,10 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-app.use(auth);
+//app.use(auth);
 //app.use(express.static('video'));
 /* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
@@ -34,7 +37,11 @@ app.use('/js', express.static('js/main.js'));
 
 // Main Page
 app.get('/',function(req,res){
-    res.sendfile('views/index.html');
+    res.sendfile(path.join(__dirname, 'views/index.html'));
+});
+
+app.get('/js/main.js',function(req,res){
+    res.sendfile(path.join(__dirname, 'js/main.js'));
 });
 
 //login page
@@ -151,6 +158,7 @@ app.get('/api/getAllUsers', function(req, res){
 });
 
 app.get('/api/getAllProjects', function(req, res) {
+    console.log("API request received");
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
@@ -173,3 +181,4 @@ app.use(function(req, res){
 app.listen(3000,function(){
     console.log("Express Started on Port 3000");
 });
+
