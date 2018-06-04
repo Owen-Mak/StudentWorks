@@ -53,6 +53,11 @@ app.get('/login', function(req, res){
     res.sendfile('views/login/index.html');
 });
 
+//Registration page
+app.get('/registration', function(req, res){
+    res.sendfile('views/registration/index.html');
+});
+
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){
     dbconnect.connect();

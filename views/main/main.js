@@ -12,8 +12,8 @@ $(document).ready(() => {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 
@@ -26,8 +26,6 @@ function showContents() {
         console.log("Ready state is: 4, status is: " + httpRequest.status);
         if (httpRequest.status === 200) {
             var jsData = JSON.parse(httpRequest.responseText);
-            //console.log(jsData);
-            // BUILD index.html
 
             var unqArr = [];
             var html = "";
@@ -68,7 +66,7 @@ function showContents() {
             $("#yearList").append(html);
 
 
-            // BODY ------------------------
+            // BODY TILES ------------------------
             var projectCount = Object.keys(jsData).length; // Assuming 6 or less at the moment
             var count = 1;
             $.each(jsData, (key, value) =>{
@@ -87,17 +85,13 @@ function showContents() {
                 html += "<div class='col-md-4'>";
                 html += "<div class='panel panel-default' style='width:360px;' >";
                 html += "   <div class='panel-heading'><h4>" + title + " ( " +year +" )</h4></div>";
-                html += "   <div class='panel-body' style='height:300px; '>" + finalIm + "</div>";
+                html += "   <div class='panel-body' style='height:270px; '>" + finalIm + "</div>";
                 html += "   <div class='panel-footer'> <b>Language: </b>" + language
                  + ", <b>Framework: </b> " + framework + "</div>"
                 html += "</div>";
 
-
-
                 count++;
-
                 $("#mainBody").append(html);
-
             });
             //------------------------------
         }
