@@ -88,3 +88,26 @@ body {
     text-shadow: 0 -1px 0 rgba(31, 31, 31, 0.29);
     -webkit-font-smoothing: antialiased;
 } 
+
+#prjVideo {
+    max-width: 70%;
+    max-height: 400px;
+    padding-left: 30px;
+    margin-top:30px;
+    margin: auto;
+}
+
+#videoCol {
+    border-right:solid 2px;
+    box-shadow: 5px 0px 0px 0px #888888;
+}
+
+#infoCol {
+    padding-left: 60px;
+    padding-top: 60px;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+#prjTitle {
+    font-family: 'Raleway', sans-serif;
+}
