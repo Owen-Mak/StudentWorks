@@ -174,6 +174,20 @@ app.get('/api/getAllProjects', function(req, res) {
 	});	
 });
 
+app.get('/api/getOneProject', function(req, res){
+    var projectID = req.query.id;
+    if (projectID != null){
+        dbconnect.connect();
+        var results = dbconnect.getOneProject(projectID, function(err,data){
+            if (err) {
+                console.log ("ERROR: ", err);
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+    }
+});
 
 /* Catches all unhandled requests */
 app.use(function(req, res){
