@@ -186,6 +186,8 @@ app.get('/api/getOneProject', function(req, res){
                 res.end(JSON.stringify(data));
             }
         });
+    } else { 
+        res.send('No project id provided');
     }
 });
 
