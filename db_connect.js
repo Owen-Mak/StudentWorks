@@ -32,7 +32,7 @@ module.exports.connect = function(err) {
         database: connectInfo.database,
         port : connectInfo.port
     });
-      console.log("Connected!");  
+      //console.log("Connected!");  
 };
 
 module.exports.getAllUsers = function (callback) {
@@ -74,7 +74,7 @@ function runQuery(sql, callback){
 			throw err;
 		} else {
 			callback (null, result);
-			console.log ("Query success: ", sql);
+			//console.log ("Query success: ", sql);
 		}
 	});
 }

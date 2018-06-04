@@ -12,15 +12,11 @@ body {
     text-align: center;
 }
 
-@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);
-[am-LatoSans] {
-    font-family: 'Lato', sans-serif;
-}
 
 [logo] {
     max-height: 90px;
     max-width: 290px;
-    margin: 12px 11px;
+    margin: 10px 11px 5px 8px;
 }
  
 [moto] {
@@ -28,13 +24,13 @@ body {
     margin-right: 30px;
     color: #333;
     vertical-align: middle;
-    line-height: 35px;
-    font-size: 19px;
+    line-height: 25px;
+    font-size: 22px;
     padding-right: 8px;
 }
 
 .prfIcon{
-    font-size: 28px;
+    font-size: 26px;
     float: right; 
     padding-top: 11px;
     color: rgb(235, 235, 235);

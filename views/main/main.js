@@ -3,27 +3,20 @@ var httpRequest;
 // READY function that gets called when HTML finishes parsing
 // console.log are used for deguggin and can be seen from BROWSER console not server.
 $(document).ready(() => {
-    console.log("main.js Page loaded");
-
-
-    // Old format
     httpRequest = new XMLHttpRequest();
     if (!httpRequest)
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
-
-    console.log("end of main.js");
 });
 
 
 function showContents() {
     if (httpRequest.readyState === 4) {
-        console.log("Ready state is: 4, status is: " + httpRequest.status);
         if (httpRequest.status === 200) {
             var jsData = JSON.parse(httpRequest.responseText);
 
@@ -82,8 +75,9 @@ function showContents() {
                 var image = value.ImageFilePath;
                 var language = value.language;
                 var framework = value.framework;
+                var id = value.projectID;
 
-                html += renderTile(title, year, image, language, framework);
+                html += renderTile(title, year, image, language, framework, id);
 
                 $("#mainBody").append(html);
             });
@@ -91,10 +85,12 @@ function showContents() {
         }
     }
 
-    function renderTile(title, year, icon, language, framework) {
-        var imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 230px; margin:auto;" alt="icon" >';
-        var titleShow = (title == "empty") ? "Future Project" : title + " [ <b>" + year + "</b> ] ";
+  
+    function renderTile(title, year, icon, language, framework, id) {
+        var imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
+        var titleShow = (title == "empty") ? "Future Project" : title + " [ <strong>" + year + "</strong> ] ";
         var footer;
+        var link;
 
         if (language || framework) {
             var languageShow = (language) ? "<b>Language: </b>" + language : "";
@@ -108,7 +104,7 @@ function showContents() {
         html += "<div class='col-md-4'>";
         html += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
         html += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-        html += "       <a href='#' class ='tileLink' style='text-decoration: none;'>";
+        html += "       <a href='#' id='prjLink"+id+"' class ='tileLink' style='text-decoration: none;' onclick='displayProject("+id+")'>";
         html += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
         html += "       </a>";
         html += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -116,8 +112,13 @@ function showContents() {
 
         return html;
     }
+}
 
-    function renderTileEmpty() {
 
-    }
+
+function displayProject (id){
+    document.getElementById('prjLink'+id).onclick = ()=>{
+        html = "id that was passed in is: " + id;
+        $("#mainBody").html(html);
+    };
 }

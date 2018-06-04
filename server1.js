@@ -167,7 +167,6 @@ app.get('/api/getAllUsers', function(req, res){
 });
 
 app.get('/api/getAllProjects', function(req, res) {
-    console.log("API request received");
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
