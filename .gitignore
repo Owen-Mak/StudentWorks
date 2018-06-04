@@ -10,6 +10,3 @@ node_modules
 
 #ignore project media content
 project
-
-#ignore pacakges
-package-lock.json
