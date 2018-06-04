@@ -13,7 +13,7 @@
 	<div class="app">
 		<div class="container">
 			<div class="content-wrapper">
-				<form id="loginForm" class="login-form validate-form flex-sb" onsubmit="true" action="/login" method="POST" enctype="application/x-www-form-urlencoded">
+				<form class="login-form validate-form flex-sb" method="POST" action="#" name="login" onsubmit="return validateForm()">
 						<span style="color:#b60909" class="title"> - LOGIN - </span>
 					<span class="title">
 						STUDENT WORKS 
@@ -26,8 +26,8 @@
 					</span> 
 
 
-					<div class="input-wrapper validate-input">
-						<input class="input" type="text" name="username" id="usrname">
+					<div class="input-wrapper">
+						<input class="input" type="text" name="username1" id="username1" onchange="validUser()">
 						<span class="focus-input"></span>
 					</div>
 					
@@ -35,8 +35,8 @@
 						PASSWORD <span id="errorMsg2" style="color:#D22822"></span>
 					</span>
 
-					<div class="input-wrapper validate-input" data-validate = "Password is required">
-						<input class="input" type="password" name="pass" id="psword">
+					<div class="input-wrapper">
+						<input class="input" type="password" name="pass" id="pass" onchange="validPass()">
 						<span class="focus-input"></span>
 					</div>
 					<div>
@@ -46,17 +46,17 @@
 					</div>
 
 					<div class="container-login-form-btn">
-						<button type="button" onclick="myFunction()" class="login-form-btn">
+						<button type="submit" onclick="validateForm()" class="login-form-btn">
 							Login
 						</button>
 					</div>
-					<span class="txt2">Need an account? <a href="../Register/index.html" class="txt3">Register</a></span>
+					<span class="txt2">Need an account? <a href="../Register/register.html" class="txt3">Register</a></span>
 					<div class="container-login-form-btn">
 				</form>
 			</div>
 		</div>
 	</div>
-	<script src="js/main.js"></script>
+	<script src="js/login.js"></script>
 
 	<div id="dropDownSelect1"></div>
 
