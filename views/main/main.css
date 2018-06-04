@@ -1,11 +1,25 @@
+body {
+    margin-top:15px;
+}
+
+.mainFooter {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: red;
+    color: white;
+    text-align: center;
+}
+
 @import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);
 [am-LatoSans] {
     font-family: 'Lato', sans-serif;
 }
 
 [logo] {
-    max-height: 70px;
-    max-width: 210px;
+    max-height: 90px;
+    max-width: 290px;
     margin: 12px 11px;
 }
  
@@ -19,14 +33,22 @@
     padding-right: 8px;
 }
 
-.glyphicon {
-    font-size: 25px;
+.prfIcon{
+    font-size: 28px;
     float: right; 
-    padding-top: 13px;
+    padding-top: 11px;
     color: rgb(235, 235, 235);
 }
 
-/* FANCY 3D LOOK
+.srchIcon {
+    font-size: 17px;
+    padding-top: 17px;
+    padding-left: 25px;
+    color: rgb(153, 38, 38);
+}
+
+
+/* FANCY 3D LOOK */
 .topper {
     display: flex;
     justify-content: space-between;
@@ -37,7 +59,7 @@
     background-image: linear-gradient(#9f9f9f, #535353 3%, #1f1f1f 17%, #212121 49%, #191919 89%, #000000 100%);
     border-top: 1px inset rgba(255, 255, 255, 0.1);
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
+    border-radius: 4px 4px 0px 0px;
     margin-top: 10px;
 
 }
@@ -69,4 +91,4 @@
     color: #fff !important;
     text-shadow: 0 -1px 0 rgba(31, 31, 31, 0.29);
     -webkit-font-smoothing: antialiased;
-} */
+} 
