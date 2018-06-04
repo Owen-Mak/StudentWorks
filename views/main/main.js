@@ -12,8 +12,8 @@ $(document).ready(() => {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 
@@ -92,7 +92,7 @@ function showContents() {
     }
 
     function renderTile(title, year, icon, language, framework) {
-        var imageShow = '<img src="' + icon + '" class="img-responsive center-block" alt="icon" >';
+        var imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 230px; margin:auto;" alt="icon" >';
         var titleShow = (title == "empty") ? "Future Project" : title + " [ <b>" + year + "</b> ] ";
         var footer;
 
@@ -104,12 +104,13 @@ function showContents() {
             footer = "<div style='text-align: center;'><a href='#' >Contribute</a></div>";
         }
 
-
         html = "";
         html += "<div class='col-md-4'>";
-        html += "<div class='panel panel-default' style='width:360px;' >";
+        html += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
         html += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-        html += "   <div class='panel-body' style='height:270px; '>" + imageShow + "</div>";
+        html += "       <a href='#' class ='tileLink' style='text-decoration: none;'>";
+        html += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
+        html += "       </a>";
         html += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
         html += "</div>";
 

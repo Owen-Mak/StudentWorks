@@ -6,16 +6,8 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="main.js"></script>
-
-    <style>
-        body {
-            margin-top: 20px;
-            padding: 20px
-        }
-    </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="main.css">
-
 </head>
 
 <body>
@@ -61,7 +53,10 @@
                             </li>
                         </ul>
                         <a href="#">
-                            <span class="glyphicon glyphicon-cog" data-toggle="modal" data-target="#myModal"></span>
+                                <span class="glyphicon glyphicon-search srchIcon"></span>
+                            </a>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-cog prfIcon"  data-toggle="modal" data-target="#myModal"></span>
                         </a>
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document" style="width:300px;">
@@ -75,9 +70,15 @@
                                     </div>
                                     <div class="modal-body">
                                         <ul>
-                                            <li><a href="login">Login</a></li>
-                                            <li><a href="registration">Register</a></li>
-                                            <li><a href="#">Forgot password</a></li>
+                                            <li>
+                                                <a href="login">Login</a>
+                                            </li>
+                                            <li>
+                                                <a href="registration">Register</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Forgot password</a>
+                                            </li>
                                         </ul>
 
                                     </div>
@@ -95,6 +96,12 @@
     <!-- BODY-->
     <div class="container">
         <div class="row" id="mainBody">
+        </div>
+    </div>
+    <hr class="clearfix w-100 d-md-none pb-3">
+    <div class="container col-md-12">
+        <div class="row" id="mainFooter">
+            <p></p>
         </div>
     </div>
 </body>
