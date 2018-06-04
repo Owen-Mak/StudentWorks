@@ -1,13 +1,15 @@
-use sw;
+use studentworks;
 
 INSERT INTO PROJECTS (title, description, creationDate, language, framework, courses, category, ImageFilePath, VideoUrl)
 VALUES 
-    ('Conteract', 'This is a webapp to connect employees with potential employers.', now(), 'Javascript', 'jQuery', 'PRJ666', NULL,'project/1/img/conteractThumbnail.jpg', 'project/1/video/Conteract.mp4'),
-    ('The Last Transmission', 'This is a game within a 2D world with point and click shooting elements. The camera is situated in a birds eye view, and the objective of the game is to find jerry cans.', now(), 'Java', 'Reactjs', 'PRJ666', NULL, 'project/2/img/solitaryThumbnail.jpg', 'project/2/video/TheLastTransmission.mp4'),
-    ('Solitary', 'This is a 2D platformer with various puzzles. The object of the game is to reach the end point of the 2D stage.', now(), 'C++', 'Unity', 'PRJ666', NULL,'project/3/img/solitaryThumbnail.jpg', 'project/3/video/'),
-    ('Web Form', 'This is my form I made in web class', now(), 'Javascript', 'jQuery', 'WEB322', NULL,'htuffhfggfre', 'vrg4gfrerfe'),
-    ('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'Java', 'Chai', 'JAC444', 'android', 'htuuuifhuifre', 'vhvfiuviurv'),
-    ('Chess App', 'This is a chess app with a very smart AI', now(), 'C#', 'EnitityFramework', 'JAC444', 'linux', 'project/6/img/someThumbnail.jpg', 'vhvfiuviurv');
+    ('Conteract', 'This is a webapp to connect employees with potential employers.', now(), 'Javascript', 'jQuery', 'PRJ666', NULL,'1/img/conteractThumbnail.jpg', '1/video/Conteract.mp4'),
+    ('The Last Transmission', 'This is a game within a 2D world with point and click shooting elements. The camera is situated in a birds eye view, and the objective of the game is to find jerry cans.', now(), 'Java', 'Reactjs', 'PRJ666', NULL, '2/img/TheLastTransmissionThumbnail.jpg', '2/video/TheLastTransmission.mp4'),
+    ('Solitary', 'This is a 2D platformer with various puzzles. The object of the game is to reach the end point of the 2D stage.', now(), 'C++', 'Unity', 'PRJ666', NULL, '3/img/solitaryThumbnail.jpg', '3/video/Solitary_-new.mp4'),
+    ('Kitchen Modeller', 'An app to accurrately design the kitchen', now(), 'Visual Basic', NULL, NULL, 'utility', '4/img/kitchen.png', '4/video/Kitchen.mp4'),
+    ('Arcanoid Game', 'A version of the popular arcanoid game from the 80s', now(), 'C++', NULL, NULL, 'game','5/img/arcanoid1.png', '5/video/Arcanoid.mp4'),
+    ('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'Java', 'Chai', 'JAC444', 'android', 'htuuuifhuifre', 'vhvfiuviurv');
+
+/* ('Chess App', 'This is a chess app with a very smart AI', now(), 'C#', 'EnitityFramework', 'JAC444', 'linux', 'project/6/img/someThumbnail.jpg', 'vhvfiuviurv'); */
     
 
 

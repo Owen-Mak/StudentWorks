@@ -62,6 +62,11 @@ module.exports.getOneUser = function (username, callback){
     runQuery (sql, callback);
 };
 
+module.exports.getOneProject = function (projectID, callback){
+    var sql = `SELECT * FROM PROJECTS WHERE projectID = ${projectID};`;       
+    runQuery (sql, callback);
+};
+
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
 		if (err) {
