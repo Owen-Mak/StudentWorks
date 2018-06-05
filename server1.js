@@ -49,6 +49,11 @@ app.get('/login', function(req, res){
     res.sendfile('views/login/index.html');
 });
 
+//registration page
+app.get('/register',function(req,res){
+    res.sendfile(path.join(__dirname, 'views/registration/index.html'));
+});
+
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){
     dbconnect.connect();
@@ -73,11 +78,12 @@ app.post('/login', urlencodedParser, function(req, res){
 
 /* Email verification  start*/
 app.get('/send',function(req,res){
+    console.log("made it to send");
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
     mailOptions={
-        to : req.query.to,
+        to : req.query.email,
         subject : "Please confirm your Email account",
         html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
     }
@@ -103,9 +109,12 @@ app.get('/send',function(req,res){
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
+            console.log("before create");
             dbconnect.createUser(user);
+            console.log("after create");
             dbconnect.end();
             res.end("sent");
+
     }
 });
 });
@@ -120,6 +129,7 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     {
         console.log("email is verified");
         //Update emailRegistration status in database
+        //send to complete.html 
         res.send("<h1>Verified</h1>")
     }
     else

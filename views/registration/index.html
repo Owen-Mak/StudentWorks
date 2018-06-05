@@ -3,9 +3,27 @@
 <head>
 	<title>StudentWorks-Register</title>
     <meta charset="UTF-8">
-    
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- Jquery to send an email -->
+	<script>
+		$(document).ready(function(){
+			var from,to,subject,text;
+			$("#send_email").click(function(){    
+				to=$("#to").val();     
+				$("#message").text("Sending E-mail...Please wait");
+				$.get("http://localhost:3000/send",{to:to},function(data){
+				console.log(to);
+				if(data=="sent")
+				{
+					$("#message").empty().html("<p>Email is been sent at "+to+" . Please check inbox !</p>");
+				}
+		
+		});
+			});
+		});
+		</script>
+		<script src="js/main1.js"></script>
 	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
-
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
@@ -13,7 +31,7 @@
 	<div class="app">
 		<div class="container">
 			<div class="content-wrapper">
-				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()">
+				<form class="register-form validate-form flex-sb" onsubmit="return true" action="/send">
                     
                     <span style="color:#b60909" class="title"> - REGISTRATION - </span>
                     <span class="title">
@@ -36,17 +54,18 @@
 					</span>
 
 					<div class="input-wrapper validate-input">
-						<input class="input" type="email" name="email" id="EMAIL">
+						<input class="input" type="text" name="email" id="to">
 						<span class="focus-input"></span>
 					</div>
 
 					<div class="container-register-form-btn">
-						<a href="complete.html" class="register-form-btn">SUBMIT</a></div>				
+						<button id="send_email">Submit</button><br>
+						<span id="message"></span>
+					</div>
 				</form>
 			</div>
 		</div>
 	</div>
-	<script src="js/main.js"></script>
 
 	<div id="dropDownSelect1"></div>
 
