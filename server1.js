@@ -67,6 +67,11 @@ app.get('/complete',function(req,res){
     res.sendfile(path.join(__dirname, 'views/registration/complete.html'));
 });
 
+//registration page
+app.get('/register',function(req,res){
+    res.sendfile(path.join(__dirname, 'views/registration/index.html'));
+});
+
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){
     dbconnect.connect();
