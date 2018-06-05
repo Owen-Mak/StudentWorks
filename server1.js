@@ -63,6 +63,10 @@ app.get('/register',function(req,res){
     res.sendfile(path.join(__dirname, 'views/registration/index.html'));
 });
 
+app.get('/complete',function(req,res){
+    res.sendfile(path.join(__dirname, 'views/registration/complete.html'));
+});
+
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){
     dbconnect.connect();
@@ -134,7 +138,8 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     {
         console.log("email is verified");
         //Update emailRegistration status in database
-        res.status(200).sendfile(path.join(__dirname, 'views/registration/complete.html'));
+        //res.status(200).sendfile(path.join(__dirname, 'views/registration/complete.html'));
+        res.status(200).redirect('/complete');
     }
     else
     {
