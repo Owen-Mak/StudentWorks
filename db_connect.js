@@ -48,8 +48,16 @@ module.exports.getAllUsers = function (callback) {
 module.exports.createUser = function (user) {
     console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationHashCode) \
-    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now(), '${user.registrationHashCode}')`;
-    runQuery(sql, callback);
+    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now())`;
+    //runQuery(sql, callback);
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log ("Failed to create user:", user.firstName);
+            throw err;
+        } else {
+            console.log (`${user.firstName} is added to database`);
+        }
+    });
 };
 
 module.exports.getAllProjects = function (callback) {
