@@ -9,7 +9,7 @@ $(document).ready(() => {
 
     httpRequest.onreadystatechange = showContents;
     httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 });

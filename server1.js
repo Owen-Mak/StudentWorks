@@ -26,14 +26,12 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-app.use(auth);
-//app.use(express.static('video'));
-/* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use(auth); // For authenticating, please do not comment out until the project is done.
+app.use(express.static('views')); 
 app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
-
 /*------------------Routing Started ------------------------*/
 
 // Main Page
