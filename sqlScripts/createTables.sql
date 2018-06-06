@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 /*
 ALTER TABLE USERS
     drop FOREIGN KEY USERS_ibfk_1;
@@ -20,7 +20,6 @@ CREATE TABLE USERS (
     program     VARCHAR(25) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
-    registrationHashcode CHAR(65) UNIQUE,
     PRIMARY KEY (userID))
 engine=innodb;
 
@@ -48,7 +47,7 @@ CREATE TABLE COMMENTS (
 engine=innodb;
 
 CREATE TABLE BRIDGE_USERS_PROJECTS (
-    id INT(11) PRIMARY KEY AUTO_INCREMENT,
+    bridgeId INT(11) PRIMARY KEY AUTO_INCREMENT,
     userID INT(11) NOT NULL,
     projectID INT(11),
     FOREIGN KEY (userID) REFERENCES USERS(userID) ON DELETE CASCADE,
