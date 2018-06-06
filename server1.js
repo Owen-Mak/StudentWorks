@@ -26,9 +26,8 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
-//app.use(auth);
-//app.use(express.static('video'));
-/* Used to serve static content (images/css/javascript) in a folder called public*/
+app.use(auth); // For authenticating, please do not comment out until the project is done.
+app.use(express.static('views')); 
 app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
@@ -37,25 +36,39 @@ app.use('/js', express.static('js/main.js'));
 
 // Main Page
 app.get('/',function(req,res){
-    res.status(200).sendfile(path.join(__dirname, 'views/index.html'));
+    res.status(200).sendFile(path.join(__dirname, 'views/index.html'));
 });
 
 app.get('/main.js',function(req,res){
-    res.sendfile(path.join(__dirname, 'views/main/main.js'));
+    res.sendFile(path.join(__dirname, 'views/main/main.js'));
 });
 
 app.get('/main.css',function(req,res){
-    res.sendfile(path.join(__dirname, 'views/main/main.css'));
+    res.sendFile(path.join(__dirname, 'views/main/main.css'));
 });
 
 //login page
 app.get('/login', function(req, res){
-    res.sendfile('views/login/login.html');
+    res.sendFile(path.join(__dirname, 'views/login/login.html'));
 });
 
 //Registration page
 app.get('/register', function(req, res){
-    res.sendfile('views/registration/register.html');
+    res.sendFile(path.join(__dirname, 'views/registration/register.html'));
+});
+
+//registration page
+app.get('/register',function(req,res){
+    res.sendFile(path.join(__dirname, '/views/registration/index.html'));
+});
+
+app.get('/complete',function(req,res){
+    res.sendFile(path.join(__dirname, 'views/registration/complete.html'));
+});
+
+//registration page
+app.get('/register',function(req,res){
+    res.sendFile(path.join(__dirname, 'views/registration/index.html'));
 });
 
 //this is for handling the POST data from login webform
@@ -82,6 +95,7 @@ app.post('/login', urlencodedParser, function(req, res){
 
 /* Email verification  start*/
 app.get('/send',function(req,res){
+    console.log("made it to send");
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
@@ -128,7 +142,8 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     {
         console.log("email is verified");
         //Update emailRegistration status in database
-        res.status(200).sendfile(path.join(__dirname, 'views/registration/complete.html'));
+        //res.status(200).sendfile(path.join(__dirname, 'views/registration/complete.html'));
+        res.status(200).redirect('/complete');
     }
     else
     {
