@@ -59,7 +59,7 @@ app.get('/register', function(req, res){
 
 //registration page
 app.get('/register',function(req,res){
-    res.sendFile(path.join(__dirname, '/views/registration/index.html'));
+    res.sendFile(path.join(__dirname, '/views/registration/register.html'));
 });
 
 app.get('/complete',function(req,res){
@@ -199,16 +199,16 @@ app.get('/api/getOneProject', function(req, res){
         var results = dbconnect.getOneProject(projectID, function(err,data){
             if (err) {
                 console.log ("ERROR: ", err);
-            } else {
+            } else if (data){
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
-        });
-    } else { 
-        res.send('No project id provided');
-    }
-});
-
+             else { 
+                res.send('No project id provided');
+             }
+            });
+        }
+    });
 /* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");
