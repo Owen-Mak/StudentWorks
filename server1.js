@@ -57,19 +57,10 @@ app.get('/register', function(req, res){
     res.sendFile(path.join(__dirname, 'views/registration/register.html'));
 });
 
-//registration page
-app.get('/register',function(req,res){
-    res.sendFile(path.join(__dirname, '/views/registration/index.html'));
-});
-
 app.get('/complete',function(req,res){
     res.sendFile(path.join(__dirname, 'views/registration/complete.html'));
 });
 
-//registration page
-app.get('/register',function(req,res){
-    res.sendFile(path.join(__dirname, 'views/registration/index.html'));
-});
 
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){
@@ -199,16 +190,25 @@ app.get('/api/getOneProject', function(req, res){
         var results = dbconnect.getOneProject(projectID, function(err,data){
             if (err) {
                 console.log ("ERROR: ", err);
-            } else {
+            } else if (data){
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
+<<<<<<< HEAD
+             else { 
+                res.send('No project id provided');
+             }
+            });
+        }
+    });
+=======
         });
     } else { 
         res.send('Invalid project id provided');
     }
 });
 
+>>>>>>> 24d54c5e3be6011fc98104dd99200dc63a008a09
 /* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");
