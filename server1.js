@@ -194,7 +194,7 @@ app.get('/api/getAllProjects', function(req, res) {
 
 app.get('/api/getOneProject', function(req, res){
     var projectID = req.query.id;
-    if (projectID != null){
+    if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
             if (err) {
@@ -205,7 +205,7 @@ app.get('/api/getOneProject', function(req, res){
             }
         });
     } else { 
-        res.send('No project id provided');
+        res.send('Invalid project id provided');
     }
 });
 
