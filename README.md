@@ -24,6 +24,7 @@ Running the command: npm install --save , will install and save all the dependen
 
 
 In order to start the server, we have chosen a Process Manager script called Forever. 
+**In order to run Forever, you must be within the StudentWorks directory**
 To start the server: forever start server1.js
 To stop the server: forever stop server1.js
 To kill the server: 
