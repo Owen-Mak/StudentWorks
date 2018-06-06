@@ -31,7 +31,7 @@ To kill the server:
   Forever list will show you two PID's. The PID of the script, as well as the PID of the node process. 
   Run the command kill -9 [PID of the server] [PID of the node process] to end the instance of the server. 
  
- 
+After running the Forever script, you can view the website by going to your localhost:3000 in the browser. It is assumed that port 3000 is a free port on the remote computer. If it is not, the port can be changed within the server1.js file. 
 
 
 
