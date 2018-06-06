@@ -52,6 +52,7 @@ app.get('/login', function(req, res){
     res.sendFile(path.join(__dirname, 'views/login/login.html'));
 });
 
+
 //Registration page
 app.get('/register', function(req, res){
     res.sendFile(path.join(__dirname, 'views/registration/register.html'));
@@ -91,7 +92,7 @@ app.post('/login', urlencodedParser, function(req, res){
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
-                    res.send(`User ${username} identity confirmed, logging in`);                    
+                    res.send(`User ${username} identity confirmed, logging in`);          
                 } else {                   
                     res.send('Login failed.');
                 }
