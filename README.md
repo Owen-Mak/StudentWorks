@@ -23,6 +23,14 @@ The quickest way to install these packages is through the included package-lock.
 Running the command: npm install --save , will install and save all the dependencies onto the remote computer. 
 
 
+There are two ways to run the server.
+
+The easiest way, is to use the included scripts, found under ~/scripts.
+The script ./startNode will start the server.
+The script ./killNode will kill any node processes, and thus shut down the server.
+
+The other way to run the server is to manually run it from multiple commands:
+
 In order to start the server, we have chosen a Process Manager script called Forever. 
 **In order to run Forever, you must be within the StudentWorks directory**
 To start the server: forever start server1.js
@@ -35,6 +43,8 @@ To kill the server:
 After running the Forever script, you can view the website by going to your localhost:3000 in the browser. It is assumed that port 3000 is a free port on the remote computer. If it is not, the port can be changed within the server1.js file. 
 
 
+
+<------- Installation Over-------->
 
 
 
