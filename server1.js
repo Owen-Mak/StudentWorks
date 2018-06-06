@@ -77,17 +77,27 @@ app.post('/login', urlencodedParser, function(req, res){
     if (!req.body) {
         return res.sendStatus(400);
     }
-    var username = req.body.username;
+    var username = req.body.username1;
+    console.log(req.body.username1);
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
             console.log (err); throw err;
-        } else {            
-            console.log("result:", data);            
-            //console.log("username: ", data[0].userName, "\tpassword: ", data[0].password);
+        } else {                        
             //validate the data here!!
-            
-            res.writeHead(200, {"Content-type":"application/json"});
-            res.end(JSON.stringify(data));
+            var jsonResult = JSON.parse(JSON.stringify(data));
+            console.log("result:", jsonResult[0]);
+            if (jsonResult.length < 1){                
+                res.send(`User ${username} does not exist`);
+            } else {
+                if (jsonResult[0].password === req.body.pass) {
+                    //set your session information here
+                    res.send(`User ${username} identity confirmed, logging in`);                    
+                } else {                   
+                    res.send('Login failed.');
+                }
+            }
+            //res.writeHead(200, {"Content-type":"application/json"});
+            //res.end(JSON.stringify(data));
         }        
     });
     dbconnect.end();
