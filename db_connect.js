@@ -5,7 +5,7 @@ var connectInfo = {
     host : null,
     user : null,
     password : null,
-    database : "studentworks",
+    database : "sw",
     port : null
 };
 
@@ -32,7 +32,7 @@ module.exports.connect = function(err) {
         database: connectInfo.database,
         port : connectInfo.port
     });
-      //console.log("Connected!");  
+      console.log("Connected!");  
 };
 
 module.exports.getAllUsers = function (callback) {
