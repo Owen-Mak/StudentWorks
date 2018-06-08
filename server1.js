@@ -185,7 +185,8 @@ app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
-			console.log ("ERROR: ", err);
+            console.log ("ERROR: ", err);
+            throw err;			
 		} else {
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
@@ -198,21 +199,32 @@ app.get('/api/getOneProject', function(req, res){
     if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
-            if (err) {
+            if (err) {                
                 console.log ("ERROR: ", err);
+                throw err;
             } else if (data){
+                var users = new Array();
+                if (data[0] && data[0].user){
+                    var sqlUsers = JSON.parse(data[0].user);     
+                    for (var i = 0; i < sqlUsers.length; i++){
+                        var user = {firstName: sqlUsers[i].firstName, 
+                            lastName:  sqlUsers[i].lastName, 
+                            userName: sqlUsers[i].userName};
+                        console.log (i, user);
+                        users.push(user);
+                    }                                                
+                }
+                console.log(data);
+                delete data[0].user;
+                data[0]['users'] = users;
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
-           else { 
-                res.send('No project id provided');
-             }
     	})
     } else { 
         res.send('Invalid project id provided');
     }
 	});	
-
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

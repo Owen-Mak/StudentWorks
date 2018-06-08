@@ -71,14 +71,13 @@ module.exports.getOneUser = function (username, callback){
 };
 
 module.exports.getOneProject = function (projectID, callback){
-    var sql =   `SELECT proj.*, u.* 
-                FROM PROJECTS proj
-                    JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
-                    JOIN USERS u on b.userID = u.userID
-                WHERE proj.ProjectID = ${projectID};`      
+    var sql =   `SELECT proj.*, JSON_ARRAYAGG(JSON_OBJECT('firstName', u.firstName, 'lastName', u.lastName, 'userName',u.userName)) AS user
+    FROM PROJECTS proj
+        JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
+        JOIN USERS u on b.userID = u.userID
+    WHERE proj.ProjectID = ${projectID};`      
     runQuery (sql, callback);
 };
-
 
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
