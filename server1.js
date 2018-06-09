@@ -68,17 +68,27 @@ app.post('/login', urlencodedParser, function(req, res){
     if (!req.body) {
         return res.sendStatus(400);
     }
-    var username = req.body.username;
+    var username = req.body.username1;
+    console.log(req.body.username1);
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
             console.log (err); throw err;
-        } else {            
-            console.log("result:", data);            
-            //console.log("username: ", data[0].userName, "\tpassword: ", data[0].password);
+        } else {                        
             //validate the data here!!
-            
-            res.writeHead(200, {"Content-type":"application/json"});
-            res.end(JSON.stringify(data));
+            var jsonResult = JSON.parse(JSON.stringify(data));
+            console.log("result:", jsonResult[0]);
+            if (jsonResult.length < 1){                
+                res.send(`User ${username} does not exist`);
+            } else {
+                if (jsonResult[0].password === req.body.pass) {
+                    //set your session information here
+                    res.send(`User ${username} identity confirmed, logging in`);                    
+                } else {                   
+                    res.send('Login failed.');
+                }
+            }
+            //res.writeHead(200, {"Content-type":"application/json"});
+            //res.end(JSON.stringify(data));
         }        
     });
     dbconnect.end();
@@ -175,7 +185,8 @@ app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
-			console.log ("ERROR: ", err);
+            console.log ("ERROR: ", err);
+            throw err;			
 		} else {
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
@@ -188,21 +199,32 @@ app.get('/api/getOneProject', function(req, res){
     if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
-            if (err) {
+            if (err) {                
                 console.log ("ERROR: ", err);
+                throw err;
             } else if (data){
+                var users = new Array();
+                if (data[0] && data[0].user){
+                    var sqlUsers = JSON.parse(data[0].user);     
+                    for (var i = 0; i < sqlUsers.length; i++){
+                        var user = {firstName: sqlUsers[i].firstName, 
+                            lastName:  sqlUsers[i].lastName, 
+                            userName: sqlUsers[i].userName};
+                        console.log (i, user);
+                        users.push(user);
+                    }                                                
+                }
+                console.log(data);
+                delete data[0].user;
+                data[0]['users'] = users;
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
-           else { 
-                res.send('No project id provided');
-             }
     	})
     } else { 
         res.send('Invalid project id provided');
     }
 	});	
-
 
 /* Catches all unhandled requests */
 app.use(function(req, res){
