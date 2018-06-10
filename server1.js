@@ -36,9 +36,10 @@ app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
 app.use(session({   secret: "keyboard warriors",
                     name: "session",
-                    resave: false,
+                    resave: true,
                     saveUninitialized: false,
-                    activeDuration: 1000 * 60}));  // used to generate session tokens
+                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                }));  // used to generate session tokens
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
@@ -60,11 +61,10 @@ app.get('/main.css',function(req,res){
 app.get('/login', function(req, res){
     if (req.session.msg) {
         res.render('login/login', {serverMsg : req.session.msg});
-        setTimeout(function(){
-            req.session.msg=""
-        }, 3000); //deletes the session msg key after 3 seconds
+        req.session.msg = ""; // resets the msg after sending it to client        
     } else {
-        res.sendFile(path.join(__dirname, 'views/login/login.html'));
+        res.render('login/login');
+        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
     }
 });
 
@@ -85,7 +85,12 @@ app.post('/login', urlencodedParser, function(req, res){
         return res.sendStatus(400);
     }
     var username = req.body.username1;
-    //console.log(req.body.username1);    
+    var password = req.body.pass;
+    //console.log(username, password);
+    if(!username || !password ) {
+        // Render 'missing credentials'
+        return res.render("login/login", { serverMsg: "Missing credentials." });
+    }    
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
             console.log (err); throw err;
@@ -95,7 +100,7 @@ app.post('/login', urlencodedParser, function(req, res){
             //console.log("result:", jsonResult[0]);
             if (jsonResult.length < 1){
                 //case of username not found
-                req.session.msg = "Invalid Username/Password. Login Failed. (no user)";
+                req.session.msg = "Invalid Username/Password. Login Failed.";
                 res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass) {

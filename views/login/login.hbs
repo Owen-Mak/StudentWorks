@@ -44,9 +44,11 @@
 							Forgot Password?
 						</a>
 					</div>
-                    <div>
-                         <span class="txt1" id="serverMsg" style="color:#D22822; font-weight: bold">{{serverMsg}}</span>
-                    </div>
+					{{#if serverMsg}}
+						<div>
+							<span class="txt1" id="serverMsg" style="color:#D22822; font-weight: bold">{{serverMsg}}</span>
+						</div>
+					{{/if}}
 
 					<div class="container-login-form-btn">
 						<button type="submit" onclick="validateForm()" class="login-form-btn">
