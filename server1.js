@@ -4,6 +4,7 @@ var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
 const path = require("path");
+const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
@@ -33,7 +34,9 @@ app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
-app.use(session({secret: "keyboard warriors"}));
+app.use(session({secret: "keyboard warriors"}));  // used to generate session tokens
+app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
+app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
 // Main Page
@@ -50,8 +53,15 @@ app.get('/main.css',function(req,res){
 });
 
 //login page
-app.get('/login', function(req, res){    
-    res.sendFile(path.join(__dirname, 'views/login/login.html'));
+app.get('/login', function(req, res){
+    if (req.session.msg) {
+        res.render('login/login', {serverMsg : req.session.msg});
+        setTimeout(function(){
+            req.session.msg=""
+        }, 3000); //deletes the session msg key after 3 seconds
+    } else {
+        res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    }
 });
 
 //Registration page
@@ -81,17 +91,17 @@ app.post('/login', urlencodedParser, function(req, res){
             //console.log("result:", jsonResult[0]);
             if (jsonResult.length < 1){
                 //case of username not found
-                req.session.msg = "Invalid Username/Password. Login Failed.";
-                res.status(401).redirect('/login/');
+                req.session.msg = "Invalid Username/Password. Login Failed. (no user)";
+                res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
-                    req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
                     res.redirect('/');
                     //res.send(`User ${username} identity confirmed, logging in`);                    
                 } else {                   
                     req.session.msg = "Invalid Username/Password. Login Failed.";
-                    res.status(401).redirect('/login/');
+                    res.status(401).redirect('/login');
                 }
             }
             //res.writeHead(200, {"Content-type":"application/json"});
