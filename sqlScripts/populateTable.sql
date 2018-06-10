@@ -7,10 +7,28 @@ VALUES
     ('Solitary', 'This is a 2D platformer with various puzzles. The object of the game is to reach the end point of the 2D stage.', now(), 'C++', 'Unity', 'PRJ666', NULL, '3/img/solitaryThumbnail.jpg', '3/video/Solitary_-new.mp4'),
     ('Kitchen Modeller', 'An app to accurrately design the kitchen', '2004-05-01', 'Visual Basic', NULL, NULL, 'utility', '4/img/kitchen.png', '4/video/Kitchen.mp4'),
     ('Arcanoid Game', 'A version of the popular arcanoid game from the 80s', '2005-05-01', 'C++', NULL, NULL, 'game','5/img/arcanoid1.png', '5/video/Arcanoid.mp4'),
-    ('empty', null, null, null, null, null, null, 'images/empty.png', null);
+    ('empty', null, null, null, null, null, null, 'images/empty.png', null),    
+    ('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'C++', 'Chai', 'JAC444', 'android', 'images/empty.png', null),
+    ('Chess App', 'This is a chess app with a very smart AI', now(), 'C++', 'nginx', 'JAC444', 'linux', 'images/empty.png', null),
+    ('Language filter project#1', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'Visual Studio', 'OOP244', 'linux', 'images/empty.png', null),
+    ('Language filter project#2', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'GNU', 'IPC144', 'windows', 'images/empty.png', null),
+    ('Language filter project#3', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'Boost', 'OOP345', 'mac', 'images/empty.png', null),
+    ('Language filter project#4', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'nginx', 'OOP244', 'linux', 'images/empty.png', null),
+    ('Language filter project#5', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'COM', 'OOP244', 'windows', 'images/empty.png', null),
+    ('Language filter project#6', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'ATL', 'OOP244', 'mac', 'images/empty.png', null),
+    ('Framework filter project#1', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT222', 'linux', 'images/empty.png', null),
+    ('Framework filter project#2', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT322', 'windows', 'images/empty.png', null),
+    ('Framework filter project#3', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT422', 'mac', 'images/empty.png', null),
+    ('Framework filter project#4', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT222', 'linux', 'images/empty.png', null),
+    ('Framework filter project#5', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT322', 'windows', 'images/empty.png', null),
+    ('Framework filter project#6', 'This is a project to test the framework filter using jQuery as the framework value.', now(), 'Javascript', 'jQuery', 'INT422', 'mac', 'images/empty.png', null),
+    ('Category filter project#1', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null),
+    ('Category filter project#2', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null),
+    ('Category filter project#3', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null),
+    ('Category filter project#4', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null),
+    ('Category filter project#5', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null),
+    ('Category filter project#6', 'This is a project to test the category filter using game as the category value.', now(), null, null, null, 'game', 'images/empty.png', null);
     
-    /*('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'Java', 'Chai', 'JAC444', 'android', 'htuuuifhuifre', 'vhvfiuviurv');*/
-    /* ('Chess App', 'This is a chess app with a very smart AI', now(), 'C#', 'EnitityFramework', 'JAC444', 'linux', 'project/6/img/someThumbnail.jpg', 'vhvfiuviurv'); */
     
 
 
