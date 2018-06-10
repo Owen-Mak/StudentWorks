@@ -34,7 +34,11 @@ app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
-app.use(session({secret: "keyboard warriors"}));  // used to generate session tokens
+app.use(session({   secret: "keyboard warriors",
+                    name: "session",
+                    resave: false,
+                    saveUninitialized: false,
+                    activeDuration: 1000 * 60}));  // used to generate session tokens
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
