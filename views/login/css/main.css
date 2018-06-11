@@ -74,7 +74,7 @@
     color: #c9c9c9;
     line-height: 1.4;
     padding-bottom: 11px;
-    padding-top: 20px;
+    padding-top: 40px;
     text-align: left;
 
   }
@@ -147,7 +147,7 @@
     width: 100%;
     display: block;
 
-    padding-bottom: 10px;
+    padding-bottom: 30px;
     text-shadow: 4px 4px #1c1c1d;
 
   }
@@ -157,7 +157,6 @@
     font-size: 13px;
     color: #a1a1a1;
     text-align: center;
-
   }
   
   
@@ -245,3 +244,10 @@
 
 
   }
+
+  .error {
+    background-color:#881c1c;
+    border: 1px solid;
+    margin: 15px 15px 15px 25px;
+    padding:15px 15px 15px 10px;
+    }
