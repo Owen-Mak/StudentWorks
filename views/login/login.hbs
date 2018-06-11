@@ -15,12 +15,16 @@
 			<div class="content-wrapper">
 				<form class="login-form validate-form flex-sb" method="POST" action="/login" name="login" onsubmit="return validateForm()">
 						<span style="color:#b60909" class="title"> - LOGIN - </span>
-					<span class="title">
+				<!--	<span class="title">
 						STUDENT WORKS 
 						<span class="txt2" >By <span style="color:#b60909" >Students</span> For <span style="color:#b60909">Students</span></span>
 
-					</span>
-
+					</span> -->
+					{{#if serverMsg}}
+						<div>
+							<span class="txt1 error" id="serverMsg" style="color:#dfdfdf; font-weight: bold; ">{{serverMsg}}</span>
+						</div>
+					{{/if}}
 					<span class="txt1" style="font-weight: bold">
 						USERNAME <span id="errorMsg" style="color:#D22822"></span>
 					</span> 
@@ -44,11 +48,6 @@
 							Forgot Password?
 						</a>
 					</div>
-					{{#if serverMsg}}
-						<div>
-							<span class="txt1" id="serverMsg" style="color:#D22822; font-weight: bold">{{serverMsg}}</span>
-						</div>
-					{{/if}}
 
 					<div class="container-login-form-btn">
 						<button type="submit" onclick="validateForm()" class="login-form-btn">
