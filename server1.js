@@ -133,6 +133,8 @@ app.get('/send',function(req,res){
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
+            //should check if userName exists in db prior to creating new user
+            //need to capture rand variable as registrationCode as well
             //dbconnect.createUser(user);
             dbconnect.end();
             res.send("<h1> Please check your email for a verification link </h1>");
