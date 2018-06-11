@@ -79,6 +79,13 @@ module.exports.getOneProject = function (projectID, callback){
     runQuery (sql, callback);
 };
 
+module.exports.validateRegistration = function (userName, callback) {
+    var sql = ` UPDATE USERS
+                SET registrationStatus = TRUE
+                WHERE userName = ${userName};`
+    runQuery (sql, callback);
+}
+
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
 		if (err) {
