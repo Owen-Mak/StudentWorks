@@ -8,8 +8,8 @@ $(document).ready(() => {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 });
@@ -79,14 +79,33 @@ function showContents() {
 
                 html += renderTile(title, year, image, language, framework, id);
 
-                $("#mainBody").append(html);
+                //$("#mainBody").append(html);
             });
 
+            var start = 0;
+            renderSixProjectTiles(jsData, start);
+            start +=6;
         }
     }
+}
 
+function renderSixProjectTiles(jsData, start){
+    // RENDER only 6 projects
+    for(var projects=0; projects<6; projects++){
+        var html ="";
+        var title = jsData[start].title;
+        var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
+        var image = jsData[start].ImageFilePath;
+        var language = jsData[start].language;
+        var framework = jsData[start].framework;
+        var id = jsData[start].projectID;
 
+        html += renderTile(title, year, image, language, framework, id);
+        $("#mainBody").append(html);
+        start++;
+    }
 
+    return html;
 }
 
 ////////
@@ -122,15 +141,13 @@ function renderTile(title, year, icon, language, framework, id) {
 // This functions is an event handler to start PROJECT page
 function readyProject(id) {
     document.getElementById('prjLink' + id).onclick = () => {
-        html = "id that was passed in is: " + id;
-
         httpRequest = new XMLHttpRequest();
         if (!httpRequest)
             console.log("Cannot create an XMLHTTP instance");
 
         httpRequest.onreadystatechange = showProject;
-        httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-        //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+        //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+        httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
         httpRequest.send();
     };
 }
