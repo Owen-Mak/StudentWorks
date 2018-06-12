@@ -73,8 +73,8 @@
     font-size: 13px;
     color: #c9c9c9;
     line-height: 1.4;
-    padding-bottom: 11px;
-    padding-top: 20px;
+    padding-bottom: 7px;
+    padding-top: 25px;
     text-align: left;
 
   }
@@ -103,19 +103,18 @@
   
   .app {
     width: 100%;
-    margin: 0 auto;
   }
   
   .container {
-    width: 100%;  
-    min-height: 100vh;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    padding: 15px;
-    background-color: #ebebeb;
-  }
+    background-color: #ffffff;
+    position: fixed;
+}
+
 
   
   .content-wrapper {
@@ -126,7 +125,7 @@
     color:#72767d;
     font-size:18px;
     padding:40px;
-    width:480px
+    width: 480px
   }
   
  
@@ -147,7 +146,7 @@
     width: 100%;
     display: block;
 
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     text-shadow: 4px 4px #1c1c1d;
 
   }
@@ -157,7 +156,6 @@
     font-size: 13px;
     color: #a1a1a1;
     text-align: center;
-
   }
   
   
@@ -181,7 +179,7 @@
     display: block;
     width: 100%;
     background: transparent;
-    height: 50px;
+    height: 40px;
     padding: 0 25px 0 25px;
   }
   
@@ -221,7 +219,7 @@
     flex-wrap: wrap;
     margin-bottom: 8px;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 10px;
 
   }
   
@@ -238,10 +236,37 @@
     padding-right:50%;
 
     min-width: 150px;
-    height: 55px;
+    height: 50px;
     background-color: #881c1c;
     border-radius: 10px;
     text-shadow: 1px 1px #1e1e1f;
 
 
   }
+
+  .error {
+    background-color:#881c1c;
+    border: 1px solid;
+    margin: 15px 15px 15px 25px;
+    padding:15px 15px 15px 10px;
+}
+
+
+
+
+[logo] {
+  max-height: 90px;
+  max-width: 290px;
+  margin-left: 15px;
+  padding-top: 15px;
+}
+
+[moto] {
+  font-weight: bold;
+  margin-right: 30px;
+  color: #333;
+  vertical-align: middle;
+  font-size: 22px;
+  margin-left: 25px;
+  font-family: 'Roboto Slab', serif;
+}

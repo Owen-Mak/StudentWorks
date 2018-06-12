@@ -4,8 +4,10 @@ var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
 const path = require("path");
+const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 //This is for parsing json POST requests in text
 // create application/json parser
@@ -32,6 +34,14 @@ app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
+app.use(session({   secret: "keyboard warriors",
+                    name: "session",
+                    resave: true,
+                    saveUninitialized: false,
+                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                }));  // used to generate session tokens
+app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
+app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
 // Main Page
@@ -49,7 +59,13 @@ app.get('/main.css',function(req,res){
 
 //login page
 app.get('/login', function(req, res){
-    res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    if (req.session.msg) {
+        res.render('login/login', {serverMsg : req.session.msg});
+        req.session.msg = ""; // resets the msg after sending it to client        
+    } else {
+        res.render('login/login');
+        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    }
 });
 
 //Registration page
@@ -63,28 +79,38 @@ app.get('/complete',function(req,res){
 
 
 //this is for handling the POST data from login webform
-app.post('/login', urlencodedParser, function(req, res){
+app.post('/login', urlencodedParser, function(req, res){    
     dbconnect.connect();
     if (!req.body) {
         return res.sendStatus(400);
     }
     var username = req.body.username1;
-    console.log(req.body.username1);
+    var password = req.body.pass;
+    //console.log(username, password);
+    if(!username || !password ) {
+        // Render 'missing credentials'
+        return res.render("login/login", { serverMsg: "Missing credentials." });
+    }    
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
             console.log (err); throw err;
         } else {                        
             //validate the data here!!
             var jsonResult = JSON.parse(JSON.stringify(data));
-            console.log("result:", jsonResult[0]);
-            if (jsonResult.length < 1){                
-                res.send(`User ${username} does not exist`);
+            //console.log("result:", jsonResult[0]);
+            if (jsonResult.length < 1){
+                //case of username not found
+                req.session.msg = "Invalid Username/Password. Login Failed.";
+                res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
-                    res.send(`User ${username} identity confirmed, logging in`);                    
+                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    res.redirect('/');
+                    //res.send(`User ${username} identity confirmed, logging in`);                    
                 } else {                   
-                    res.send('Login failed.');
+                    req.session.msg = "Invalid Username/Password. Login Failed.";
+                    res.status(401).redirect('/login');
                 }
             }
             //res.writeHead(200, {"Content-type":"application/json"});
@@ -177,8 +203,7 @@ app.get('/api/getAllUsers', function(req, res){
         }
     });
    // res.send("Successful query!");    
-    dbconnect.end();
-    console.log ("login response concluded");
+    dbconnect.end();    
 });
 
 app.get('/api/getAllProjects', function(req, res) {
