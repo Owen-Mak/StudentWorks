@@ -122,9 +122,7 @@ app.post('/login', urlencodedParser, function(req, res){
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
-                    req.clientSessions.user = {
-                        user: req.body.user
-                    }
+                    req.session.secret = 
                     res.send(`User ${username} identity confirmed, logging in`);                    
                 } else {                   
                     res.send('Login failed.');
