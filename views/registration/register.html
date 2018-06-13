@@ -9,11 +9,7 @@
 		$(document).ready(function(){
 			var from,to,subject,text;
 			$("#send_email").click(function(){   
-				if($("#to").val() == ""){
-					$("#message".text("Not a valid email, please try again"));
-				} 
-				
-				else {
+				if($('#to').is(':valid')){ //make sure the email is valid before displaying message
 						to=$("#to").val();     
 						$("#message").text("Sending E-mail...Please wait");
 						$.get("http://localhost:3000/send",{to:to},function(data){
@@ -41,7 +37,7 @@
 			</div>
 		<div class="container">
 			<div class="content-wrapper">
-				<form class="register-form validate-form flex-sb" id="register" name ="register" onsubmit="return validateForm()" method="POST" action="/send" >                    
+				<form onsubmit="return validateForm()" class="register-form validate-form flex-sb" id="register" name ="register" method="POST" action="/send">                    
                     <span style="color:#b60909" class="title"> - REGISTRATION - </span>
                     <span class="title">
                         STUDENT WORKS
@@ -54,7 +50,7 @@
 
 
 					<div class="input-wrapper validate-input">
-						<input class="input" type="text" name="name" id="NAME" required>
+						<input class="input" type="text" name="name" id="NAME" onchange="validUser()">
 						<span class="focus-input"></span>
 					</div>
 
@@ -74,7 +70,7 @@
 					</span>
 
 					<div class="input-wrapper validate-input">
-						<input class="input" type="text" name="email" id="to" required>
+						<input class="input" type="email" name="email" id="to" onchange="validEmail()" >
 						<span class="focus-input"></span>
 					</div>
 					

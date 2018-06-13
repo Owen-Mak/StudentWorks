@@ -150,12 +150,12 @@ app.post('/send', urlencodedParser, function(req,res){
             //testing with sample user data   ----> will use data from front end later on when it is available
             console.log ("Create sample user");
             var user = {
-                firstName: 'Owen',
-                lastName: 'Mak',
+                firstName: 'NULL',
+                lastName: 'NULL',
                 password: req.body.password,
                 email: req.body.email,
                 username: req.query.name,
-                userType: 'Admin',
+                userType: 'NULL',
                 program: 'CPA'
             };
             console.log ("Done Create sample user");
@@ -165,7 +165,8 @@ app.post('/send', urlencodedParser, function(req,res){
             dbconnect.end();
 
             //replace with something a bit nicer?
-            res.send("<h1> Please check your email for a verification link </h1>");
+            //res.send("<h1> Please check your email for a verification link </h1>");
+            res.redirect('/');
     }
 });
 });
