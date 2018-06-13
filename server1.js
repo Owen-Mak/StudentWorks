@@ -132,6 +132,7 @@ app.post('/login', urlencodedParser, function(req, res){
 /* Email verification  start*/
 var rand,mailOptions,host,link;
 app.post('/send', urlencodedParser, function(req,res){
+    //
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
@@ -156,7 +157,7 @@ app.post('/send', urlencodedParser, function(req,res){
                 email: req.body.email,
                 username: req.query.name,
                 userType: 'NULL',
-                program: 'CPA'
+                program: 'NULL'
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
@@ -165,8 +166,8 @@ app.post('/send', urlencodedParser, function(req,res){
             dbconnect.end();
 
             //replace with something a bit nicer?
-            //res.send("<h1> Please check your email for a verification link </h1>");
-            res.redirect('/');
+            res.send("<h1> Please check your email for a verification link </h1>");
+            //res.redirect('/');
     }
 });
 });

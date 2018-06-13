@@ -8,8 +8,8 @@ $(document).ready(() => {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = showContents;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
 
     httpRequest.send();
 });
@@ -129,8 +129,8 @@ function readyProject(id) {
             console.log("Cannot create an XMLHTTP instance");
 
         httpRequest.onreadystatechange = showProject;
-        httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-        //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+        //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+        httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
         httpRequest.send();
     };
 }
