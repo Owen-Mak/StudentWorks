@@ -1,8 +1,10 @@
+// Globals 
 var httpRequest;
 var start;
 var prjNum;
 var lastPAge;
 var remainder;
+
 // READY function that gets called when HTML finishes parsing
 // console.log are used for deguggin and can be seen from BROWSER console not server.
 $(document).ready(() => {
@@ -25,50 +27,45 @@ function showContents() {
 
             prjNum = jsData.length;
             lastPage = false;
-            remainder = 0;
-            var unqArr = [];
             var html = "";
-            var count = 0;
+            let languageList = "";
+            let frameworkList = "";
+            let yearList = "";
+
+            let languageArr = [];
+            let frameworkArr = [];
+            let yearArr = [];
 
             // Language LIST ........................
             $.each(jsData, (key, value) => {
                 if (value.language) {
-                    if (!unqArr.includes(value.language)) {
-                        unqArr[count++] = value.language;
-                        html += "<li href='#'>" + value.language + "</li>";
+                    if (!languageArr.includes(value.language)) {
+                        languageArr.push(value.language);
+                        languageList += "<li href='#'>" + value.language + "</li>";
                     }
                 }
-            });
-            $("#lngList").append(html);
 
-            // Framework LIST ......................
-            html = "";
-            cout = 0;
-            unqArr = []
-            $.each(jsData, (key, value) => {
-                if (value.framework) { // checks for null
-                    if (!unqArr.includes(value.framework)) {
-                        unqArr[count++] = value.framework;
-                        html += "<li href='#'>" + value.framework + "</li>";
+                if (value.framework) {
+                    if (!frameworkArr.includes(value.framework)) {
+                        frameworkArr.push(value.framework);
+                        frameworkList += "<li href='#'>" + value.framework + "</li>";
                     }
                 }
-            });
-            $("#frmList").append(html);
 
-            // Year LIST ......................
-            html = "";
-            cout = 0;
-            unqArr = []
-            $.each(jsData, (key, value) => {
                 if (value.creationDate) {
                     var year = value.creationDate.substring(0, 4);
-                    if (!unqArr.includes(year)) {
-                        unqArr[count++] = year;
-                        html += "<li href='#'>" + year + "</li>";
+                    if (!yearArr.includes(year)) {
+                        yearArr.push(year);
+                        yearList += "<li href='#'>" + year + "</li>";
                     }
                 }
+
+
             });
-            $("#yearList").append(html);
+
+            $("#lngList").append(languageList);
+            $("#frmList").append(frameworkList);
+            //$("#yearList").append(yearList);
 
 
             // BODY TILES ------------------------
@@ -177,6 +174,9 @@ function renderEmptyTile() {
 
     return html;
 }
+
+
+
 
 // Event handler to start rendering PROJECT page
 function readyProject(id) {
