@@ -79,6 +79,34 @@ module.exports.getOneProject = function (projectID, callback){
     runQuery (sql, callback);
 };
 
+module.exports.validateRegistration = function (userName, callback) {
+    var sql = ` UPDATE USERS
+                SET registrationStatus = TRUE
+                WHERE userName = ${userName};`
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByLanguage = function (language, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.language) = Lower ('${language}');`;
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByFramework = function (framework, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.framework) = Lower ('${framework}');`;    
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByYear = function (year, callback){
+    var sql = `SELECT * 
+                FROM PROJECTS 
+                WHERE DATE_FORMAT(creationDate, '%Y')=${year};`;    
+    runQuery (sql, callback);
+}
+
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
 		if (err) {
@@ -96,4 +124,3 @@ module.exports.end = function (){
     connection.end();
 };
 
-//module.export = connection;
