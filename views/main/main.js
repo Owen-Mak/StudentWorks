@@ -41,14 +41,16 @@ function showContents() {
                 if (value.language) {
                     if (!languageArr.includes(value.language)) {
                         languageArr.push(value.language);
-                        languageList += "<li href='#'>" + value.language + "</li>";
+                        languageList += "<li> <a href='#' onclick='prepareFilter(\"language\" ,\"" + value.language + "\")'>";
+                        languageList += value.language + "</a></li>";
                     }
                 }
 
                 if (value.framework) {
                     if (!frameworkArr.includes(value.framework)) {
                         frameworkArr.push(value.framework);
-                        frameworkList += "<li href='#'>" + value.framework + "</li>";
+                        frameworkList += "<li> <a href='#' onclick='prepareFilter(\"framework\" ,\"" + value.framework + "\")'>";
+                        frameworkList += value.framework + "</a></li>";
                     }
                 }
 
@@ -56,7 +58,8 @@ function showContents() {
                     var year = value.creationDate.substring(0, 4);
                     if (!yearArr.includes(year)) {
                         yearArr.push(year);
-                        yearList += "<li href='#'>" + year + "</li>";
+                        yearList += "<li> <a href='#' onclick='prepareFilter(\"year\" ,\"" + year + "\")'>";
+                        yearList += year + "</a></li>";
                     }
                 }
             });
@@ -71,8 +74,6 @@ function showContents() {
             // BODY TILES ------------------------
             start = 0;
             renderSixProjectTiles(jsData);
-
-
 
             // Tile navigation button event handlers
             $("#prevBtn").click(() => {
@@ -96,6 +97,73 @@ function showContents() {
 } // showContent function
 
 
+// Prepare filtering
+function prepareFilter(key, value) {
+    $("#mainBody").empty();
+    $("#tileNav").empty();
+
+    let httpRequest = new XMLHttpRequest();
+    if (!httpRequest)
+        console.log("Cannot create an XMLHTTP instance");
+
+    httpRequest.onreadystatechange = renderFilter(key, value);
+    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.send();
+}
+
+// Render Filtering
+function renderFilter(sKey, sValue) {
+    if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+
+            let jsData = JSON.parse(httpRequest.responseText);
+            let newData = [];
+
+            if (sKey == "language") {
+                $.each(jsData, (key, value) => {
+                    if (value.language == sValue) newData.push(value);
+                });
+            }
+            else if (sKey == "framework") {
+                $.each(jsData, (key, value) => {
+                    if (value.framework == sValue) newData.push(value);
+                });
+            }
+            else if (sKey == "year") {
+                console.log("The year is: " + sValue);
+                $.each(jsData, (key, value) => {
+
+                    if (value.creationDate) {
+                        console.log(value.creationDate);
+                        var year = value.creationDate.substring(0, 4);
+                        if (year == sValue) newData.push(value);
+                    }
+                });
+            }
+
+            start = 0;
+            renderTileNavigation();
+            renderSixProjectTiles(newData);
+
+            $("#prevBtn").click(() => {
+                $("#mainBody").empty();
+                start -= 12;
+                if (start < 0)
+                    start = 0;
+
+                renderSixProjectTiles(newData);
+            });
+
+            $("#nextBtn").click(() => {
+                if (!lastPage) {
+                    $("#mainBody").empty();
+                    renderSixProjectTiles(newData);
+                }
+            });
+
+        }
+    }
+}
 
 // Renders 6 tiles per page
 function renderSixProjectTiles(jsData) {
@@ -127,8 +195,9 @@ function renderSixProjectTiles(jsData) {
         }
     }
 
+    let projs = jsData.length;
     let currPage = start / 6;
-    let totalPage = Math.floor(prjNum / 6) + 1;
+    let totalPage = Math.floor(projs / 6) + 1;
     $("#pageId").html("<span>" + currPage + " &nbsp; &#47; &nbsp; " + totalPage + "</span>");
 
 }
@@ -144,7 +213,7 @@ function renderTile(title, year, icon, language, framework, id) {
     tileHtml += "<div class='col-md-4'>";
     tileHtml += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-    tileHtml += "       <a href='#' id='prjLink" + id + "' class ='tileLink' style='text-decoration: none;' onclick='readyProject(" + id + ")'>";
+    tileHtml += "       <a href='#' id='prjLink" + id + "' class ='tileLink' style='text-decoration: none;' onclick='prepareProject(" + id + ")'>";
     tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -160,7 +229,7 @@ function renderEmptyTile() {
 
     let emptyTileHtml = "";
     emptyTileHtml += "<div class='col-md-4'>";
-    emptyTileHtml += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
+    emptyTileHtml += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); opacity: 0.3;' >";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
     emptyTileHtml += "       <a href='#' class ='tileLinkEmpty' style='text-decoration: none;'>";
     emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
@@ -183,18 +252,18 @@ function renderTileNavigation() {
     tileNav += '</div>'
 
     $("#tileNav").append(tileNav);
-
 }
 
 
+// PROJECT STUFF GET INTO A SEPERATE FILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Event handler to start rendering PROJECT page
-function readyProject(id) {
+function prepareProject(id) {
     document.getElementById('prjLink' + id).onclick = () => {
         httpRequest = new XMLHttpRequest();
         if (!httpRequest)
             console.log("Cannot create an XMLHTTP instance");
 
-        httpRequest.onreadystatechange = showProject;
+        httpRequest.onreadystatechange = renderProject;
         //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
         httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
         httpRequest.send();
@@ -202,7 +271,7 @@ function readyProject(id) {
 }
 
 // This function shows the PROJECT page
-function showProject() {
+function renderProject() {
     if (httpRequest.readyState === 4) {
         if (httpRequest.status === 200) {
             var jsData = JSON.parse(httpRequest.responseText);

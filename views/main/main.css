@@ -115,19 +115,25 @@ body {
 /* Navigation Buttons ---------------------- */
 #tileNav {
     margin: auto;
-    width: 30%;
+    width: 25%;
     padding: 10px;
 }
 
 #nextBtn {
     float: right;
+    width:60px;
+}
+
+#prevBtn {
+    width:60px;
 }
 
 #pageId {
     color: #072d50;
-    padding-left: 110px;
+    padding-left: 60px;
     font-size: 18px;
     font-weight: 800;
+    padding-top:10px;
 }
 
 /* END Navigation Buttons ---------------------- */
