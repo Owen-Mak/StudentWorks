@@ -111,3 +111,14 @@ body {
 #prjTitle {
     font-family: 'Raleway', sans-serif;
 }
+
+/* for Navigation Buttons */
+#tileNav {
+    margin: auto;
+    width: 30%;
+    padding: 10px;
+}
+
+#nextBtn {
+    float: right;
+}

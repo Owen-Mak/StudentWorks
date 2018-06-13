@@ -1,5 +1,8 @@
 var httpRequest;
-
+var start;
+var prjNum;
+var lastPAge;
+var remainder;
 // READY function that gets called when HTML finishes parsing
 // console.log are used for deguggin and can be seen from BROWSER console not server.
 $(document).ready(() => {
@@ -20,6 +23,9 @@ function showContents() {
         if (httpRequest.status === 200) {
             var jsData = JSON.parse(httpRequest.responseText);
 
+            prjNum = jsData.length;
+            lastPage = false;
+            remainder = 0;
             var unqArr = [];
             var html = "";
             var count = 0;
@@ -66,63 +72,80 @@ function showContents() {
 
 
             // BODY TILES ------------------------
-            var projectCount = Object.keys(jsData).length; // Assuming 6 or less at the moment
-            var count = 1;
-            $.each(jsData, (key, value) => {
-                var html = "";
-                var title = value.title;
-                var year = value.creationDate ? value.creationDate.substring(0, 4) : "";
-                var image = value.ImageFilePath;
-                var language = value.language;
-                var framework = value.framework;
-                var id = value.projectID;
+            start = 0;
+            renderSixProjectTiles(jsData);
 
-                html += renderTile(title, year, image, language, framework, id);
+            // TILE NAViGATION --------------------
+            html = "";
+            html += '<button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'; // PREVIOUS Button
+            html += '<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button>';
 
-                //$("#mainBody").append(html);
+            html += '<button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'; // NEXT Button
+            html += '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>';
+            $("#tileNav").append(html);
+
+
+            $("#prevBtn").click(() => {
+                $("#mainBody").empty();
+                start -= 12;
+                if (start < 0)
+                    start = 0;
+
+                renderSixProjectTiles(jsData);
             });
 
-            var start = 0;
-            renderSixProjectTiles(jsData, start);
-            start +=6;
+            $("#nextBtn").click(() => {
+                if (!lastPage) {
+                    $("#mainBody").empty();
+                    renderSixProjectTiles(jsData);
+                }
+            });
+
+        } // status
+    } // ready state
+} // showContent function
+
+
+
+// Renders 6 tiles per page
+function renderSixProjectTiles(jsData) {
+
+    // Main loop for six projects
+    for (var projects = 0; projects < 6; projects++) {
+        if (start > (jsData.length - 1)) {
+            // render empty tile
+            html = renderEmptyTile();
+            $("#mainBody").append(html);
+            lastPage = true;
+            remainder++;
+            start++;
+        } else {//
+            lastPage = false;
+            var html = "";
+            var title = jsData[start].title;
+            var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
+            var image = jsData[start].ImageFilePath;
+            var language = jsData[start].language;
+            var framework = jsData[start].framework;
+            var id = jsData[start].projectID;
+
+            html += renderTile(title, year, image, language, framework, id);
+            $("#mainBody").append(html);
+            start++;
         }
-    }
-}
 
-function renderSixProjectTiles(jsData, start){
-    // RENDER only 6 projects
-    for(var projects=0; projects<6; projects++){
-        var html ="";
-        var title = jsData[start].title;
-        var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
-        var image = jsData[start].ImageFilePath;
-        var language = jsData[start].language;
-        var framework = jsData[start].framework;
-        var id = jsData[start].projectID;
-
-        html += renderTile(title, year, image, language, framework, id);
-        $("#mainBody").append(html);
-        start++;
     }
 
     return html;
 }
 
-////////
-// This function creates one Tile at the time on the MAIN page 
+// Renders single tile
 function renderTile(title, year, icon, language, framework, id) {
     var imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
-    var titleShow = (title == "empty") ? "Future Project" : title + " [ <strong>" + year + "</strong> ] ";
-    var footer;
-    var link;
-
-    if (language || framework) {
-        var languageShow = (language) ? "<b>Language: </b>" + language : "";
-        var frameworkShow = (framework) ? ", <b>Framework: </b> " + framework : "&nbsp;";
-        footer = languageShow + frameworkShow;
-    } else {
-        footer = "<div style='text-align: center;'><a href='#' >Contribute</a></div>";
-    }
+    var titleShow = title + " (<strong>" + year + "</strong>) ";
+    var languageShow = (language) ? "<b>Language: </b>" + language : "";
+    var frameworkShow = (framework) ? ", <b>Framework: </b> " + framework : "&nbsp;";
+    var footer = languageShow + frameworkShow;
 
     html = "";
     html += "<div class='col-md-4'>";
@@ -137,8 +160,25 @@ function renderTile(title, year, icon, language, framework, id) {
     return html;
 }
 
-/////
-// This functions is an event handler to start PROJECT page
+// Renders empty tile
+function renderEmptyTile() {
+    var imageShow = '<img src="images/empty.png" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
+    var footer = "<div style='text-align: center;'><a href='#' >Contribute</a></div>";
+
+    html = "";
+    html += "<div class='col-md-4'>";
+    html += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
+    html += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
+    html += "       <a href='#' class ='tileLinkEmpty' style='text-decoration: none;'>";
+    html += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
+    html += "       </a>";
+    html += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
+    html += "</div>";
+
+    return html;
+}
+
+// Event handler to start rendering PROJECT page
 function readyProject(id) {
     document.getElementById('prjLink' + id).onclick = () => {
         httpRequest = new XMLHttpRequest();
@@ -152,7 +192,6 @@ function readyProject(id) {
     };
 }
 
-///////
 // This function shows the PROJECT page
 function showProject() {
     if (httpRequest.readyState === 4) {
@@ -163,7 +202,7 @@ function showProject() {
                 var year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
                 var videoLink = jsData[0].VideoUrl;
                 var languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
-                var frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>": "";
+                var frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
                 var desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
                 var html = "";
 
@@ -189,10 +228,8 @@ function showProject() {
                 html += "</div>";
 
                 $("#mainBody").html(html);
-                console.log("Link id: " + videoLink);
-                console.log(jsData);
+                $("#tileNav").empty();
             }
         }
     }
 }
-
