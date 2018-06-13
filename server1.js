@@ -1,17 +1,19 @@
-var express=require('express');
-var nodemailer = require("nodemailer");
-var app=express();
-var auth = require('./auth');
-var dbconnect = require ('./db_connect');
+const express=require('express');
+const nodemailer = require("nodemailer");
+const app=express();
+const auth = require('./auth');
+const dbconnect = require ('./db_connect');
 const path = require("path");
-
-var bodyParser = require('body-parser');
+const session = require('express-session');
+const bodyParser = require('body-parser');
 
 //This is for parsing json POST requests in text
 // create application/json parser
 var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+
 
 /*
     Here we are configuring our SMTP Server details.
@@ -26,16 +28,45 @@ var smtpTransport = nodemailer.createTransport({
 });
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
+
+
+//File usage
 app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('views')); 
 app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
+
+//session cookie
+app.use(session({
+    secret: "prj666_182a07",
+    //security must be false, sine we do not have a HTTPS server...
+    cookie: { secure: false, 
+              maxAge: 6000,
+    }
+  }));
+
+
+//Functions:
+
+//call this function, if we want to display a page which is required to have a user logged in.
+//if user is not logged in, direct them to login.
+/*function ensureLogin(req, res, next) {
+    console.log("ensuring login...");
+    if (req.secret == "prj666_182a07") {
+      console.log("ensured");
+      res.redirect("/login");
+    } else {
+      next();
+    }
+  };
+*/
+
 /*------------------Routing Started ------------------------*/
 
 // Main Page
-app.get('/',function(req,res){
+app.get("/", (req,res) =>{
     res.status(200).sendFile(path.join(__dirname, 'views/index.html'));
 });
 
@@ -91,6 +122,9 @@ app.post('/login', urlencodedParser, function(req, res){
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
+                    req.clientSessions.user = {
+                        user: req.body.user
+                    }
                     res.send(`User ${username} identity confirmed, logging in`);                    
                 } else {                   
                     res.send('Login failed.');
@@ -213,21 +247,12 @@ app.get('/api/getOneProject', function(req, res){
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
-<<<<<<< HEAD
-             else { 
-                res.send('No project id provided');
-             }
-            });
-        }
-    });
-=======
         });
     } else { 
         res.send('Invalid project id provided');
     }
 });
 
->>>>>>> 24d54c5e3be6011fc98104dd99200dc63a008a09
 /* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");

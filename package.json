@@ -20,7 +20,10 @@
   "dependencies": {
     "basic-auth": "^2.0.0",
     "bcryptjs": "^2.4.3",
+    "client-sessions": "^0.8.0",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-sessions": "^1.0.6",
     "fs": "0.0.1-security",
     "mysql": "^2.15.0",
     "nev": "0.0.0",
