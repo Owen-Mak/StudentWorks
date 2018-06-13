@@ -221,6 +221,28 @@ app.get('/api/getAllProjects', function(req, res) {
 	});	
 });
 
+app.get('/api/getAllProjects/:page', function(req, res) {
+    dbconnect.connect();
+    var page = req.params.page;
+    if (isNaN(page)){
+        res.send("Invalid page number");
+    }else {
+        var results = dbconnect.getAllProjects(function(err, data){
+            if (err) {
+                console.log ("ERROR: ", err);
+                throw err;			
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                var parsedData = new Array();
+                for (var i=(6*page); i < (page*6+6); i++){
+                    parsedData.push(data[i]);
+                }
+                res.end(JSON.stringify(parsedData));
+            }
+        });	
+    }
+});
+
 app.get('/api/getOneProject', function(req, res){
     var projectID = req.query.id;
     if (projectID != null && !isNaN(projectID)){
