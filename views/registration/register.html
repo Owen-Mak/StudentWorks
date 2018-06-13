@@ -3,41 +3,27 @@
 <head>
 	<title>StudentWorks-Register</title>
     <meta charset="UTF-8">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<!-- Jquery to send an email -->
-	<script>
-		$(document).ready(function(){
-			var from,to,subject,text;
-			$("#send_email").click(function(){    
-				to=$("#to").val();     
-				$("#message").text("Sending E-mail...Please wait");
-				$.get("http://localhost:3000/send",{to:to},function(data){
-				console.log(to);
-				if(data=="sent")
-				{
-					$("#message").empty().html("<p>Email is been sent at "+to+" . Please check inbox !</p>");
-				}
-		
-		});
-			});
-		});
-		</script>
-		<script src="/registration/js/register.js"></script>
+    
 	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
+
 	<link rel="stylesheet" type="text/css" href="/registration/css/register.css">
 </head>
 <body>
 	
-	<div class="app">
+			<div class="app">
+					<div>
+						<div>
+							<a href="#">
+								<img logo alt="logo" src="../images/logo.png">
+							</a>
+						</div>
+						<span moto >By <span style="color:#b60909" >Students</span> For <span style="color:#b60909">Students</span></span>
+					</div>
 		<div class="container">
 			<div class="content-wrapper">
-				<form class="register-form validate-form flex-sb" onsubmit="return true" action="/send">
+				<form class="register-form validate-form flex-sb" id="register" name ="register" method="POST" action="../Register/complete.html" onsubmit="return validateForm()">
                     
                     <span style="color:#b60909" class="title"> - REGISTRATION - </span>
-                    <span class="title">
-                        STUDENT WORKS
-						<span class="txt2" >By <span style="color:#b60909" >Students</span> For <span style="color:#b60909">Students</span></span>
-					</span>
 
 					<span class="txt1" style="font-weight: bold">
 						USERNAME <span id="errorMsg" style="color:#D22822"></span>
@@ -45,27 +31,31 @@
 
 
 					<div class="input-wrapper validate-input">
-						<input class="input" type="text" name="name" id="NAME">
+						<input class="input" type="text" name="username1" id="username1" onchange="validUser()">
 						<span class="focus-input"></span>
 					</div>
 					
 					<span class="txt1" style="font-weight: bold">
 						EMAIL <span id="errorMsg2" style="color:#D22822"></span>
 					</span>
-
+		
 					<div class="input-wrapper validate-input">
-						<input class="input" type="text" name="email" id="to">
+						<input class="input" name="email1" id="email1" onchange="validEmail()">
 						<span class="focus-input"></span>
 					</div>
 
 					<div class="container-register-form-btn">
-						<button id="send_email">Submit</button><br>
-						<span id="message"></span>
+							<button type="submit" class="register-form-btn">
+								SUBMIT
+							</button>
 					</div>
+					
+		
 				</form>
 			</div>
 		</div>
 	</div>
+	<script src="/registration/js/register.js"></script>
 
 	<div id="dropDownSelect1"></div>
 

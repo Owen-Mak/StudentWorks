@@ -4,8 +4,10 @@ var app=express();
 var auth = require('./auth');
 var dbconnect = require ('./db_connect');
 const path = require("path");
+const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
+var session = require('express-session');
 
 //This is for parsing json POST requests in text
 // create application/json parser
@@ -32,6 +34,14 @@ app.use('/js', express.static('js'));
 app.use('/images', express.static('views/images'));
 app.use(express.static('project'));
 app.use('/js', express.static('js/main.js'));
+app.use(session({   secret: "keyboard warriors",
+                    name: "session",
+                    resave: true,
+                    saveUninitialized: false,
+                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                }));  // used to generate session tokens
+app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
+app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
 // Main Page
@@ -49,7 +59,13 @@ app.get('/main.css',function(req,res){
 
 //login page
 app.get('/login', function(req, res){
-    res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    if (req.session.msg) {
+        res.render('login/login', {serverMsg : req.session.msg});
+        req.session.msg = ""; // resets the msg after sending it to client        
+    } else {
+        res.render('login/login');
+        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    }
 });
 
 
@@ -58,43 +74,44 @@ app.get('/register', function(req, res){
     res.sendFile(path.join(__dirname, 'views/registration/register.html'));
 });
 
-//registration page
-app.get('/register',function(req,res){
-    res.sendFile(path.join(__dirname, '/views/registration/index.html'));
-});
-
 app.get('/complete',function(req,res){
     res.sendFile(path.join(__dirname, 'views/registration/complete.html'));
 });
 
-//registration page
-app.get('/register',function(req,res){
-    res.sendFile(path.join(__dirname, 'views/registration/index.html'));
-});
 
 //this is for handling the POST data from login webform
-app.post('/login', urlencodedParser, function(req, res){
+app.post('/login', urlencodedParser, function(req, res){    
     dbconnect.connect();
     if (!req.body) {
         return res.sendStatus(400);
     }
     var username = req.body.username1;
-    console.log(req.body.username1);
+    var password = req.body.pass;
+    //console.log(username, password);
+    if(!username || !password ) {
+        // Render 'missing credentials'
+        return res.render("login/login", { serverMsg: "Missing credentials." });
+    }    
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
             console.log (err); throw err;
         } else {                        
             //validate the data here!!
             var jsonResult = JSON.parse(JSON.stringify(data));
-            console.log("result:", jsonResult[0]);
-            if (jsonResult.length < 1){                
-                res.send(`User ${username} does not exist`);
+            //console.log("result:", jsonResult[0]);
+            if (jsonResult.length < 1){
+                //case of username not found
+                req.session.msg = "Invalid Username/Password. Login Failed.";
+                res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
-                    res.send(`User ${username} identity confirmed, logging in`);          
+                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    res.redirect('/');
+                    //res.send(`User ${username} identity confirmed, logging in`);                    
                 } else {                   
-                    res.send('Login failed.');
+                    req.session.msg = "Invalid Username/Password. Login Failed.";
+                    res.status(401).redirect('/login');
                 }
             }
             //res.writeHead(200, {"Content-type":"application/json"});
@@ -136,6 +153,8 @@ app.get('/send',function(req,res){
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
+            //should check if userName exists in db prior to creating new user
+            //need to capture rand variable as registrationCode as well
             //dbconnect.createUser(user);
             dbconnect.end();
             res.send("<h1> Please check your email for a verification link </h1>");
@@ -187,15 +206,15 @@ app.get('/api/getAllUsers', function(req, res){
         }
     });
    // res.send("Successful query!");    
-    dbconnect.end();
-    console.log ("login response concluded");
+    dbconnect.end();    
 });
 
 app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
 		if (err) {
-			console.log ("ERROR: ", err);
+            console.log ("ERROR: ", err);
+            throw err;			
 		} else {
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
@@ -203,20 +222,114 @@ app.get('/api/getAllProjects', function(req, res) {
 	});	
 });
 
+app.get('/api/getAllProjects/:page', function(req, res) {
+    dbconnect.connect();
+    var page = req.params.page;
+    if (isNaN(page)){
+        res.send("Invalid page number");
+    }else {
+        var results = dbconnect.getAllProjects(function(err, data){
+            if (err) {
+                console.log ("ERROR: ", err);
+                throw err;			
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                var parsedData = new Array();
+                for (var i=(6*page); i < (page*6+6); i++){
+                    parsedData.push(data[i]);
+                }
+                res.end(JSON.stringify(parsedData));
+            }
+        });	
+    }
+});
+
 app.get('/api/getOneProject', function(req, res){
     var projectID = req.query.id;
     if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
-            if (err) {
+            if (err) {                
                 console.log ("ERROR: ", err);
+                throw err;
+            } else if (data){
+                var users = new Array();
+                if (data[0] && data[0].user){
+                    var sqlUsers = JSON.parse(data[0].user);     
+                    for (var i = 0; i < sqlUsers.length; i++){
+                        var user = {firstName: sqlUsers[i].firstName, 
+                            lastName:  sqlUsers[i].lastName, 
+                            userName: sqlUsers[i].userName};
+                        console.log (i, user);
+                        users.push(user);
+                    }                                                
+                }
+                console.log(data);
+                delete data[0].user;
+                data[0]['users'] = users;
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+    	})
+    } else { 
+        res.send('Invalid project id provided');
+    }
+});
+    
+app.get('/api/getAllProjects/language/:language', function (req, res) {
+    var language = req.params.language;
+    if (language === null) {
+        res.send ('No language provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByLanguage(language, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
             } else {
                 res.writeHead(200, {"Content-type":"application/json"});
                 res.end(JSON.stringify(data));
             }
         });
-    } else { 
-        res.send('Invalid project id provided');
+        dbconnect.end();
+    }
+});
+
+app.get('/api/getAllProjects/framework/:framework', function (req, res) {
+    var framework = req.params.framework;
+    if (framework === null) {
+        res.send ('No framework provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByFramework(framework, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
+
+app.get('/api/getAllProjects/year/:year', function (req, res) {
+    var year = req.params.year;
+    if (year === null || isNaN(year)) {
+        res.send ('Invalid year provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByYear(year, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
     }
 });
 
