@@ -86,6 +86,14 @@ module.exports.validateRegistration = function (userName, callback) {
     runQuery (sql, callback);
 }
 
+module.exports.getAllProjectsFilterByLanguage = function (language, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.language) = Lower ('${language}');`;
+    console.log(sql);
+    runQuery (sql, callback);
+}
+
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
 		if (err) {
@@ -103,4 +111,3 @@ module.exports.end = function (){
     connection.end();
 };
 
-//module.export = connection;

@@ -251,7 +251,26 @@ app.get('/api/getOneProject', function(req, res){
     } else { 
         res.send('Invalid project id provided');
     }
-	});	
+});
+    
+app.get('/api/getAllProjectsByLanguage', function (req, res) {
+    var language = URLDecoder.decode(req.query.language);
+    if (language === null) {
+        res.send ('No language provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByLanguage(language, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
 
 /* Catches all unhandled requests */
 app.use(function(req, res){
