@@ -2,7 +2,8 @@
 var httpRequest;
 var start;
 var prjNum;
-var lastPAge;
+var pageNum;
+var lastPage;
 
 // READY function that gets called when HTML finishes parsing
 // console.log are used for deguggin and can be seen from BROWSER console not server.
@@ -25,11 +26,11 @@ function showContents() {
 
             prjNum = jsData.length;
             lastPage = false;
+            pageNum = 1;
 
             let languageList = "";
             let frameworkList = "";
             let yearList = "";
-            let tileNav = "";
 
             let languageArr = [];
             let frameworkArr = [];
@@ -64,21 +65,16 @@ function showContents() {
             $("#frmList").append(frameworkList);
             $("#yearList").append(yearList);
 
+            // TILE NAVIGATION --------------------
+            renderTileNavigation();
 
             // BODY TILES ------------------------
             start = 0;
             renderSixProjectTiles(jsData);
 
-            // TILE NAViGATION --------------------
-            tileNav = "";
-            tileNav += '<button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'; // PREVIOUS Button
-            tileNav += '<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button>';
-
-            tileNav += '<button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'; // NEXT Button
-            tileNav += '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button>';
-            $("#tileNav").append(tileNav);
 
 
+            // Tile navigation button event handlers
             $("#prevBtn").click(() => {
                 $("#mainBody").empty();
                 start -= 12;
@@ -108,30 +104,34 @@ function renderSixProjectTiles(jsData) {
     for (var projects = 0; projects < 6; projects++) {
 
         if (start <= (jsData.length - 1)) { // Render PROJECT tile
-            
-            var title     = jsData[start].title;
-            var year      = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
-            var image     = jsData[start].ImageFilePath;
-            var language  = jsData[start].language;
+
+            var title = jsData[start].title;
+            var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
+            var image = jsData[start].ImageFilePath;
+            var language = jsData[start].language;
             var framework = jsData[start].framework;
-            var id        = jsData[start].projectID;
+            var id = jsData[start].projectID;
 
             var prjHtml = renderTile(title, year, image, language, framework, id);
             $("#mainBody").append(prjHtml);
 
             start++;
             lastPage = false;
-        } 
+        }
         else { // Render Empty tile
-            var prjHtml  = renderEmptyTile();
+            var prjHtml = renderEmptyTile();
             $("#mainBody").append(prjHtml);
 
             lastPage = true;
             start++;
         }
     }
-}
 
+    let currPage = start / 6;
+    let totalPage = Math.floor(prjNum / 6) + 1;
+    $("#pageId").html("<span>" + currPage + " &nbsp; &#47; &nbsp; " + totalPage + "</span>");
+
+}
 // Renders single tile
 function renderTile(title, year, icon, language, framework, id) {
     let imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
@@ -171,7 +171,20 @@ function renderEmptyTile() {
     return emptyTileHtml;
 }
 
+// Render tile navigation
+function renderTileNavigation() {
+    let tileNav = "";
+    tileNav += '<div class="row center">';
+    tileNav += '<div style="display: inline;"><button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'; // PREVIOUS Button
+    tileNav += '<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></div>';
+    tileNav += '<div id="pageId"  style="display: inline; class="center"></div>';
+    tileNav += '<div  style="display: inline;"><button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'; // NEXT Button
+    tileNav += '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button><div>';
+    tileNav += '</div>'
 
+    $("#tileNav").append(tileNav);
+
+}
 
 
 // Event handler to start rendering PROJECT page

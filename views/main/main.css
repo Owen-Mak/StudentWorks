@@ -112,7 +112,7 @@ body {
     font-family: 'Raleway', sans-serif;
 }
 
-/* for Navigation Buttons */
+/* Navigation Buttons ---------------------- */
 #tileNav {
     margin: auto;
     width: 30%;
@@ -122,3 +122,12 @@ body {
 #nextBtn {
     float: right;
 }
+
+#pageId {
+    color: #072d50;
+    padding-left: 110px;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+/* END Navigation Buttons ---------------------- */
