@@ -26,7 +26,6 @@ var smtpTransport = nodemailer.createTransport({
         pass: "prj666_182a07"
     }
 });
-var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
 app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('views')); 
@@ -57,17 +56,6 @@ app.get('/main.css',function(req,res){
     res.sendFile(path.join(__dirname, 'views/main/main.css'));
 });
 
-//login page
-app.get('/login', function(req, res){
-    if (req.session.msg) {
-        res.render('login/login', {serverMsg : req.session.msg});
-        req.session.msg = ""; // resets the msg after sending it to client        
-    } else {
-        res.render('login/login');
-        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
-    }
-});
-
 
 //Registration page
 app.get('/register', function(req, res){
@@ -78,6 +66,21 @@ app.get('/complete',function(req,res){
     res.sendFile(path.join(__dirname, 'views/registration/complete.html'));
 });
 
+app.post('/complete', function(req,res){
+    console.log('here')
+});
+
+
+//login page
+app.get('/login', function(req, res){
+    if (req.session.msg) {
+        res.render('login/login', {serverMsg : req.session.msg});
+        req.session.msg = ""; // resets the msg after sending it to client        
+    } else {
+        res.render('login/login');
+        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
+    }
+});
 
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){    
@@ -122,17 +125,16 @@ app.post('/login', urlencodedParser, function(req, res){
 });
 
 /* Email verification  start*/
-app.get('/send',function(req,res){
-    console.log("made it to send");
+var rand,mailOptions,host,link;
+app.post('/send', urlencodedParser, function(req,res){
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
     mailOptions={
-        to : req.query.email,
+        to : req.body.email,
         subject : "Please confirm your Email account",
         html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
     }
-    console.log(mailOptions);
     smtpTransport.sendMail(mailOptions, function(error, response){
      if(error){
         console.log(error);
@@ -145,18 +147,19 @@ app.get('/send',function(req,res){
             var user = {
                 firstName: 'Owen',
                 lastName: 'Mak',
-                password: 'password123',
-                email: 'omak@myseneca.ca',
-                username: 'omak',
+                password: req.body.password,
+                email: req.body.email,
+                username: req.query.name,
                 userType: 'Admin',
                 program: 'CPA'
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
             //should check if userName exists in db prior to creating new user
-            //need to capture rand variable as registrationCode as well
             //dbconnect.createUser(user);
             dbconnect.end();
+
+            //replace with something a bit nicer?
             res.send("<h1> Please check your email for a verification link </h1>");
     }
 });
@@ -172,8 +175,7 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
     {
         console.log("email is verified");
         //Update emailRegistration status in database
-        //res.status(200).sendfile(path.join(__dirname, 'views/registration/complete.html'));
-        res.status(200).redirect('/complete');
+        res.status(200).redirect('/login');
     }
     else
     {
