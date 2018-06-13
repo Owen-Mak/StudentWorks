@@ -71,14 +71,41 @@ module.exports.getOneUser = function (username, callback){
 };
 
 module.exports.getOneProject = function (projectID, callback){
-    var sql =   `SELECT proj.*, u.* 
-                FROM PROJECTS proj
-                    JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
-                    JOIN USERS u on b.userID = u.userID
-                WHERE proj.ProjectID = ${projectID};`      
+    var sql =   `SELECT proj.*, JSON_ARRAYAGG(JSON_OBJECT('firstName', u.firstName, 'lastName', u.lastName, 'userName',u.userName)) AS user
+    FROM PROJECTS proj
+        JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
+        JOIN USERS u on b.userID = u.userID
+    WHERE proj.ProjectID = ${projectID};`      
     runQuery (sql, callback);
 };
 
+module.exports.validateRegistration = function (userName, callback) {
+    var sql = ` UPDATE USERS
+                SET registrationStatus = TRUE
+                WHERE userName = ${userName};`
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByLanguage = function (language, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.language) = Lower ('${language}');`;
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByFramework = function (framework, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.framework) = Lower ('${framework}');`;    
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByYear = function (year, callback){
+    var sql = `SELECT * 
+                FROM PROJECTS 
+                WHERE DATE_FORMAT(creationDate, '%Y')=${year};`;    
+    runQuery (sql, callback);
+}
 
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
@@ -97,4 +124,3 @@ module.exports.end = function (){
     connection.end();
 };
 
-//module.export = connection;

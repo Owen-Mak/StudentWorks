@@ -15,11 +15,12 @@ CREATE TABLE USERS (
     lastName    VARCHAR(30) NOT NULL,
     password    CHAR(50)  NOT NULL,
     email	    VARCHAR(50) NOT NULL,    
-    userName    VARCHAR(20) NOT NULL,    
+    userName    VARCHAR(20) NOT NULL UNIQUE,    
     userType    VARCHAR(25) NOT NULL CHECK(userType IN ('User','Contributor', 'Administrator')),
     program     VARCHAR(25) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
+    registrationCode CHAR(65),
     PRIMARY KEY (userID))
 engine=innodb;
 

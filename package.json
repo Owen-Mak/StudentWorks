@@ -22,8 +22,13 @@
     "bcryptjs": "^2.4.3",
     "client-sessions": "^0.8.0",
     "express": "^4.16.3",
+<<<<<<< HEAD
     "express-session": "^1.15.6",
     "express-sessions": "^1.0.6",
+=======
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+>>>>>>> Owen
     "fs": "0.0.1-security",
     "mysql": "^2.15.0",
     "nev": "0.0.0",
