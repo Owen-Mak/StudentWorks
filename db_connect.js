@@ -90,7 +90,20 @@ module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
                 FROM PROJECTS proj
                 WHERE Lower (proj.language) = Lower ('${language}');`;
-    console.log(sql);
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByFramework = function (framework, callback){
+    var sql = `Select * 
+                FROM PROJECTS proj
+                WHERE Lower (proj.framework) = Lower ('${framework}');`;    
+    runQuery (sql, callback);
+}
+
+module.exports.getAllProjectsFilterByYear = function (year, callback){
+    var sql = `SELECT * 
+                FROM PROJECTS 
+                WHERE DATE_FORMAT(creationDate, '%Y')=${year};`;    
     runQuery (sql, callback);
 }
 

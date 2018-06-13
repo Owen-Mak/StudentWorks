@@ -253,13 +253,51 @@ app.get('/api/getOneProject', function(req, res){
     }
 });
     
-app.get('/api/getAllProjectsByLanguage', function (req, res) {
-    var language = URLDecoder.decode(req.query.language);
+app.get('/api/getAllProjects/language/:language', function (req, res) {
+    var language = req.params.language;
     if (language === null) {
         res.send ('No language provided');
     } else {
         dbconnect.connect();
         var results = dbconnect.getAllProjectsFilterByLanguage(language, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
+
+app.get('/api/getAllProjects/framework/:framework', function (req, res) {
+    var framework = req.params.framework;
+    if (framework === null) {
+        res.send ('No framework provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByFramework(framework, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
+
+app.get('/api/getAllProjects/year/:year', function (req, res) {
+    var year = req.params.year;
+    if (year === null || isNaN(year)) {
+        res.send ('Invalid year provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getAllProjectsFilterByYear(year, function (err, data) {
             if (err) {
                 console.log ("ERROR", err);
                 throw err;
