@@ -46,16 +46,7 @@ app.set('view engine', '.hbs');
 
 // Main Page
 app.get("/", (req,res) =>{
-<<<<<<< HEAD:server1.js
-    res.status(200).sendFile(path.join(__dirname, 'views/index.html'));
-=======
     res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
-});
-
-//Registration page
-app.get('/register', function(req, res){
-    res.sendFile(path.join(__dirname, 'public/registration/register.html'));
->>>>>>> master:server.js
 });
 
 app.get('/complete',function(req,res){
@@ -66,34 +57,6 @@ app.post('/complete', function(req,res){
     console.log('here')
 });
 
-<<<<<<< HEAD:server1.js
-
-//Registration page
-app.get('/register', function(req, res){
-    res.sendFile(path.join(__dirname, 'views/registration/register.html'));
-});
-
-app.get('/complete',function(req,res){
-    res.sendFile(path.join(__dirname, 'views/registration/complete.html'));
-});
-
-app.post('/complete', function(req,res){
-    console.log('here')
-});
-
-
-//login page
-app.get('/login', function(req, res){
-    if (req.session.msg) {
-        res.render('login/login', {serverMsg : req.session.msg});
-        req.session.msg = ""; // resets the msg after sending it to client        
-    } else {
-        res.render('login/login');
-        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
-    }
-});
-
-=======
 
 //login page
 app.get('/login', function(req, res){
@@ -106,7 +69,6 @@ app.get('/login', function(req, res){
     }
 });
 
->>>>>>> master:server.js
 //this is for handling the POST data from login webform
 app.post('/login', urlencodedParser, function(req, res){    
     dbconnect.connect();
