@@ -34,6 +34,7 @@ var smtpTransport = nodemailer.createTransport({
 //File usage
 app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public')); 
+app.use(express.static('project'));
 app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
