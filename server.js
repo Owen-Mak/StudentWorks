@@ -29,11 +29,7 @@ var smtpTransport = nodemailer.createTransport({
 var rand,mailOptions,host,link;
 /*------------------SMTP Over-----------------------------*/
 app.use(auth); // For authenticating, please do not comment out until the project is done.
-app.use(express.static('views')); 
-app.use('/js', express.static('js'));
-app.use('/images', express.static('views/images'));
-app.use(express.static('project'));
-app.use('/js', express.static('js/main.js'));
+app.use(express.static('public')); 
 app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
@@ -46,24 +42,16 @@ app.set('view engine', '.hbs');
 
 // Main Page
 app.get('/',function(req,res){
-    res.status(200).sendFile(path.join(__dirname, 'views/index.html'));
-});
-
-app.get('/main.js',function(req,res){
-    res.sendFile(path.join(__dirname, 'views/main/main.js'));
-});
-
-app.get('/main.css',function(req,res){
-    res.sendFile(path.join(__dirname, 'views/main/main.css'));
+    res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
 });
 
 //login page
 app.get('/login', function(req, res){
     if (req.session.msg) {
-        res.render('login/login', {serverMsg : req.session.msg});
+        res.render('login', {serverMsg : req.session.msg});
         req.session.msg = ""; // resets the msg after sending it to client        
     } else {
-        res.render('login/login');
+        res.render('login');
         //res.sendFile(path.join(__dirname, 'views/login/login.html'));
     }
 });
