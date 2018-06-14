@@ -34,6 +34,7 @@ var smtpTransport = nodemailer.createTransport({
 //File usage
 app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public')); 
+app.use(express.static('project'));
 app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
@@ -47,6 +48,12 @@ app.set('view engine', '.hbs');
 // Main Page
 app.get("/", (req,res) =>{
     res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+});
+
+
+//Registration page
+app.get('/register', function(req, res){
+    res.sendFile(path.join(__dirname, 'public/registration/register.html'));
 });
 
 app.get('/complete',function(req,res){
