@@ -60,7 +60,7 @@ app.get('/complete',function(req,res){
     res.sendFile(path.join(__dirname, 'public/registration/complete.html'));
 });
 
-app.post('/complete', function(req,res){
+app.post('/complete', urlencodedParser, function(req,res){
     console.log('here')
 });
 
@@ -162,8 +162,9 @@ app.post('/send', urlencodedParser, function(req,res){
             dbconnect.end();
 
             //replace with something a bit nicer?
-            res.send("<h1> Please check your email for a verification link </h1>");
-            //res.redirect('/');
+            //res.sendFile("SOMEONE's WONDERFUL NEW HTML PAGE");
+            res.redirect("/");
+            
     }
 });
 });
@@ -175,7 +176,7 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
     console.log("Domain is matched. Information is from Authentic email");
     //Check if id = the hashvalue stored in the user table
-    //make call from 
+    //make call from DB to get the hashcode based on user's email. (req.query.email)
     if(req.query.id==rand)
     {
         console.log("email is verified");
