@@ -121,10 +121,15 @@ app.post('/login', urlencodedParser, function(req, res){
 /* Email verification  start*/
 var rand,mailOptions,host,link;
 app.post('/send', urlencodedParser, function(req,res){
-    //
-    rand=Math.floor((Math.random() * 100) + 54);
+    //Create a random string, store in DB (This string does not need to be 'random' per say, as it's not used for security.)
+    //This creates a random 1-12 character string of just random lowercase letters. 
+    rand=Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12);
+    console.log(rand);
+    //rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
-    link="http://"+req.get('host')+"/verify?id="+rand;
+    //create the link to verfiy the email account, this link will use jquery to pass the hash (id) as well as the email
+    //these two parameters are used with /verify 
+    link="http://"+req.get('host')+"/verify?id="+rand+"&email="+req.body.email;
     mailOptions={
         to : req.body.email,
         subject : "Please confirm your Email account",
@@ -135,7 +140,7 @@ app.post('/send', urlencodedParser, function(req,res){
         console.log(error);
         res.end("error");
      } else {
-            console.log("Message sent: " + response.message);
+            console.log("Message sent: " + res.message);
             //Create user account in database
             //testing with sample user data   ----> will use data from front end later on when it is available
             console.log ("Create sample user");
@@ -144,9 +149,10 @@ app.post('/send', urlencodedParser, function(req,res){
                 lastName: 'NULL',
                 password: req.body.password,
                 email: req.body.email,
-                username: req.query.name,
+                username: req.body.name,
                 userType: 'NULL',
-                program: 'NULL'
+                program: 'NULL',
+                hashCode: rand
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
@@ -167,6 +173,8 @@ console.log(req.protocol+":/"+req.get('host'));
 if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
     console.log("Domain is matched. Information is from Authentic email");
+    //Check if id = the hashvalue stored in the user table
+    //make call from 
     if(req.query.id==rand)
     {
         console.log("email is verified");
