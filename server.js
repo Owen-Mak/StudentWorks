@@ -152,7 +152,8 @@ app.post('/send', urlencodedParser, function(req,res){
                 username: req.body.name,
                 userType: 'NULL',
                 program: 'NULL',
-                hashCode: rand
+                //In your insert values script, think you need to put registrationCode before the registrationStatus and registrationDate so this works?
+                registrationCode: rand
             };
             console.log ("Done Create sample user");
             dbconnect.connect();
