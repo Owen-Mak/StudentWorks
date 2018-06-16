@@ -119,8 +119,7 @@ app.post('/login', urlencodedParser, function(req, res){
 
 /* Email verification  start*/
 var rand,mailOptions,host,link;
-app.post('/send', urlencodedParser, function(req,res){
-    //
+app.post('/send', urlencodedParser, function(req,res){    
     rand=Math.floor((Math.random() * 100) + 54);
     host=req.get('host');
     link="http://"+req.get('host')+"/verify?id="+rand;
@@ -130,6 +129,7 @@ app.post('/send', urlencodedParser, function(req,res){
         html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
     }
     smtpTransport.sendMail(mailOptions, function(error, response){
+        console.log('got into /sendMail');
      if(error){
         console.log(error);
         res.end("error");
@@ -137,22 +137,38 @@ app.post('/send', urlencodedParser, function(req,res){
             console.log("Message sent: " + response.message);
             //Create user account in database
             //testing with sample user data   ----> will use data from front end later on when it is available
-            console.log ("Create sample user");
-            var user = {
-                firstName: 'NULL',
-                lastName: 'NULL',
-                password: req.body.password,
-                email: req.body.email,
-                username: req.query.name,
-                userType: 'NULL',
-                program: 'NULL'
-            };
-            console.log ("Done Create sample user");
-            dbconnect.connect();
             //should check if userName exists in db prior to creating new user
-            //dbconnect.createUser(user);
-            dbconnect.end();
-
+            dbconnect.connect();            
+            dbconnect.getUserExist(req.body.name, function(err, data) {
+                if (err){ throw err;}
+                else {
+                    console.log(data[0].userExist);
+                    if (data[0].userExist === 1) {
+                        //case of existing username in database
+                        dbconnect.end();
+                        console.log('found user, cannot create');
+                    } else {
+                        //case of new username, in which we can create user
+                        console.log ('user not found, can create one');
+                        dbconnect.end();
+                        //have to reconnect in order to do separate query
+                        dbconnect.connect();
+                        var user = {
+                            firstName: 'NULL',
+                            lastName: 'NULL',
+                            email: req.body.email,
+                            password: req.body.password1,                
+                            username: req.body.name,
+                            userType: 'NULL',
+                            program: 'NULL',
+                            registrationCode: rand
+                        };
+                        dbconnect.createUser(user);   
+                        dbconnect.end();
+                    }
+                }                
+            });
+            
             //replace with something a bit nicer?
             res.send("<h1> Please check your email for a verification link </h1>");
             //res.redirect('/');
@@ -166,10 +182,14 @@ console.log(req.protocol+":/"+req.get('host'));
 if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
     console.log("Domain is matched. Information is from Authentic email");
+    console.log(rand);
     if(req.query.id==rand)
     {
         console.log("email is verified");
         //Update emailRegistration status in database
+        dbconnect.connect();
+        dbconnect.validateRegistration(rand);
+        dbconnect.end();
         res.status(200).redirect('/login');
     }
     else
@@ -185,7 +205,7 @@ else
 });   //email verification end
 
 
-/* Attempt to get all users   WIP - Owen*/
+/* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
     dbconnect.connect(); 
     var results = dbconnect.getAllUsers(function(err,data){
