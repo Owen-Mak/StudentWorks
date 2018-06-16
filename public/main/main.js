@@ -14,9 +14,15 @@ $(document).ready(() => {
     if (!httpRequest)
         console.log("Cannot create an XMLHTTP instance");
 
+<<<<<<< HEAD
     httpRequest.onreadystatechange = renderFirstPage;
     //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
     httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+=======
+    httpRequest.onreadystatechange = showContents;
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+>>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 
     httpRequest.send();
 });
@@ -61,8 +67,25 @@ function renderFirstPage() {
             });
 
 
+<<<<<<< HEAD
         }
     }
+=======
+
+// Prepare filtering
+function prepareFilter(key, value) {
+    $("#mainBody").empty();
+    $("#tileNav").empty();
+
+    let httpRequest = new XMLHttpRequest();
+    if (!httpRequest)
+        console.log("Cannot create an XMLHTTP instance");
+
+    httpRequest.onreadystatechange = renderFilter(key, value);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.send();
+>>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 }
 
 
@@ -277,8 +300,8 @@ function prepareProject(id) {
             console.log("Cannot create an XMLHTTP instance");
 
         httpRequest.onreadystatechange = renderProject;
-        //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-        httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+        httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+        //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
         httpRequest.send();
     };
 }
