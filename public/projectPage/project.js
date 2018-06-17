@@ -6,8 +6,8 @@ $(document).ready(() => {
 
     id = getQueryStr('id');
     httpRequest.onreadystatechange = renderProject;
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-    httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
     httpRequest.send();
 });
 
