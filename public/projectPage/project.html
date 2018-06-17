@@ -6,18 +6,18 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="main/main.js"></script>
+    <script src="project.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="main/nav.css">
-    <link rel="stylesheet" href="main/main.css">
+    <link rel="stylesheet" href="../main/nav.css">
+    <link rel="stylesheet" href="project.css">
 </head>
 
 <body>
     <div class="container">
         <div class="row hidden-xs">
             <div class="col-xs-7 col-sm-7">
-                <a href="">
-                    <img class="swLogo" alt="logo" src="images/logo.png">
+                <a href="/">
+                    <img class="swLogo" alt="logo" src="../images/logo.png">
                 </a>
             </div>
             <div class="text-right">
@@ -30,35 +30,11 @@
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
                             <li class="active">
-                                <a href="" >
+                                <a href="/" >
                                     <space class="glyphicon glyphicon-home"></space>
                                 </a>
                             </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Language
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu lngList" id="lngList" role="menu"></ul>
-                            </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Framework
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu frmList" id="frmList" role="menu"></ul>
-                            </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Year
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu yearList" id="yearList" role="menu"></ul>
-                            </li>
                         </ul>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-search srchIcon"></span>
-                        </a>
                         <a href="#">
                             <span class="glyphicon glyphicon-barcode profilefIcon" data-toggle="modal" data-target="#myModal"></span>
                         </a>
@@ -107,13 +83,8 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <div class="row" id="mainBody"></div>
-    </div>
-    <div class="container">
-        <div class="row center" id="tileNav"></div>
+        <div class="row" id="projectBody"></div>
     </div>
     <!-- End of BODY.............................................................. -->
-    <hr class="clearfix w-100 d-md-none pb-3">
-
 </body>
 </html>

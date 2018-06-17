@@ -4,7 +4,6 @@
 // Globals used JSON API requests and tracking pages (safe)
 var httpRequest;
 var start;
-var prjNum;
 var pageNum;
 var lastPage;
 
@@ -14,15 +13,9 @@ $(document).ready(() => {
     if (!httpRequest)
         console.log("Cannot create an XMLHTTP instance");
 
-<<<<<<< HEAD
     httpRequest.onreadystatechange = renderFirstPage;
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
-=======
-    httpRequest.onreadystatechange = showContents;
     httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
     //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
->>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 
     httpRequest.send();
 });
@@ -32,7 +25,6 @@ function renderFirstPage() {
         if (httpRequest.status === 200) {
 
             var jsData = JSON.parse(httpRequest.responseText);
-            prjNum = jsData.length;
             lastPage = false;
             pageNum = 1;
 
@@ -65,29 +57,9 @@ function renderFirstPage() {
                     renderSixProjectTiles(jsData);
                 }
             });
-
-
-<<<<<<< HEAD
         }
     }
-=======
-
-// Prepare filtering
-function prepareFilter(key, value) {
-    $("#mainBody").empty();
-    $("#tileNav").empty();
-
-    let httpRequest = new XMLHttpRequest();
-    if (!httpRequest)
-        console.log("Cannot create an XMLHTTP instance");
-
-    httpRequest.onreadystatechange = renderFilter(key, value);
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
-    httpRequest.send();
->>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 }
-
 
 function renderNavigation(data) {
     let languageList = "";
@@ -131,8 +103,6 @@ function renderNavigation(data) {
     $("#yearList").append(yearList);
 }
 
-
-// Renders 6 tiles per page
 function renderSixProjectTiles(jsData) {
 
     // Main loop for six projects
@@ -169,9 +139,8 @@ function renderSixProjectTiles(jsData) {
 
 }
 
-// Renders single tile
 function renderTile(title, year, icon, language, framework, id) {
-    let imageShow = '<img src="' + icon + '" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
+    let imageShow = '<img src="' + icon + '" class="img-responsive center-block swPrjImage" alt="icon" >';
     let titleShow = title + " (<strong>" + year + "</strong>) ";
     let languageShow = (language) ? "<b>Language: </b>" + language : "";
     let frameworkShow = (framework) ? ", <b>Framework: </b> " + framework : "&nbsp;";
@@ -179,9 +148,9 @@ function renderTile(title, year, icon, language, framework, id) {
 
     let tileHtml = "";
     tileHtml += "<div class='col-md-4'>";
-    tileHtml += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);' >";
+    tileHtml += "<div class='panel panel-default swTile'>";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-    tileHtml += "       <a href='#' id='prjLink" + id + "' class ='tileLink' style='text-decoration: none;' onclick='prepareProject(" + id + ")'>";
+    tileHtml += "       <a href='projectPage/project.html?id=" + id + "' class ='tileLink'>";
     tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -190,16 +159,15 @@ function renderTile(title, year, icon, language, framework, id) {
     return tileHtml;
 }
 
-// Renders empty tile
 function renderEmptyTile() {
-    let image = '<img src="images/empty.png" class="img-responsive center-block;" style="height: 220px; margin:auto;" alt="icon" >';
+    let image = '<img src="images/empty.png" class="img-responsive center-block swPrjImage" alt="icon" >';
     let footer = "<div style='text-align: center;'><a href='#' >Contribute</a></div>";
 
     let emptyTileHtml = "";
     emptyTileHtml += "<div class='col-md-4'>";
-    emptyTileHtml += "<div class='panel panel-default' style='width:360px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); opacity: 0.3;' >";
+    emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
-    emptyTileHtml += "       <a href='#' class ='tileLinkEmpty' style='text-decoration: none;'>";
+    emptyTileHtml += "       <a href='#' class ='tileLinkEmpty'>";
     emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -208,7 +176,6 @@ function renderEmptyTile() {
     return emptyTileHtml;
 }
 
-// Render tile navigation
 function renderTileNavigation() {
     let tileNav = "";
     tileNav += '<div class="row center">';
@@ -232,8 +199,8 @@ function prepareFilter(key, value) {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = renderFilter(key, value);
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
     httpRequest.send();
 }
 
@@ -289,61 +256,3 @@ function renderFilter(sKey, sValue) {
         }
     }
 }
-
-
-// MOVE them outof here !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Event handler to start rendering PROJECT page
-function prepareProject(id) {
-    document.getElementById('prjLink' + id).onclick = () => {
-        httpRequest = new XMLHttpRequest();
-        if (!httpRequest)
-            console.log("Cannot create an XMLHTTP instance");
-
-        httpRequest.onreadystatechange = renderProject;
-        httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-        //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
-        httpRequest.send();
-    };
-}
-
-// This function shows the PROJECT page
-function renderProject() {
-    if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-            var jsData = JSON.parse(httpRequest.responseText);
-
-            if (jsData[0].title != "empty") {
-                let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-                let videoLink = jsData[0].VideoUrl;
-                let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
-                let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
-                let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
-
-                // Title
-                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " [ " + year + " ] </h2><br>";
-
-                // Video and Info
-                prjHtml += "<div class='container'>";
-                prjHtml += "   <div class='row'>";
-                prjHtml += "      <div class='col-md-8' id='videoCol'>";
-                prjHtml += "         <div class='embed-responsive embed-responsive-16by9'>";
-                prjHtml += "            <iframe class='embed-responsive-item' id='prjVideo' src='" + videoLink + "'></iframe>";
-                prjHtml += "         </div>";
-                prjHtml += "      </div>";
-                prjHtml += "      <div class='col-md-4' id='infoCol'>";
-                prjHtml += "         <br><h4> Contributors:</h4> <p>Vasia Jopovych</p><p>Vaselisa Pizdaivanovna</p><p>Johnny Waters</p>";
-                prjHtml += "         <br><h4 id='prjTitle'> Project info:</h4>" + languageShow + frameworkShow;
-                prjHtml += "      </div>";
-                prjHtml += "   </div>";
-                prjHtml += "   <div class='row'>";
-                prjHtml += "      <h3>Description</h3>" + desc;
-                prjHtml += "   </div>";
-                prjHtml += "</div>";
-
-                $("#mainBody").html(prjHtml);
-                $("#tileNav").empty();
-            }
-        }
-    }
-}
-
