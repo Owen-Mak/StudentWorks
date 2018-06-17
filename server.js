@@ -138,6 +138,7 @@ app.post('/send', urlencodedParser, function(req,res){
             //Create user account in database
             //testing with sample user data   ----> will use data from front end later on when it is available
             //should check if userName exists in db prior to creating new user
+            
             dbconnect.connect();            
             dbconnect.getUserExist(req.body.name, function(err, data) {
                 if (err){ throw err;}
@@ -166,7 +167,7 @@ app.post('/send', urlencodedParser, function(req,res){
                         dbconnect.createUser(user);   
                         dbconnect.end();
                     }
-                }                
+                } 
             });
             
             //replace with something a bit nicer?
