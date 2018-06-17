@@ -20,20 +20,20 @@ function renderProject() {
 
             if (jsData[0].title != "empty") {
                 let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-                let videoLink = jsData[0].VideoUrl;
+                let videoLink = "../" + jsData[0].VideoUrl;
                 let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
                 let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
                 let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
 
                 // Title
-                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " [ " + year + " ] </h2><br>";
+                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " (" + year + ") </h2><br>";
 
                 // Video and Info
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
                 prjHtml += "      <div class='col-md-8' id='videoCol'>";
                 prjHtml += "         <div class='embed-responsive embed-responsive-16by9'>";
-                prjHtml += "            <iframe class='embed-responsive-item' id='prjVideo' src='../" + videoLink + "'></iframe>";
+                prjHtml += "            <video width='320' height='240' controls> <source src='" + videoLink + "' type='video/mp4'></video>";
                 prjHtml += "         </div>";
                 prjHtml += "      </div>";
                 prjHtml += "      <div class='col-md-4' id='infoCol'>";
