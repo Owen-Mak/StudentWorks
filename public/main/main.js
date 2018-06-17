@@ -61,8 +61,6 @@ function renderFirstPage() {
     }
 }
 
-
-
 function renderNavigation(data) {
     let languageList = "";
     let frameworkList = "";
@@ -105,8 +103,6 @@ function renderNavigation(data) {
     $("#yearList").append(yearList);
 }
 
-
-// Renders 6 tiles per page
 function renderSixProjectTiles(jsData) {
 
     // Main loop for six projects
@@ -143,7 +139,6 @@ function renderSixProjectTiles(jsData) {
 
 }
 
-// Renders single tile
 function renderTile(title, year, icon, language, framework, id) {
     let imageShow = '<img src="' + icon + '" class="img-responsive center-block swPrjImage" alt="icon" >';
     let titleShow = title + " (<strong>" + year + "</strong>) ";
@@ -164,7 +159,6 @@ function renderTile(title, year, icon, language, framework, id) {
     return tileHtml;
 }
 
-// Renders empty tile
 function renderEmptyTile() {
     let image = '<img src="images/empty.png" class="img-responsive center-block swPrjImage" alt="icon" >';
     let footer = "<div style='text-align: center;'><a href='#' >Contribute</a></div>";
@@ -182,7 +176,6 @@ function renderEmptyTile() {
     return emptyTileHtml;
 }
 
-// Render tile navigation
 function renderTileNavigation() {
     let tileNav = "";
     tileNav += '<div class="row center">';
