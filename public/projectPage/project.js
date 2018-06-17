@@ -21,8 +21,15 @@ function renderProject() {
             if (jsData[0].title != "empty") {
                 let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
                 let videoLink = "../" + jsData[0].VideoUrl;
+                
+                let contributors = "<br><h4><u>Contributors:</u></h4>";
+                $.each(jsData[0].users, (key, value) => {
+                    contributors += " <p>" + value.firstName + " " + value.lastName + "</p>";
+                });
+
                 let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
                 let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
+                let category = (jsData[0].category) ? "<p><b>Category: </b> " + jsData[0].category + "</p>" : "";
                 let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
 
                 // Title
@@ -31,18 +38,16 @@ function renderProject() {
                 // Video and Info
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
-                prjHtml += "      <div class='col-md-8' id='videoCol'>";
-                prjHtml += "         <div class='embed-responsive embed-responsive-16by9'>";
-                prjHtml += "            <video width='320' height='240' controls> <source src='" + videoLink + "' type='video/mp4'></video>";
-                prjHtml += "         </div>";
+                prjHtml += "      <div  id='videoCol' style='display:inline'>";
+                prjHtml += "            <video id='videoID'  height='400' controls style=''> <source src='" + videoLink + "' type='video/mp4'></video>";
                 prjHtml += "      </div>";
-                prjHtml += "      <div class='col-md-4' id='infoCol'>";
-                prjHtml += "         <br><h4> Contributors:</h4> <p>Vasia Jopovych</p><p>Vaselisa Pizdaivanovna</p><p>Johnny Waters</p>";
-                prjHtml += "         <br><h4 class='prjTitle'> Project info:</h4>" + languageShow + frameworkShow;
+                prjHtml += "      <div class='col-md-4' id='infoCol'";
+                prjHtml +=  contributors;
+                prjHtml += "         <br><br><h4 class='prjTitle'><u>Project info:</u></h4>" + languageShow + frameworkShow + category;
                 prjHtml += "      </div>";
                 prjHtml += "   </div>";
                 prjHtml += "   <div class='row'>";
-                prjHtml += "      <h3>Description</h3>" + desc;
+                prjHtml += "      <br><br><h3>Description</h3>" + desc;
                 prjHtml += "   </div>";
                 prjHtml += "</div>";
 
