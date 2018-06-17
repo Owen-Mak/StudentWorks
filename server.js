@@ -52,7 +52,13 @@ app.get("/", (req,res) =>{
 
 //Registration page
 app.get('/register', function(req, res){
-    res.sendFile(path.join(__dirname, 'public/registration/register.html'));
+    if (req.session.msg) {
+        res.render('register', {serverMsg : req.session.msg});        
+        req.session.msg = "";
+        //res.sendFile(path.join(__dirname, 'public/registration/register.html'));
+    } else {
+        res.render('register', {serverMsg : req.session.msg});
+    }
 });
 
 app.get('/complete',function(req,res){
@@ -86,7 +92,8 @@ app.post('/login', urlencodedParser, function(req, res){
     //console.log(username, password);
     if(!username || !password ) {
         // Render 'missing credentials'
-        return res.render("login/login", { serverMsg: "Missing credentials." });
+        req.session.msg = "Missing credentials.";
+        return res.status(401).redirect('/login');        
     }    
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
@@ -102,9 +109,10 @@ app.post('/login', urlencodedParser, function(req, res){
             } else {
                 if (jsonResult[0].password === req.body.pass) {
                     //set your session information here
+                    req.session.authenticate = true;
                     //req.session.msg = `Welcome ${username}, you are now logged in.`;
-                    res.redirect('/');
-                    //res.send(`User ${username} identity confirmed, logging in`);                    
+                    //redirect back to main page
+                    res.redirect('/');                                  
                 } else {                   
                     req.session.msg = "Invalid Username/Password. Login Failed.";
                     res.status(401).redirect('/login');
@@ -119,62 +127,98 @@ app.post('/login', urlencodedParser, function(req, res){
 
 /* Email verification  start*/
 var rand,mailOptions,host,link;
-app.post('/send', urlencodedParser, function(req,res){    
-    rand=Math.floor((Math.random() * 100) + 54);
-    host=req.get('host');
-    link="http://"+req.get('host')+"/verify?id="+rand;
-    mailOptions={
-        to : req.body.email,
-        subject : "Please confirm your Email account",
-        html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+app.post('/send', urlencodedParser, function(req,res){
+    if (!req.body) {
+        return res.sendStatus(400).redirect('/register');
     }
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        console.log('got into /sendMail');
-     if(error){
-        console.log(error);
-        res.end("error");
-     } else {
-            console.log("Message sent: " + response.message);
-            //Create user account in database
-            //testing with sample user data   ----> will use data from front end later on when it is available
-            //should check if userName exists in db prior to creating new user
-            
-            dbconnect.connect();            
-            dbconnect.getUserExist(req.body.name, function(err, data) {
-                if (err){ throw err;}
-                else {
-                    console.log(data[0].userExist);
-                    if (data[0].userExist === 1) {
-                        //case of existing username in database
-                        dbconnect.end();
-                        console.log('found user, cannot create');
-                    } else {
-                        //case of new username, in which we can create user
-                        console.log ('user not found, can create one');
-                        dbconnect.end();
-                        //have to reconnect in order to do separate query
-                        dbconnect.connect();
-                        var user = {
-                            firstName: 'NULL',
-                            lastName: 'NULL',
-                            email: req.body.email,
-                            password: req.body.password1,                
-                            username: req.body.name,
-                            userType: 'NULL',
-                            program: 'NULL',
-                            registrationCode: rand
-                        };
-                        dbconnect.createUser(user);   
-                        dbconnect.end();
-                    }
-                } 
-            });
-            
-            //replace with something a bit nicer?
-            res.send("<h1> Please check your email for a verification link </h1>");
-            //res.redirect('/');
+    if (!req.body.name || !req.body.password1 || !req.body.email){
+        req.session.msg = "Missing credentials.";
+        return res.status(401).redirect('/register');         
     }
-});
+    //check if user is already created within the database
+    var userExist = false;
+    function getUserExistence(){
+        dbconnect.connect();
+        dbconnect.getUserExist(req.body.name, function(err, data) {
+            if (err) {throw err;}
+            else {
+                userExist = data[0].userExist;
+                //console.log('userExist inside', userExist);
+            }
+        });    
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (userExist === 0){
+                    resolve(userExist);
+                } else {
+                    reject(`Username: ${req.body.name} is already taken by another user. Please try again with another username`);                    
+                }
+            }, 1000);
+        })
+    }
+
+   function sendMail(){
+        rand=Math.floor((Math.random() * 100) + 54);
+        host=req.get('host');
+        link="http://"+req.get('host')+"/verify?id="+rand;
+        mailOptions={
+            to : req.body.email,
+            subject : "Please confirm your Email account",
+            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+        }
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            console.log('got into /sendMail');
+            if(error){
+                console.log(error);
+                res.end("error");
+            } else {
+                    console.log("Message sent: " + response.message);
+                    res.send("<h1> Please check your email for a verification link </h1>");
+            }
+        });
+        return new Promise(function (resolve, reject){
+            resolve('sendMail resolved');
+        })
+    }
+
+    function addUsertoDb(){
+        dbconnect.connect(); 
+        var user = {
+            firstName: 'NULL',
+            lastName: 'NULL',
+            email: req.body.email,
+            password: req.body.password1,                
+            username: req.body.name,
+            userType: 'NULL',
+            program: 'NULL',
+            registrationCode: rand
+        };
+        var errorMsg = "";
+        try{
+            dbconnect.createUser(user);   
+        } catch (err) {
+            errorMsg = err.message;
+        }
+        dbconnect.end();
+        return new Promise (function(resolve, reject){
+            if (errorMsg !== ""){
+                reject (errorMsg);
+            }else {
+                resolve('addUserDb() resolved');
+            }
+        })
+    }
+
+    //executing checking user existence, send mail, adding new user to database in synchronous order
+    getUserExistence()
+    .then(sendMail, null)
+    .then(addUsertoDb, null)
+    .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/register');
+    });    
 });
 
 app.get('/verify',function(req,res){
