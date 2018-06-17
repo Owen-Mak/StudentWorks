@@ -13,15 +13,9 @@ $(document).ready(() => {
     if (!httpRequest)
         console.log("Cannot create an XMLHTTP instance");
 
-<<<<<<< HEAD
     httpRequest.onreadystatechange = renderFirstPage;
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
-=======
-    httpRequest.onreadystatechange = showContents;
     httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
     //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
->>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 
     httpRequest.send();
 });
@@ -63,30 +57,8 @@ function renderFirstPage() {
                     renderSixProjectTiles(jsData);
                 }
             });
-
-<<<<<<< HEAD
-=======
-
-<<<<<<< HEAD
->>>>>>> 038df3bae6dc379188c3d698628fe8514110b8d3
         }
     }
-=======
-
-// Prepare filtering
-function prepareFilter(key, value) {
-    $("#mainBody").empty();
-    $("#tileNav").empty();
-
-    let httpRequest = new XMLHttpRequest();
-    if (!httpRequest)
-        console.log("Cannot create an XMLHTTP instance");
-
-    httpRequest.onreadystatechange = renderFilter(key, value);
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
-    httpRequest.send();
->>>>>>> 1830e9c216d994880939af208807ad30ac242d43
 }
 
 
@@ -233,8 +205,8 @@ function prepareFilter(key, value) {
         console.log("Cannot create an XMLHTTP instance");
 
     httpRequest.onreadystatechange = renderFilter(key, value);
-    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
+    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
     httpRequest.send();
 }
 
@@ -290,64 +262,3 @@ function renderFilter(sKey, sValue) {
         }
     }
 }
-
-
-<<<<<<< HEAD
-=======
-// MOVE them outof here !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// Event handler to start rendering PROJECT page
-function prepareProject(id) {
-    document.getElementById('prjLink' + id).onclick = () => {
-        httpRequest = new XMLHttpRequest();
-        if (!httpRequest)
-            console.log("Cannot create an XMLHTTP instance");
-
-        httpRequest.onreadystatechange = renderProject;
-        httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-        //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
-        httpRequest.send();
-    };
-}
-
-// This function shows the PROJECT page
-function renderProject() {
-    if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-            var jsData = JSON.parse(httpRequest.responseText);
-
-            if (jsData[0].title != "empty") {
-                let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-                let videoLink = jsData[0].VideoUrl;
-                let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
-                let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
-                let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
-
-                // Title
-                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " [ " + year + " ] </h2><br>";
-
-                // Video and Info
-                prjHtml += "<div class='container'>";
-                prjHtml += "   <div class='row'>";
-                prjHtml += "      <div class='col-md-8' id='videoCol'>";
-                prjHtml += "         <div class='embed-responsive embed-responsive-16by9'>";
-                prjHtml += "            <iframe class='embed-responsive-item' id='prjVideo' src='" + videoLink + "'></iframe>";
-                prjHtml += "         </div>";
-                prjHtml += "      </div>";
-                prjHtml += "      <div class='col-md-4' id='infoCol'>";
-                prjHtml += "         <br><h4> Contributors:</h4> <p>Vasia Jopovych</p><p>Vaselisa Pizdaivanovna</p><p>Johnny Waters</p>";
-                prjHtml += "         <br><h4 id='prjTitle'> Project info:</h4>" + languageShow + frameworkShow;
-                prjHtml += "      </div>";
-                prjHtml += "   </div>";
-                prjHtml += "   <div class='row'>";
-                prjHtml += "      <h3>Description</h3>" + desc;
-                prjHtml += "   </div>";
-                prjHtml += "</div>";
-
-                $("#mainBody").html(prjHtml);
-                $("#tileNav").empty();
-            }
-        }
-    }
-}
-
->>>>>>> 038df3bae6dc379188c3d698628fe8514110b8d3
