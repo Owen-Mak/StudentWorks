@@ -38,8 +38,8 @@ function renderProject() {
                 // Video and Info
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
-                prjHtml += "      <div id='videoCol' style='float:left'>";
-                prjHtml += "            <video id='videoID'  height='400' controls style=''> <source src='" + videoLink + "' type='video/mp4'></video>";
+                prjHtml += "      <div class='col-md-8 center' id='videoCol' >";
+                prjHtml += "            <video id='videoID' height='400' controls style=''> <source src='" + videoLink + "' type='video/mp4'></video>";
                 prjHtml += "      </div>";
                 prjHtml += "      <div class='col-md-4' id='infoCol'";
                 prjHtml +=           contributors;
