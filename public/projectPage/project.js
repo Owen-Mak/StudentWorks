@@ -38,7 +38,7 @@ function renderProject() {
                 // Video and Info
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
-                prjHtml += "      <div class='col-md-8' id='videoCol' style='border:solid;' >";
+                prjHtml += "      <div class='col-md-8' id='videoCol' >";
                 prjHtml += "            <video id='videoID' height='400' controls > <source src='" + videoLink + "' type='video/mp4'></video>";
                 prjHtml += "      </div>";
                 prjHtml += "      <div class='col-md-4' id='infoCol'";
