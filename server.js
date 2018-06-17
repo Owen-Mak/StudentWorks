@@ -257,11 +257,11 @@ app.get('/api/getOneProject', function(req, res){
                         var user = {firstName: sqlUsers[i].firstName, 
                             lastName:  sqlUsers[i].lastName, 
                             userName: sqlUsers[i].userName};
-                        console.log (i, user);
+                        //console.log (i, user);
                         users.push(user);
                     }                                                
                 }
-                console.log(data);
+                //console.log(data);
                 delete data[0].user;
                 data[0]['users'] = users;
                 res.writeHead(200, {"Content-type":"application/json"});

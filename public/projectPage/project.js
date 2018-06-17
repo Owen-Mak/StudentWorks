@@ -1,0 +1,64 @@
+
+$(document).ready(() => {
+    httpRequest = new XMLHttpRequest();
+    if (!httpRequest)
+        console.log("Cannot create an XMLHTTP instance");
+
+    id = getQueryStr('id');
+    httpRequest.onreadystatechange = renderProject;
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+    httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+    httpRequest.send();
+});
+
+
+// This function shows the PROJECT page
+function renderProject() {
+    if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+            var jsData = JSON.parse(httpRequest.responseText);
+
+            if (jsData[0].title != "empty") {
+                let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
+                let videoLink = jsData[0].VideoUrl;
+                let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
+                let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
+                let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
+
+                // Title
+                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " [ " + year + " ] </h2><br>";
+
+                // Video and Info
+                prjHtml += "<div class='container'>";
+                prjHtml += "   <div class='row'>";
+                prjHtml += "      <div class='col-md-8' id='videoCol'>";
+                prjHtml += "         <div class='embed-responsive embed-responsive-16by9'>";
+                prjHtml += "            <iframe class='embed-responsive-item' id='prjVideo' src='../" + videoLink + "'></iframe>";
+                prjHtml += "         </div>";
+                prjHtml += "      </div>";
+                prjHtml += "      <div class='col-md-4' id='infoCol'>";
+                prjHtml += "         <br><h4> Contributors:</h4> <p>Vasia Jopovych</p><p>Vaselisa Pizdaivanovna</p><p>Johnny Waters</p>";
+                prjHtml += "         <br><h4 class='prjTitle'> Project info:</h4>" + languageShow + frameworkShow;
+                prjHtml += "      </div>";
+                prjHtml += "   </div>";
+                prjHtml += "   <div class='row'>";
+                prjHtml += "      <h3>Description</h3>" + desc;
+                prjHtml += "   </div>";
+                prjHtml += "</div>";
+
+                $("#projectBody").html(prjHtml);
+                $("#tileNav").empty();
+            }
+        }
+    }
+}
+
+function getQueryStr(name, url){
+    if( !url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
