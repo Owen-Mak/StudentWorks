@@ -54,8 +54,7 @@ app.get("/", (req,res) =>{
 app.get('/register', function(req, res){
     if (req.session.msg) {
         res.render('register', {serverMsg : req.session.msg});        
-        req.session.msg = "";
-        //res.sendFile(path.join(__dirname, 'public/registration/register.html'));
+        req.session.msg = "";        
     } else {
         res.render('register', {serverMsg : req.session.msg});
     }
@@ -77,7 +76,6 @@ app.get('/login', function(req, res){
         req.session.msg = ""; // resets the msg after sending it to client        
     } else {
         res.render('login');
-        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
     }
 });
 
@@ -107,14 +105,18 @@ app.post('/login', urlencodedParser, function(req, res){
                 req.session.msg = "Invalid Username/Password. Login Failed.";
                 res.status(401).redirect('/login');
             } else {
-                if (jsonResult[0].password === req.body.pass) {
+                if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
                     //set your session information here
                     req.session.authenticate = true;
                     //req.session.msg = `Welcome ${username}, you are now logged in.`;
                     //redirect back to main page
                     res.redirect('/');                                  
-                } else {                   
-                    req.session.msg = "Invalid Username/Password. Login Failed.";
+                } else {
+                    if (jsonResult[0].registrationStatus == false){
+                        req.session.msg = "Login failed, please verify your email.";
+                    }else {
+                        req.session.msg = "Invalid Username/Password. Login Failed.";
+                    }                    
                     res.status(401).redirect('/login');
                 }
             }
@@ -143,7 +145,6 @@ app.post('/send', urlencodedParser, function(req,res){
             if (err) {throw err;}
             else {
                 userExist = data[0].userExist;
-                //console.log('userExist inside', userExist);
             }
         });    
         dbconnect.end();
@@ -152,14 +153,14 @@ app.post('/send', urlencodedParser, function(req,res){
                 if (userExist === 0){
                     resolve(userExist);
                 } else {
-                    reject(`Username: ${req.body.name} is already taken by another user. Please try again with another username`);                    
+                    reject(`Username "${req.body.name}" is already taken by another user. Please try again.`);                    
                 }
             }, 1000);
         })
     }
 
    function sendMail(){
-        rand=Math.floor((Math.random() * 100) + 54);
+        rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
         link="http://"+req.get('host')+"/verify?id="+rand;
         mailOptions={
@@ -222,7 +223,7 @@ app.post('/send', urlencodedParser, function(req,res){
 });
 
 app.get('/verify',function(req,res){
-console.log(req.protocol+":/"+req.get('host'));
+console.log(req.protocol+"://"+req.get('host'));
 
 if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
@@ -235,6 +236,7 @@ if((req.protocol+"://"+req.get('host'))==("http://"+host))
         dbconnect.connect();
         dbconnect.validateRegistration(rand);
         dbconnect.end();
+        req.session.msg = "Email successfully verified.";
         res.status(200).redirect('/login');
     }
     else
