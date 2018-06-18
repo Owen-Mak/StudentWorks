@@ -1,133 +1,30 @@
-body {
-    margin-top:15px;
+/* TILES - the body that displays six projects -------------------------------------- */
+.swTile {
+    width:360px; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
 }
-
-.mainFooter {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: red;
-    color: white;
-    text-align: center;
+.swEmptyTile {
+    opacity: 0.3;
 }
-
-
-[logo] {
-    max-height: 90px;
-    max-width: 290px;
-    margin: 10px 11px 5px 8px;
-}
- 
-[moto] {
-    font-weight: 200;
-    margin-right: 30px;
-    color: #333;
-    vertical-align: middle;
-    line-height: 25px;
-    font-size: 22px;
-    padding-right: 8px;
-}
-
-.prfIcon{
-    font-size: 26px;
-    float: right; 
-    padding-top: 11px;
-    color: rgb(235, 235, 235);
-}
-
-.srchIcon {
-    font-size: 17px;
-    padding-top: 17px;
-    padding-left: 25px;
-    color: rgb(153, 38, 38);
-}
-
-
-/* FANCY 3D LOOK */
-.topper {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-}
-
-.navbar.navbar-inverse {
-    background-image: linear-gradient(#9f9f9f, #535353 3%, #1f1f1f 17%, #212121 49%, #191919 89%, #000000 100%);
-    border-top: 1px inset rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.5);
-    border-radius: 4px 4px 0px 0px;
-    margin-top: 10px;
-
-}
-
-.navbar .navbar-nav>li>a {
-    color: #d1d1d1;
-    font-weight: 700;
-    text-rendering: optimizeLegibility;
-    text-shadow: 0px -1px black, 0px 1px rgba(255, 255, 255, 0.25);
-    line-height: 18px;
-}
-
-.navbar .navbar-nav>li.active {
-    color: #f8f8f8;
-    background-color: #080808;
-    box-shadow: inset 0px -28px 23px -21px rgba(255, 255, 255, 0.15);
-    border-left: 1px solid #2A2A2A;
-    border-right: 1px solid #272727;
-}
-
-.btn.btn-gradient-blue {
-    background-color: #0c5497 !important;
-    background-image: -webkit-linear-gradient(top, #127bde 0%, #072d50 100%);
-    background-image: -o-linear-gradient(top, #127bde 0%, #072d50 100%);
-    background-image: linear-gradient(to bottom, #127bde 0%, #072d50 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff127bde', endColorstr='#ff072d50', GradientType=0);
-    border-color: #072d50 #072d50 #0c5497;
-    color: #fff !important;
-    text-shadow: 0 -1px 0 rgba(31, 31, 31, 0.29);
-    -webkit-font-smoothing: antialiased;
-} 
-
-#prjVideo {
-    max-width: 70%;
-    max-height: 400px;
-    padding-left: 30px;
-    margin-top:30px;
+.swPrjImage {
+    height: 220px; 
     margin: auto;
 }
 
-#videoCol {
-    border-right:solid 2px;
-    box-shadow: 5px 0px 0px 0px #888888;
-}
 
-#infoCol {
-    padding-left: 60px;
-    padding-top: 60px;
-}
-
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-#prjTitle {
-    font-family: 'Raleway', sans-serif;
-}
-
-/* Navigation Buttons ---------------------- */
+/* PROJECT Navigation Buttons ---------------------- */
 #tileNav {
     margin: auto;
     width: 25%;
     padding: 10px;
 }
-
 #nextBtn {
     float: right;
     width:60px;
 }
-
 #prevBtn {
     width:60px;
 }
-
 #pageId {
     color: #072d50;
     padding-left: 60px;
@@ -136,4 +33,3 @@ body {
     padding-top:10px;
 }
 
-/* END Navigation Buttons ---------------------- */
