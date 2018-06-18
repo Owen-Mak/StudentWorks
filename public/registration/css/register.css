@@ -80,10 +80,9 @@
     font-size: 13px;
     color: #c9c9c9;
     line-height: 1.4;
-    padding-bottom: 11px;
-    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-top: 15px;
     text-align: left;
-
   }
   
   .txt2 {
@@ -123,12 +122,15 @@
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
-    padding-top: 15px;
+
 }
 
 .container {
-  padding-top: 15px;
+  padding-top: 13px;
+  width:808px; margin:0 auto;
 }
+
+
   
   .content-wrapper {
     background:#363941;
@@ -137,12 +139,13 @@
     box-sizing:border-box;
     color:#72767d;
     font-size:18px;
-    padding:40px;
-    width:450px
+    padding: 40px;
+    width:450px;
+    padding-bottom: 18px;
+    padding-top: 25px;
   }
-  
  
-  .register-form {
+  .registration-form {
     text-align: center;
     width: 100%;
   }
@@ -179,8 +182,8 @@
     background-color: #323338;
     border: 2px solid #222020;
     border-radius: 5px;
-    margin-bottom: 1px;
   }
+  
   
   
   /*---------------------------------------------*/
@@ -262,7 +265,7 @@
     flex-wrap: wrap;
     margin-bottom: 8px;
     width: 100%;
-    padding-top: 20px;
+    padding-top: 15px;
 
   }
   
@@ -283,7 +286,7 @@
     padding-right:50%;
 
     min-width: 150px;
-    height: 55px;
+    height: 40px;
     background-color: #881c1c;
     border-radius: 10px;
     text-shadow: 1px 1px #1e1e1f;
@@ -295,14 +298,23 @@
     max-height: 90px;
     max-width: 290px;
     margin: 10px 11px 5px 8px;
-}
- 
-[moto] {
+    align-items: center;
+    align-content: center;
+    margin-left: 450px;
+    
+  }
+  
+  [moto] {
     font-weight: 200;
-    margin-right: 30px;
-    color: #333;
+    color: #333333;
+    align-items: center;
     vertical-align: middle;
     line-height: 25px;
     font-size: 22px;
-    padding-right: 8px;
-}
+     margin-left: 100px;
+    display: flex;
+    padding-left: 320px;
+    white-space: nowrap;
+    position: relative;
+  }
+  

@@ -73,8 +73,20 @@
     font-size: 13px;
     color: #c9c9c9;
     line-height: 1.4;
-    padding-bottom: 7px;
-    padding-top: 25px;
+    padding-bottom: 5px;
+    padding-top: 10px;
+    text-align: left;
+  }
+
+  .txt {
+    text-shadow: 1px 1px #1e1e1f;
+    font-family: 'Roboto', serif;
+    letter-spacing: 1.6px;
+    font-size: 13px;
+    color: #c9c9c9;
+    line-height: 1.4;
+    padding-bottom: 5px;
+    padding-top: 5px;
     text-align: left;
 
   }
@@ -83,36 +95,34 @@
     font-family: 'Roboto', serif;
     font-size: 15px;
     color: #c5c5c5;
-    line-height: 1.8;
-    display:block;  
+    display:inline-block;  
     text-shadow: 1px 1px #1e1e1f;
-    
+
   }
   
   .txt3 {
     font-family: 'Catamaran', serif;
     font-size: 13px;
     color: #D22822;
-    line-height: 2.2;
-    padding-bottom:  20px;
     text-shadow: 1px 1px #111111;
-    padding-bottom: 20px;
+    display: inline-block;
 
   }
 
   
   .app {
     width: 100%;
-  }
-  
-  .container {
-    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
-    position: fixed;
+
+}
+
+.container {
+  padding-top: 13px;
+  width:800px; margin:0 auto;
 }
 
 
@@ -124,14 +134,14 @@
     box-sizing:border-box;
     color:#72767d;
     font-size:18px;
-    padding:40px;
-    width: 480px
+    padding: 40px;
+    width:450px;
+    padding-bottom: 8px;
+    padding-top: 25px;
   }
-  
  
   .login-form {
     text-align: center;
-
     width: 100%;
   }
   
@@ -159,25 +169,24 @@
   }
   
   
-  
   .input-wrapper {
     width: 100%;
     position: relative;
     background-color: #323338;
     border: 2px solid #222020;
     border-radius: 5px;
-    margin-bottom: 12px;
+    margin-bottom: 1px;
   }
   
   
+  /*---------------------------------------------*/
   .input {
     font-family: 'Roboto', serif;
     color: #e4e4e4;
     line-height: 1.2;
-    font-size: 13px;
+    font-size: 15px;
   
     display: block;
-    width: 100%;
     background: transparent;
     height: 40px;
     padding: 0 25px 0 25px;
@@ -217,9 +226,9 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 8px;
+    margin-bottom: 13px;
     width: 100%;
-    padding-top: 10px;
+    padding-top: 13px;
 
   }
   
@@ -247,8 +256,7 @@
   .error {
     background-color:#881c1c;
     border: 1px solid;
-    margin: 15px 15px 15px 25px;
-    padding:15px 15px 15px 10px;
+    padding: 3px;
 }
 
 
@@ -257,16 +265,22 @@
 [logo] {
   max-height: 90px;
   max-width: 290px;
-  margin-left: 15px;
-  padding-top: 15px;
+  margin: 10px 11px 5px 8px;
+  align-items: center;
+  align-content: center;
+  margin-left: 250px;
 }
 
 [moto] {
-  font-weight: bold;
-  margin-right: 30px;
-  color: #333;
+  font-weight: 200;
+  color: #333333;
+  align-items: center;
   vertical-align: middle;
+  line-height: 25px;
   font-size: 22px;
-  margin-left: 25px;
-  font-family: 'Roboto Slab', serif;
+   margin-left: 100px;
+  display: flex;
+  padding-left: 140px;
+  white-space: nowrap;
 }
+
