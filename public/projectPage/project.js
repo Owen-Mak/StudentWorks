@@ -22,7 +22,7 @@ function renderProject() {
                 let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
                 let videoLink = "../" + jsData[0].VideoUrl;
                 
-                let contributors = "<br><h4><u>Contributors:</u></h4>";
+                let contributors = "<br><h4><u>Developers:</u></h4>";
                 $.each(jsData[0].users, (key, value) => {
                     contributors += " <p>" + value.firstName + " " + value.lastName + "</p>";
                 });

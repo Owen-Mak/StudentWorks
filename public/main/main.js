@@ -167,7 +167,7 @@ function renderEmptyTile() {
     emptyTileHtml += "<div class='col-md-4'>";
     emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
-    emptyTileHtml += "       <a href='#' class ='tileLinkEmpty'>";
+    emptyTileHtml += "       <a href='../contribute/contribute.html' class ='tileLinkEmpty'>";
     emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -213,17 +213,19 @@ function renderFilter(sKey, sValue) {
             let newData = [];
 
             if (sKey == "language") {
+                //$("#langNavID").attr({"class" : "active" });
                 $.each(jsData, (key, value) => {
                     if (value.language == sValue) newData.push(value);
                 });
             }
             else if (sKey == "framework") {
+                //$("#frmNavID").attr({"class" : "active" });
                 $.each(jsData, (key, value) => {
                     if (value.framework == sValue) newData.push(value);
                 });
             }
             else if (sKey == "year") {
-                console.log("The year is: " + sValue);
+                //$("#yrNavID").attr({"class" : "active" });
                 $.each(jsData, (key, value) => {
 
                     if (value.creationDate) {
