@@ -36,7 +36,7 @@
 				<!-- START OF LOGO SECTION -->
 						<div class="row hidden-xs topper">
 								<div class="col-xs-7 col-sm-7">
-										<a href="/main/main.html">
+										<a href="/">
 												<img logo alt="logo" src="../images/logo.png">
 										</a>
 										<p moto>"By the students, for the students"</p>
@@ -48,6 +48,11 @@
 			<div class="content-wrapper">
 				<form onsubmit="return validateForm()" class="register-form validate-form flex-sb" id="register" name ="register" method="POST" action="/send">                    
                     <span style="color:#b60909" class="title"> - REGISTRATION - </span>
+					{{#if serverMsg}}
+					<div>
+						<span class="text error" id="serverMsg" style="color:#dfdfdf; font-weight: bold; ">{{serverMsg}}</span>
+					</div>
+					{{/if}}
 					<span class="txt1" style="font-weight: bold">
 						USERNAME <span id="errorMsg" style="color:#D22822"></span>
 					</span> 
