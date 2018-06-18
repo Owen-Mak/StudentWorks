@@ -50,7 +50,6 @@ app.get("/", (req,res) =>{
     res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
 });
 
-
 //Registration page
 app.get('/register', function(req, res){
     if (req.session.msg) {
@@ -252,6 +251,24 @@ else
 }
 });   //email verification end
 
+
+//Project page
+app.get("/project", (req,res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
+});
+
+//Profile Page
+app.get("/profile", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/profile/profile.html'));
+})
+
+//Forgot password
+app.get("/forgotpass", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/forgotPassword/complete.html'));
+})
+
+
+/*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
