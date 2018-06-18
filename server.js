@@ -260,12 +260,35 @@ app.get("/project", (req,res) => {
 //Profile Page
 app.get("/profile", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/profile/profile.html'));
-})
+});
 
 //Forgot password
-app.get("/forgotpass", (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public/forgotPassword/complete.html'));
-})
+app.get("/login/forgotpass", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/login/forgot.html'));
+});
+
+app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
+    if (!req.body) {
+        return res.sendStatus(400).redirect('/register');
+    }
+    else{
+    console.log(req.body.username1);
+    dbconnect.connect();
+    dbconnect.getOneUser(req.body.username1, function(err, data){
+        if(err){
+            console.log("user not found");
+        }
+        else{
+            //grab user data
+            var user = JSON.parse(JSON.stringify(data));
+            //console.log("found user" + user[0].email);
+        }
+    });
+
+
+    }
+    
+});
 
 
 /*------------------Routing End ------------------------*/
