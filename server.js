@@ -397,6 +397,26 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
     }
 });
 
+app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
+    var userID = req.params.userID;
+    if (isNaN(userID) || (userID < 0)){
+        res.send('Invalid userID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
+
+
 /* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");
