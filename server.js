@@ -276,21 +276,42 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
     dbconnect.connect();
     dbconnect.getOneUser(req.body.username1, function(err, data){
         if(err){
+            //need to update the page to say no user is found
             console.log("user not found");
         }
+        //we have a user, go at it...
         else{
-            //grab user data
-            var user = JSON.parse(JSON.stringify(data));
-            //console.log("found user" + user[0].email);
-        }
-    });
+                //grab user data
+                var user = JSON.parse(JSON.stringify(data));
+                //create temp password
+                var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
+                //send an e-mail for user to access new password.
+                var passlink = "http://myvmlab.senecacollege.ca:6193/login/complete";
+                var newMailOptions = {
+                    to : user[0].email,
+                    subject : "StudentWorks Password Recovery",
+                    html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
+                }
+                smtpTransport.sendMail(newMailOptions, function(error, response){
+                    console.log('got into /sendMail');
+                    if(error){
+                        console.log(error);
+                        res.end("error");
+                    } else {
+                            console.log("Message sent: " + response.message);
+                            res.send("<h1> Please check your email for your new password </h1>");
+                    }
+                });
 
-
+            }
+        });
     }
     
 });
 
-
+app.get("/login/complete", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
+})
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
