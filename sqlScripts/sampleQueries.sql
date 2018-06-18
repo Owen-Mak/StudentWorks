@@ -11,10 +11,13 @@ SELECT * FROM USERS WHERE userName = 'omak';
 SELECT p.*, b.userID
 FROM PROJECTS p, BRIDGE_USERS_PROJECTS b
 WHERE (p.ProjectID = b.ProjectID);
-*/
+
 
 SELECT proj.*, u.*
 FROM PROJECTS proj
   JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
   JOIN USERS u on b.userID = u.userID
 WHERE proj.ProjectID = 1;
+*/
+
+SELECT * FROM USERS  WHERE EXISTS (SELECT * FROM USERS WHERE userName = 'NotOwen');
