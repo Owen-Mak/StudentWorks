@@ -311,15 +311,9 @@
     vertical-align: middle;
     line-height: 25px;
     font-size: 22px;
-<<<<<<< HEAD
-    margin-left: 25px;
-    font-family: 'Roboto Slab', serif;
-}
-=======
      margin-left: 100px;
     display: flex;
     padding-left: 320px;
     white-space: nowrap;
     position: relative;
   }
->>>>>>> master
