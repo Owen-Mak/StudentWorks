@@ -524,7 +524,7 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
     var year = req.params.year;
     if (year === null || isNaN(year)) {
         res.send ('Invalid year provided');
-    } else {
+    } else { 
         dbconnect.connect();
         var results = dbconnect.getAllProjectsFilterByYear(year, function (err, data) {
             if (err) {
