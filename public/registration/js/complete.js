@@ -3,7 +3,7 @@ var rPassCheck = true; //for reetype password check
 
 function validateForm() {
 
-    if(validPass(passCheck) && validRPass(rPassCheck)){
+    if(passCheck && rPassCheck){
         return true;
     }else{
         return false;
