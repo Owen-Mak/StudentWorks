@@ -12,7 +12,7 @@
 				$('form[name=register]').submit(function(){
 				if($('#to').is(':valid')){ //make sure the email is valid before displaying message
 						to=$("#to").val();     
-						$("#message").text("Sending E-mail...Please wait");
+						$("#message").text("Validating credentials...Please wait");
 						$.get("http://localhost:3000/send",{to:to},function(data){
 						if(data=="sent")
 						{

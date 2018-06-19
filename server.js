@@ -166,7 +166,7 @@ app.post('/send', urlencodedParser, function(req,res){
         mailOptions={
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -174,8 +174,8 @@ app.post('/send', urlencodedParser, function(req,res){
                 console.log(error);
                 res.end("error");
             } else {
-                    console.log("Message sent: " + response.message);
-                    res.send("<h1> Please check your email for a verification link </h1>");
+                req.session.msg = "Please check your email for a verification link.";
+                return res.status(401).redirect('/register'); 
             }
         });
         return new Promise(function (resolve, reject){
