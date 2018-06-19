@@ -259,44 +259,71 @@ app.get("/login/forgotpass", (req, res) => {
 });
 
 app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
-    if (!req.body) {
-        return res.sendStatus(400).redirect('/register');
-    }
-    else{
-    dbconnect.connect();
-    dbconnect.getOneUser(req.body.username1, function(err, data){
-        if(err){
-            //need to update the page to say no user is found
-            console.log("user not found");
-        }
-        //we have a user, go at it...
-        else{
-                //grab user data
-                var user = JSON.parse(JSON.stringify(data));
-                //create temp password
-                var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
-                //send an e-mail for user to access new password.
-                var passlink = "http://myvmlab.senecacollege.ca:6193/forgotpass/complete";
-                var newMailOptions = {
-                    to : user[0].email,
-                    subject : "StudentWorks Password Recovery",
-                    html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
-                }
-                smtpTransport.sendMail(newMailOptions, function(error, response){
-                    console.log('got into /sendMail');
-                    if(error){
-                        console.log(error);
-                        res.end("error");
-                    } else {
-                            console.log("Message sent: " + response.message);
-                            res.send("<h1> Please check your email for your new password </h1>");
-                    }
-                });
+    var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
 
-            }
-        });
-    }
     
+    function getUser(){
+        return new Promise(function(resolve, reject){
+            dbconnect.connect();
+            dbconnect.getOneUser(req.body.username1, function(err, data){
+                if(err){
+                    //need to update the page to say no user is found
+                    reject();
+                }
+                //we have a user, go at it...
+                else{
+                        //grab user data
+                        var user = JSON.parse(JSON.stringify(data));
+                        //send an e-mail for user to access new password.
+                        var passlink = "http://myvmlab.senecacollege.ca:6193/forgotpass/complete";
+                        var newMailOptions = {
+                            to : user[0].email,
+                            subject : "StudentWorks Password Recovery",
+                            html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
+                        }
+                        smtpTransport.sendMail(newMailOptions, function(error, response){
+                            console.log('got into /sendMail');
+                            if(error){
+                                console.log(error);
+                                res.end("error");
+                                reject();
+                            } else {
+                                    console.log("Message sent: " + response.message);
+                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    resolve();
+                            }
+                        });
+                        
+                    }
+            });
+         });
+         dbconnect.end();
+    }
+
+    function updatePassword() {
+        return new Promise(function (resolve, reject){
+             dbconnect.connect();
+             dbconnect.updatePasswordByUsername(req.body.username1, tempPass,function(err, data){
+                 if (err){
+                         console.log("could not update password");
+                         reject();
+                     }
+                     else{
+                         resolve();   
+                     }
+              });
+          dbconnect.end();
+         });
+     };
+
+     getUser()
+     .then(updatePassword, null)
+     .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/login');
+    });   
+      
 });
 
 app.get("/forgotpass/complete", (req, res) => {
