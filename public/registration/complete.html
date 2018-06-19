@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>StudentWorks-Complete Registration</title>
+	<title>StudentWorks-Reset Password</title>
     <meta charset="UTF-8">
     
 	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
 
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="/registration/css/register.css">
+	<script src="/registration/js/complete.js"></script>
 </head>
 <body>
 	
@@ -24,15 +25,36 @@
 		<div class="row">
 			<div class="app">
 			<div class="content-wrapper">
-				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()" name="complete">
+				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()" name="complete" method="POST" action="/complete">
 					<span style="color:#b60909" class="title">
 					- COMPLETE REGISTRATION -
                         <span class="txt2" >Good to see you, </span>
-                        <span style="color:#b60909" class="txt3" style="text-align: center;" >Please choose your password and we're all done</span>
-                    </span>
+                        <span style="color:#b60909" class="txt3" style="text-align: center;" >Please enter your current password, and your new one.</span>
+					</span>
+					
 
 					<span class="txt1" style="font-weight: bold">
-						PASSWORD <span id="errorMsg" style="color:#D22822"></span>
+							USERNAME <span id="errorMsg" style="color:#D22822"></span>
+						</span> 
+
+						<div class="input-wrapper validate-input">
+								<input class="input" type="text" name="username" id="username" required>
+								<span class="focus-input"></span>
+							</div>
+
+					<span class="txt1" style="font-weight: bold">
+							CURRENT PASSWORD <span id="errorMsg" style="color:#D22822"></span>
+						</span> 
+					
+						<div class="input-wrapper validate-input">
+								<input class="input" type="password" name="oldpassword" id="oldpassword" onchange="validPass()">
+								<span class="focus-input"></span>
+							</div>
+
+						
+
+					<span class="txt1" style="font-weight: bold">
+						NEW PASSWORD <span id="errorMsg" style="color:#D22822"></span>
 					</span> 
 
 
@@ -62,7 +84,7 @@
 		</div>
 		</div>
 	</div>
-	<script src="js/complete.js"></script>
+	
 
 	<div id="dropDownSelect1"></div>
 

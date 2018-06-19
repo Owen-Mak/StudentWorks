@@ -11,12 +11,12 @@ drop table USERS;
 
 CREATE TABLE USERS (
     userID      INT(11) NOT NULL AUTO_INCREMENT,
-    firstName   VARCHAR(30) NOT NULL,
-    lastName    VARCHAR(30) NOT NULL,
+    firstName   VARCHAR(30) NULL,
+    lastName    VARCHAR(30) NULL,
     password    CHAR(50)  NOT NULL,
     email	    VARCHAR(50) NOT NULL,    
     userName    VARCHAR(20) NOT NULL UNIQUE,    
-    userType    VARCHAR(25) NOT NULL CHECK(userType IN ('User','Contributor', 'Administrator')),
+    userType    VARCHAR(25) CHECK(userType IN ('User','Contributor', 'Administrator')),
     program     VARCHAR(25) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
