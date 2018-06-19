@@ -60,15 +60,6 @@ app.get('/register', function(req, res){
     }
 });
 
-app.get('/complete',function(req,res){
-    res.sendFile(path.join(__dirname, 'public/registration/complete.html'));
-});
-
-app.post('/complete', urlencodedParser, function(req,res){
-    console.log('here')
-});
-
-
 //login page
 app.get('/login', function(req, res){
     if (req.session.msg) {
@@ -286,7 +277,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                 //create temp password
                 var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
                 //send an e-mail for user to access new password.
-                var passlink = "http://myvmlab.senecacollege.ca:6193/login/complete";
+                var passlink = "http://myvmlab.senecacollege.ca:6193/forgotpass/complete";
                 var newMailOptions = {
                     to : user[0].email,
                     subject : "StudentWorks Password Recovery",
@@ -309,9 +300,49 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
     
 });
 
-app.get("/login/complete", (req, res) => {
+app.get("/forgotpass/complete", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
-})
+});
+
+app.post('/complete', urlencodedParser, function(req,res){
+    //check that old password matches
+    var username = req.body.username;
+    dbconnect.connect();
+    var getUser = dbconnect.getOneUser(username, function (err, data) {
+        if (err) { 
+            console.log (err); throw err;
+        } else {                        
+            //validate the data here!!
+            var user = JSON.parse(JSON.stringify(data));
+            //console.log("result:", jsonResult[0]);
+            if (user.length < 1){
+                //case of username not found
+                req.session.msg = "Invalid Username/Password. Login Failed.";
+                res.status(401).redirect('/login');
+            } else {
+                if (user[0].password === req.body.oldpassword  && user[0].registrationStatus == true) {
+                    //Set user password to new password
+                    var password = req.body.password1;
+                    
+                    //set your session information here
+                    req.session.authenticate = true;
+                    res.redirect('/');                                  
+                } else {
+                    if (user[0].registrationStatus == false){
+                        req.session.msg = "Login failed, please verify your email.";
+                    }else {
+                        req.session.msg = "Invalid Username/Password. Login Failed.";
+                    }                    
+                    res.status(401).redirect('/login');
+                }
+            }
+            //res.writeHead(200, {"Content-type":"application/json"});
+            //res.end(JSON.stringify(data));
+        }        
+    });
+    dbconnect.end();
+    
+});
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */

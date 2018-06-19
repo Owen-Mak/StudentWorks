@@ -119,6 +119,14 @@ module.exports.getUserExist = function (userName, callback){
     runQuery(sql, callback);
 }
 
+module.exports.getProjectsByUser = function (userID, callback){
+    var sql = ` SELECT proj.* FROM PROJECTS proj
+                    JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
+                    JOIN USERS u on b.userID = u.userID
+                WHERE u.userID = 1;`;
+    runQuery(sql, callback);
+}
+
 function runQuery(sql, callback){
     connection.query(sql, (err, result) => {
 		if (err) {
@@ -135,4 +143,3 @@ module.exports.end = function (){
     console.log ("Disconnect!");
     connection.end();
 };
-

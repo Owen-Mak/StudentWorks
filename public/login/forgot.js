@@ -1,11 +1,7 @@
 var userCheck = true; 
 var passCheck = true;
-console.log("made it into the script...");
 
-function test(){
-	console.log("testing...");
-	return true;
-}
+
 function validateForm() {
    console.log(userCheck);
    if(userCheck){
