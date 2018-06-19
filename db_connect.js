@@ -123,7 +123,14 @@ module.exports.getProjectsByUser = function (userID, callback){
     var sql = ` SELECT proj.* FROM PROJECTS proj
                     JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
                     JOIN USERS u on b.userID = u.userID
-                WHERE u.userID = 1;`;
+                WHERE u.userID = ${userID};`;
+    runQuery(sql, callback);
+}
+
+module.exports.updatePasswordByUsername = function (userName, password, callback) {
+    var sql = ` UPDATE USERS
+                SET password = '${password}'
+                WHERE userName = '${userName}';`;
     runQuery(sql, callback);
 }
 
