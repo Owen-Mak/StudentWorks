@@ -260,7 +260,27 @@ app.get("/login/forgotpass", (req, res) => {
 
 app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
     var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
-
+    var userExist = false;
+    function getUserExistence(){
+        dbconnect.connect();
+        dbconnect.getUserExist(req.body.username1, function(err, data) {
+            if (err) {throw err;}
+            else {
+                console.log(data[0].userExist);
+                userExist = data[0].userExist;
+            }
+        });    
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (userExist === 0){
+                    reject(`Username "${req.body.username1}" is not in our system!`);                    
+                } else {
+                    resolve(userExist);
+                }
+            }, 1000);
+        })
+    }
     
     function getUser(){
         return new Promise(function(resolve, reject){
@@ -288,7 +308,6 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-                                    console.log("Message sent: " + response.message);
                                     res.send("<h1> Please check your email for your new password </h1>");
                                     resolve();
                             }
@@ -315,8 +334,8 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
           dbconnect.end();
          });
      };
-
-     getUser()
+     getUserExistence()
+     .then(getUser, null)
      .then(updatePassword, null)
      .catch(function(rejectMsg){
         console.log('rejectMsg: ', rejectMsg);
