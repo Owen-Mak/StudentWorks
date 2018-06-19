@@ -52,7 +52,12 @@ app.get("/", (req,res) =>{
 
 //Registration page
 app.get('/register', function(req, res){
-    res.sendFile(path.join(__dirname, 'public/registration/register.html'));
+    if (req.session.msg) {
+        res.render('register', {serverMsg : req.session.msg});        
+        req.session.msg = "";        
+    } else {
+        res.render('register', {serverMsg : req.session.msg});
+    }
 });
 
 app.get('/complete',function(req,res){
@@ -71,7 +76,6 @@ app.get('/login', function(req, res){
         req.session.msg = ""; // resets the msg after sending it to client        
     } else {
         res.render('login');
-        //res.sendFile(path.join(__dirname, 'views/login/login.html'));
     }
 });
 
@@ -86,7 +90,8 @@ app.post('/login', urlencodedParser, function(req, res){
     //console.log(username, password);
     if(!username || !password ) {
         // Render 'missing credentials'
-        return res.render("login/login", { serverMsg: "Missing credentials." });
+        req.session.msg = "Missing credentials.";
+        return res.status(401).redirect('/login');        
     }    
     var results = dbconnect.getOneUser(username, function (err, data) {
         if (err) { 
@@ -100,13 +105,18 @@ app.post('/login', urlencodedParser, function(req, res){
                 req.session.msg = "Invalid Username/Password. Login Failed.";
                 res.status(401).redirect('/login');
             } else {
-                if (jsonResult[0].password === req.body.pass) {
+                if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
                     //set your session information here
+                    req.session.authenticate = true;
                     //req.session.msg = `Welcome ${username}, you are now logged in.`;
-                    res.redirect('/');
-                    //res.send(`User ${username} identity confirmed, logging in`);                    
-                } else {                   
-                    req.session.msg = "Invalid Username/Password. Login Failed.";
+                    //redirect back to main page
+                    res.redirect('/');                                  
+                } else {
+                    if (jsonResult[0].registrationStatus == false){
+                        req.session.msg = "Login failed, please verify your email.";
+                    }else {
+                        req.session.msg = "Invalid Username/Password. Login Failed.";
+                    }                    
                     res.status(401).redirect('/login');
                 }
             }
@@ -120,56 +130,113 @@ app.post('/login', urlencodedParser, function(req, res){
 /* Email verification  start*/
 var rand,mailOptions,host,link;
 app.post('/send', urlencodedParser, function(req,res){
-    //
-    rand=Math.floor((Math.random() * 100) + 54);
-    host=req.get('host');
-    link="http://"+req.get('host')+"/verify?id="+rand;
-    mailOptions={
-        to : req.body.email,
-        subject : "Please confirm your Email account",
-        html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+    if (!req.body) {
+        return res.sendStatus(400).redirect('/register');
     }
-    smtpTransport.sendMail(mailOptions, function(error, response){
-     if(error){
-        console.log(error);
-        res.end("error");
-     } else {
-            console.log("Message sent: " + response.message);
-            //Create user account in database
-            //testing with sample user data   ----> will use data from front end later on when it is available
-            console.log ("Create sample user");
-            var user = {
-                firstName: 'NULL',
-                lastName: 'NULL',
-                password: req.body.password,
-                email: req.body.email,
-                username: req.query.name,
-                userType: 'NULL',
-                program: 'NULL'
-            };
-            console.log ("Done Create sample user");
-            dbconnect.connect();
-            //should check if userName exists in db prior to creating new user
-            //dbconnect.createUser(user);
-            dbconnect.end();
+    if (!req.body.name || !req.body.password1 || !req.body.email){
+        req.session.msg = "Missing credentials.";
+        return res.status(401).redirect('/register');         
+    }
+    //check if user is already created within the database
+    var userExist = false;
+    function getUserExistence(){
+        dbconnect.connect();
+        dbconnect.getUserExist(req.body.name, function(err, data) {
+            if (err) {throw err;}
+            else {
+                userExist = data[0].userExist;
+            }
+        });    
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (userExist === 0){
+                    resolve(userExist);
+                } else {
+                    reject(`Username "${req.body.name}" is already taken by another user. Please try again.`);                    
+                }
+            }, 1000);
+        })
+    }
 
-            //replace with something a bit nicer?
-            res.send("<h1> Please check your email for a verification link </h1>");
-            //res.redirect('/');
+   function sendMail(){
+        rand=Math.floor((Math.random() * 100000) + 54);
+        host=req.get('host');
+        link="http://"+req.get('host')+"/verify?id="+rand;
+        mailOptions={
+            to : req.body.email,
+            subject : "Please confirm your Email account",
+            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+        }
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            console.log('got into /sendMail');
+            if(error){
+                console.log(error);
+                res.end("error");
+            } else {
+                    console.log("Message sent: " + response.message);
+                    res.send("<h1> Please check your email for a verification link </h1>");
+            }
+        });
+        return new Promise(function (resolve, reject){
+            resolve('sendMail resolved');
+        })
     }
-});
+
+    function addUsertoDb(){
+        dbconnect.connect(); 
+        var user = {
+            firstName: 'NULL',
+            lastName: 'NULL',
+            email: req.body.email,
+            password: req.body.password1,                
+            username: req.body.name,
+            userType: 'NULL',
+            program: 'NULL',
+            registrationCode: rand
+        };
+        var errorMsg = "";
+        try{
+            dbconnect.createUser(user);   
+        } catch (err) {
+            errorMsg = err.message;
+        }
+        dbconnect.end();
+        return new Promise (function(resolve, reject){
+            if (errorMsg !== ""){
+                reject (errorMsg);
+            }else {
+                resolve('addUserDb() resolved');
+            }
+        })
+    }
+
+    //executing checking user existence, send mail, adding new user to database in synchronous order
+    getUserExistence()
+    .then(sendMail, null)
+    .then(addUsertoDb, null)
+    .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/register');
+    });    
 });
 
 app.get('/verify',function(req,res){
-console.log(req.protocol+":/"+req.get('host'));
+console.log(req.protocol+"://"+req.get('host'));
 
 if((req.protocol+"://"+req.get('host'))==("http://"+host))
 {
     console.log("Domain is matched. Information is from Authentic email");
+    console.log(rand);
     if(req.query.id==rand)
     {
         console.log("email is verified");
         //Update emailRegistration status in database
+        dbconnect.connect();
+        dbconnect.validateRegistration(rand);
+        dbconnect.end();
+        req.session.msg = "Email successfully verified.";
         res.status(200).redirect('/login');
     }
     else
@@ -185,7 +252,7 @@ else
 });   //email verification end
 
 
-/* Attempt to get all users   WIP - Owen*/
+/* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
     dbconnect.connect(); 
     var results = dbconnect.getAllUsers(function(err,data){
@@ -329,6 +396,26 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
         dbconnect.end();
     }
 });
+
+app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
+    var userID = req.params.userID;
+    if (isNaN(userID) || (userID < 0)){
+        res.send('Invalid userID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
+            if (err) {
+                console.log ("ERROR", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                res.end(JSON.stringify(data));
+            }
+        });
+        dbconnect.end();
+    }
+});
+
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

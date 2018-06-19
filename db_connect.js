@@ -47,15 +47,14 @@ module.exports.getAllUsers = function (callback) {
 */
 module.exports.createUser = function (user) {
     console.log("Inside createUser():");
-    var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationHashCode) \
-    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now())`;
-    //runQuery(sql, callback);
+    var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode) \
+    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now(), ${user.registrationCode})`;   
     connection.query(sql, (err, result) => {
         if (err) {
-            console.log ("Failed to create user:", user.firstName);
+            console.log ("Failed SQL:", sql);
             throw err;
         } else {
-            console.log (`${user.firstName} is added to database`);
+            console.log (`${user.username} is added to database`);
         }
     });
 };
@@ -79,11 +78,18 @@ module.exports.getOneProject = function (projectID, callback){
     runQuery (sql, callback);
 };
 
-module.exports.validateRegistration = function (userName, callback) {
+module.exports.validateRegistration = function (registrationCode) {
     var sql = ` UPDATE USERS
                 SET registrationStatus = TRUE
-                WHERE userName = ${userName};`
-    runQuery (sql, callback);
+                WHERE registrationCode = ${registrationCode};`
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log ("Failed SQL:", sql);
+            throw err;
+        } else {
+            console.log (`registration code ${registrationCode} is updated to database`);
+        }
+    });
 }
 
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
@@ -105,6 +111,20 @@ module.exports.getAllProjectsFilterByYear = function (year, callback){
                 FROM PROJECTS 
                 WHERE DATE_FORMAT(creationDate, '%Y')=${year};`;    
     runQuery (sql, callback);
+}
+
+module.exports.getUserExist = function (userName, callback){
+    var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE userName = '${userName}') AS userExist 
+                FROM USERS LIMIT 1;`
+    runQuery(sql, callback);
+}
+
+module.exports.getProjectsByUser = function (userID, callback){
+    var sql = ` SELECT proj.* FROM PROJECTS proj
+                    JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
+                    JOIN USERS u on b.userID = u.userID
+                WHERE u.userID = 1;`;
+    runQuery(sql, callback);
 }
 
 function runQuery(sql, callback){
