@@ -263,7 +263,6 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
         return res.sendStatus(400).redirect('/register');
     }
     else{
-    console.log(req.body.username1);
     dbconnect.connect();
     dbconnect.getOneUser(req.body.username1, function(err, data){
         if(err){
@@ -303,44 +302,94 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
 app.get("/forgotpass/complete", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
 });
-
+//Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
-    //check that old password matches
-    var username = req.body.username;
     dbconnect.connect();
-    var getUser = dbconnect.getOneUser(username, function (err, data) {
-        if (err) { 
-            console.log (err); throw err;
-        } else {                        
-            //validate the data here!!
-            var user = JSON.parse(JSON.stringify(data));
-            //console.log("result:", jsonResult[0]);
-            if (user.length < 1){
-                //case of username not found
-                req.session.msg = "Invalid Username/Password. Login Failed.";
-                res.status(401).redirect('/login');
-            } else {
-                if (user[0].password === req.body.oldpassword  && user[0].registrationStatus == true) {
-                    //Set user password to new password
-                    var password = req.body.password1;
-                    
-                    //set your session information here
-                    req.session.authenticate = true;
-                    res.redirect('/');                                  
-                } else {
-                    if (user[0].registrationStatus == false){
-                        req.session.msg = "Login failed, please verify your email.";
-                    }else {
-                        req.session.msg = "Invalid Username/Password. Login Failed.";
-                    }                    
-                    res.status(401).redirect('/login');
+    var password;
+    function checkUser() {
+        return new Promise(function(resolve, reject){
+            dbconnect.connect();
+            dbconnect.getOneUser(req.body.username, function (err, data) {
+                if (err) { 
+                    console.log (err); throw err;
+                } else {                        
+                    //validate the data here!!
+                    var jsonResult = JSON.parse(JSON.stringify(data));
+                    if (jsonResult.length < 1){
+                        //case of username not found
+                        req.session.msg = "Invalid Username/Password. Failed to update password.";
+                        res.status(401).redirect('/login');
+                    } else {
+                        if (jsonResult[0].password === req.body.oldpassword  && jsonResult[0].registrationStatus == true) {
+                                resolve("passwords match!");                          
+                        } else {
+                            if (jsonResult[0].registrationStatus == false){
+                                req.session.msg = "Password entry failed, please verify your email.";
+                            }else {
+                                req.session.msg = "Invalid Username/Password.Failed to update password.";
+                            }                    
+                            res.status(401).redirect('/login');
+                            reject();
+                        }
+                    }
                 }
-            }
-            //res.writeHead(200, {"Content-type":"application/json"});
-            //res.end(JSON.stringify(data));
-        }        
-    });
-    dbconnect.end();
+            });
+        });
+    }
+    function getUser(){ 
+        return new Promise(function (resolve, reject){
+            
+            dbconnect.getOneUser(req.body.username, function (err, data) {
+                if (err) { 
+                    console.log (err); throw err;
+                } else {          
+                    //validate the data here!!
+                    var user = JSON.parse(JSON.stringify(data));
+                    if (user.length < 1){
+                        //case of username not found
+                        req.session.msg = "Invalid Username/Password. Login Failed.";
+                        res.status(401).redirect('/login');
+                    } else {
+                        if (user[0].password === req.body.oldpassword  && user[0].registrationStatus == true) {
+                            //Set user password to new password
+                            var password = req.body.password1;
+                            resolve();
+                        }
+                        else {
+                            req.session.msg = "Passwords did not match.";
+                            reject("Password did not match.");
+                        }
+                    }
+                }
+            dbconnect.end();
+            });
+        });
+    };
+
+    function updatePassord() {
+       return new Promise(function (resolve, reject){
+            dbconnect.connect();
+            dbconnect.updatePasswordByUsername(req.body.username, req.body.password1,function(err, data){
+                if (err){
+                        console.log("could not update password");
+                        reject();
+                    }
+                    else{
+                        req.session.authenticate = true;
+                        resolve(res.redirect('/'));   
+                    }
+             });
+         dbconnect.end();
+        });
+    };
+    checkUser()
+    .then(getUser, null)
+    .then(updatePassord, null)
+    .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/register');
+    });    
     
 });
 /*------------------Routing End ------------------------*/
