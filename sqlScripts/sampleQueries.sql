@@ -19,5 +19,17 @@ FROM PROJECTS proj
   JOIN USERS u on b.userID = u.userID
 WHERE proj.ProjectID = 1;
 */
-
+/*
 SELECT * FROM USERS  WHERE EXISTS (SELECT * FROM USERS WHERE userName = 'NotOwen');
+
+SELECT proj FROM PROJECTS proj
+    JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
+    JOIN USERS u on b.userID = u.userID
+WHERE u.userID = 1;
+*/
+
+UPDATE USERS
+SET password = 'qwerty'
+WHERE userName = 'NotOwen';
+
+SELECT * FROM USERS WHERE userName = 'NotOwen';
