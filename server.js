@@ -416,7 +416,6 @@ app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
     }
 });
 
-
 /* Catches all unhandled requests */
 app.use(function(req, res){
     res.status(404).send("Page not found");
