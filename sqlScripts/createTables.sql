@@ -1,4 +1,4 @@
-use sw;
+use studentworks;
 /*
 ALTER TABLE USERS
     drop FOREIGN KEY USERS_ibfk_1;
@@ -35,6 +35,7 @@ CREATE TABLE PROJECTS (
     category    VARCHAR(20), 
     ImageFilePath CHAR(50),
     VideoUrl    CHAR(50),
+    status      ENUM('approved', 'pending'),
     PRIMARY KEY (projectID))
 engine=innodb;
 
