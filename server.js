@@ -58,7 +58,6 @@ app.get('/register', function(req, res){
     } else {
         res.render('register', {serverMsg : req.session.msg});
     }
-<<<<<<< HEAD
 });
 
 app.get('/complete',function(req,res){
@@ -67,8 +66,6 @@ app.get('/complete',function(req,res){
 
 app.post('/complete', function(req,res){
     console.log('here')
-=======
->>>>>>> master
 });
 
 //login page
@@ -168,7 +165,7 @@ app.post('/send', urlencodedParser, function(req,res){
         mailOptions={
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -176,8 +173,8 @@ app.post('/send', urlencodedParser, function(req,res){
                 console.log(error);
                 res.end("error");
             } else {
-                    console.log("Message sent: " + response.message);
-                    res.send("<h1> Please check your email for a verification link </h1>");
+                req.session.msg = "Please check your email for a verification link.";
+                return res.status(401).redirect('/register'); 
             }
         });
         return new Promise(function (resolve, reject){
@@ -254,8 +251,6 @@ else
 });   //email verification end
 
 
-<<<<<<< HEAD
-=======
 //Project page
 app.get("/project", (req,res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
@@ -453,7 +448,6 @@ app.post('/complete', urlencodedParser, function(req,res){
 });
 /*------------------Routing End ------------------------*/
 
->>>>>>> master
 /* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
     dbconnect.connect(); 
