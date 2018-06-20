@@ -12,11 +12,7 @@
 				$('form[name=register]').submit(function(){
 				if($('#to').is(':valid')){ //make sure the email is valid before displaying message
 						to=$("#to").val();     
-<<<<<<< HEAD
-						$("#message").text("Validating credentials...Please wait");
-=======
 						$("#message").html("<div class='txt error' style='padding-top: 2px;'>Validating.. Please wait</div>");
->>>>>>> master
 						$.get("http://localhost:3000/send",{to:to},function(data){
 						if(data=="sent")
 						{
