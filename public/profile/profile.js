@@ -2,9 +2,6 @@
 $(document).ready(() => {
   httpRequest = new XMLHttpRequest();
   if (!httpRequest)
-      console.log("Cannot create an XMLHTTP instance");
-
-      console.log("IM LOADED");
 
   id = 2;
   httpRequest.onreadystatechange = renderProfile;
@@ -17,22 +14,18 @@ function renderProfile() {
   if (httpRequest.readyState === 4) {
       if (httpRequest.status === 200) {
 
-        console.log("I got something");
-
           var jsData = JSON.parse(httpRequest.responseText);
 
           let projectList = "";
           let projectStatusList = "";
           let projectYearList = "";
 
-            projectList += "<li>"+ jsData[0].title + "</li>";
+          $.each(jsData, (key, value) => {
+
+            projectList += "<li>"+ jsData.title + "</li>";
             projectStatusList += "<li>NO STATUS IN OUR MODEL</li>";
-            projectYearList += "<li>"+ jsData[0].creationDate.substring(0, 4) + "</li>";
-
-            console.log(projectList);
-            console.log(projectStatusList);
-            console.log(projectYearList);
-
+            projectYearList += "<li>"+ jsDavalue.creationDate.substring(0, 4) + "</li>";
+        });
 
           $("#projectName").html(projectList);
           $("#projectStatus").html(projectStatusList);

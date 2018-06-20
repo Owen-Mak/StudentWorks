@@ -64,10 +64,6 @@ app.get('/complete',function(req,res){
     res.sendFile(path.join(__dirname, 'public/registration/complete.html'));
 });
 
-app.post('/complete', function(req,res){
-    console.log('here')
-});
-
 //login page
 app.get('/login', function(req, res){
     if (req.session.msg) {
@@ -358,6 +354,7 @@ app.get("/forgotpass/complete", (req, res) => {
 });
 //Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
+    console.log('got to /complete');
     dbconnect.connect();
     var password;
     function checkUser() {
