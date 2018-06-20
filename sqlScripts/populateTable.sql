@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 
 INSERT INTO PROJECTS (title, description, creationDate, language, framework, courses, category, ImageFilePath, VideoUrl, status)
 VALUES 
@@ -58,13 +58,14 @@ VALUES
     (1, 2),
     (2, 2),
     (3, 3),
-    (4, NULL),
+    (4, 6),
     (5, 6),
     (6, 4),
     (7, 4),    
     (8, 1),
     (9, 1),
-    (10, 1);
+    (10, 1),
+    (2, 6);
 
 INSERT INTO COMMENTS (userID, commentContent, date)
 VALUES

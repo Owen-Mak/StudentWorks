@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 /*
 ALTER TABLE USERS
     drop FOREIGN KEY USERS_ibfk_1;
