@@ -58,6 +58,17 @@ app.get('/register', function(req, res){
     } else {
         res.render('register', {serverMsg : req.session.msg});
     }
+<<<<<<< HEAD
+});
+
+app.get('/complete',function(req,res){
+    res.sendFile(path.join(__dirname, 'public/registration/complete.html'));
+});
+
+app.post('/complete', function(req,res){
+    console.log('here')
+=======
+>>>>>>> master
 });
 
 //login page
@@ -243,6 +254,8 @@ else
 });   //email verification end
 
 
+<<<<<<< HEAD
+=======
 //Project page
 app.get("/project", (req,res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
@@ -440,6 +453,7 @@ app.post('/complete', urlencodedParser, function(req,res){
 });
 /*------------------Routing End ------------------------*/
 
+>>>>>>> master
 /* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
     dbconnect.connect(); 
