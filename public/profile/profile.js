@@ -8,8 +8,8 @@ $(document).ready(() => {
 
   id = 2;
   httpRequest.onreadystatechange = renderProfile;
-  //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-  httpRequest.open('GET', "http://localhost:3000/api/getProjectsByUser/UserID/" + id, true);
+  httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+  //httpRequest.open('GET', "http://localhost:3000/api/getProjectsByUser/UserID/" + id, true);
   httpRequest.send();
 });
 
