@@ -150,4 +150,3 @@ module.exports.end = function (){
     console.log ("Disconnect!");
     connection.end();
 };
-

@@ -68,7 +68,6 @@ app.post('/complete', function(req,res){
     console.log('here')
 });
 
-
 //login page
 app.get('/login', function(req, res){
     if (req.session.msg) {
@@ -166,7 +165,7 @@ app.post('/send', urlencodedParser, function(req,res){
         mailOptions={
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : "Hello,<br> Please Click on the link to verify your email.<br><a href="+link+">Click here to verify</a>"
+            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -174,8 +173,8 @@ app.post('/send', urlencodedParser, function(req,res){
                 console.log(error);
                 res.end("error");
             } else {
-                    console.log("Message sent: " + response.message);
-                    res.send("<h1> Please check your email for a verification link </h1>");
+                req.session.msg = "Please check your email for a verification link.";
+                return res.status(401).redirect('/register'); 
             }
         });
         return new Promise(function (resolve, reject){
@@ -251,6 +250,203 @@ else
 }
 });   //email verification end
 
+
+//Project page
+app.get("/project", (req,res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
+});
+
+//Profile Page
+app.get("/profile", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/profile/profile.html'));
+});
+
+//Forgot password
+app.get("/login/forgotpass", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/login/forgot.html'));
+});
+
+app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
+    var tempPass = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12); 
+    var userExist = false;
+    function getUserExistence(){
+        dbconnect.connect();
+        dbconnect.getUserExist(req.body.username1, function(err, data) {
+            if (err) {throw err;}
+            else {
+                console.log(data[0].userExist);
+                userExist = data[0].userExist;
+            }
+        });    
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (userExist === 0){
+                    reject(`Username "${req.body.username1}" is not in our system!`);                    
+                } else {
+                    resolve(userExist);
+                }
+            }, 1000);
+        })
+    }
+    
+    function getUser(){
+        return new Promise(function(resolve, reject){
+            dbconnect.connect();
+            dbconnect.getOneUser(req.body.username1, function(err, data){
+                if(err){
+                    //need to update the page to say no user is found
+                    reject();
+                }
+                //we have a user, go at it...
+                else{
+                        //grab user data
+                        var user = JSON.parse(JSON.stringify(data));
+                        //send an e-mail for user to access new password.
+                        var passlink = "http://myvmlab.senecacollege.ca:6193/forgotpass/complete";
+                        var newMailOptions = {
+                            to : user[0].email,
+                            subject : "StudentWorks Password Recovery",
+                            html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
+                        }
+                        smtpTransport.sendMail(newMailOptions, function(error, response){
+                            console.log('got into /sendMail');
+                            if(error){
+                                console.log(error);
+                                res.end("error");
+                                reject();
+                            } else {
+                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    resolve();
+                            }
+                        });
+                        
+                    }
+            });
+         });
+         dbconnect.end();
+    }
+
+    function updatePassword() {
+        return new Promise(function (resolve, reject){
+             dbconnect.connect();
+             dbconnect.updatePasswordByUsername(req.body.username1, tempPass,function(err, data){
+                 if (err){
+                         console.log("could not update password");
+                         reject();
+                     }
+                     else{
+                         resolve();   
+                     }
+              });
+          dbconnect.end();
+         });
+     };
+     getUserExistence()
+     .then(getUser, null)
+     .then(updatePassword, null)
+     .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/login');
+    });   
+      
+});
+
+app.get("/forgotpass/complete", (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
+});
+//Finish the password resetting (can be used apart from 'Forgetting a password')
+app.post('/complete', urlencodedParser, function(req,res){
+    dbconnect.connect();
+    var password;
+    function checkUser() {
+        return new Promise(function(resolve, reject){
+            dbconnect.connect();
+            dbconnect.getOneUser(req.body.username, function (err, data) {
+                if (err) { 
+                    console.log (err); throw err;
+                } else {                        
+                    //validate the data here!!
+                    var jsonResult = JSON.parse(JSON.stringify(data));
+                    if (jsonResult.length < 1){
+                        //case of username not found
+                        req.session.msg = "Invalid Username/Password. Failed to update password.";
+                        res.status(401).redirect('/login');
+                    } else {
+                        if (jsonResult[0].password === req.body.oldpassword  && jsonResult[0].registrationStatus == true) {
+                                resolve("passwords match!");                          
+                        } else {
+                            if (jsonResult[0].registrationStatus == false){
+                                req.session.msg = "Password entry failed, please verify your email.";
+                            }else {
+                                req.session.msg = "Invalid Username/Password.Failed to update password.";
+                            }                    
+                            res.status(401).redirect('/login');
+                            reject();
+                        }
+                    }
+                }
+            });
+        });
+    }
+    function getUser(){ 
+        return new Promise(function (resolve, reject){
+            
+            dbconnect.getOneUser(req.body.username, function (err, data) {
+                if (err) { 
+                    console.log (err); throw err;
+                } else {          
+                    //validate the data here!!
+                    var user = JSON.parse(JSON.stringify(data));
+                    if (user.length < 1){
+                        //case of username not found
+                        req.session.msg = "Invalid Username/Password. Login Failed.";
+                        res.status(401).redirect('/login');
+                    } else {
+                        if (user[0].password === req.body.oldpassword  && user[0].registrationStatus == true) {
+                            //Set user password to new password
+                            var password = req.body.password1;
+                            resolve();
+                        }
+                        else {
+                            req.session.msg = "Passwords did not match.";
+                            reject("Password did not match.");
+                        }
+                    }
+                }
+            dbconnect.end();
+            });
+        });
+    };
+
+    function updatePassord() {
+       return new Promise(function (resolve, reject){
+            dbconnect.connect();
+            dbconnect.updatePasswordByUsername(req.body.username, req.body.password1,function(err, data){
+                if (err){
+                        console.log("could not update password");
+                        reject();
+                    }
+                    else{
+                        req.session.authenticate = true;
+                        resolve(res.redirect('/'));   
+                    }
+             });
+         dbconnect.end();
+        });
+    };
+    checkUser()
+    .then(getUser, null)
+    .then(updatePassord, null)
+    .catch(function(rejectMsg){
+        console.log('rejectMsg: ', rejectMsg);
+        req.session.msg = rejectMsg;
+        res.status(401).redirect('/register');
+    });    
+    
+});
+/*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
 app.get('/api/getAllUsers', function(req, res){
@@ -382,7 +578,7 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
     var year = req.params.year;
     if (year === null || isNaN(year)) {
         res.send ('Invalid year provided');
-    } else {
+    } else { 
         dbconnect.connect();
         var results = dbconnect.getAllProjectsFilterByYear(year, function (err, data) {
             if (err) {
