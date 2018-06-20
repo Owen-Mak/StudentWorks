@@ -7,10 +7,12 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="profile.js"></script>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-
-    <link rel='stylesheet prefetch' href='https://rawgit.com/adrotec/knockout-file-bindings/master/knockout-file-bindings.css'>        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel='stylesheet prefetch' href='https://rawgit.com/adrotec/knockout-file-bindings/master/knockout-file-bindings.css'>        
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="profile.css">
+    
 </head>
 
 <body>
@@ -18,7 +20,7 @@
         <!-- START OF LOGO SECTION -->
         <div class="row hidden-xs topper">
             <div class="col-xs-7 col-sm-7">
-                <a href="../main/main.html">
+                <a href="/">
                     <img logo alt="logo" src="../images/logo.png">
                 </a>
             </div>
@@ -61,7 +63,7 @@
                                                 <a href="register">Register</a>
                                             </li>
                                             <li>
-                                                <a href="#">Forgot password</a>
+                                                <a href="/login/forgotpass">Forgot password</a>
                                             </li>
                                             <li>
                                                 <a href="#">Profile</a>
@@ -110,9 +112,7 @@
                             <div class="form-group username col-md-6">
                                     <input type="text" class="form-control" id="username" name="usernmae" placeholder="Username">
                             </div>
-                            <div class="form-group password col-md-6">
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                            </div>
+     
                         </div>
 
                         <textarea style="resize:none" name="name" cols="100" rows="5"></textarea>
@@ -141,12 +141,14 @@
         <div class="formgroup list-container col-md-6">
             <div class="row">
                 <h4>List of Projects</h4>
+                <ul id="projectName"></ul>
             </div>
         </div>
 
         <div class="formgroup status-container col-md-4">
                 <div class="row">
                     <h4>Status</h4>
+                    <ul id="projectStatus"></ul>
                 </div>
             </div>
 
@@ -154,11 +156,8 @@
                     <div class="row">
                         <h4>Year</h4>
                     </div>
+                    <ul id="projectYear"></ul>
                 </div>
-
-                <div class="container-profile-form-btn">
-                        <button type="submit" class="profile-form-btn">Contribute</button><br>
-                    </div>
 
     </div>
     <hr class="clearfix w-100 d-md-none pb-3">

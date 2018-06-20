@@ -149,5 +149,8 @@ function runQuery(sql, callback){
 module.exports.end = function (){
     console.log ("Disconnect!");
     connection.end();
+<<<<<<< HEAD
 };
-
+=======
+};
+>>>>>>> master
