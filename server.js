@@ -93,8 +93,7 @@ app.post('/login', urlencodedParser, function(req, res){
             console.log (err); throw err;
         } else {                        
             //validate the data here!!
-            var jsonResult = JSON.parse(JSON.stringify(data));
-            //console.log("result:", jsonResult[0]);
+            var jsonResult = JSON.parse(JSON.stringify(data));            
             if (jsonResult.length < 1){
                 //case of username not found
                 req.session.msg = "Invalid Username/Password. Login Failed.";
@@ -103,7 +102,11 @@ app.post('/login', urlencodedParser, function(req, res){
                 if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
                     //set your session information here
                     req.session.authenticate = true;
-                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    req.session.userName = username;
+                    //have to get userType here somehow
+
+
+                    
                     //redirect back to main page
                     res.redirect('/');                                  
                 } else {
@@ -218,32 +221,61 @@ app.post('/send', urlencodedParser, function(req,res){
 });
 
 app.get('/verify',function(req,res){
-console.log(req.protocol+"://"+req.get('host'));
+    console.log(req.protocol+"://"+req.get('host'));
+    var regCodeExist = false;
+    function getRegCodeExistence() {        
+        dbconnect.connect();
+        dbconnect.getRegCodeExist(req.query.id, function (err, data) {
+            if (err){
+                throw err;
+            } else {
+                console.log("regCode:", data[0].regCodeExist)
+                regCodeExist = data[0].regCodeExist;
+            }
+        });
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (regCodeExist == 1){
+                    console.log('resolved at getRegCodeExisitence');
+                    resolve(regCodeExist);
+                } else {
+                    reject(`regCode ${req.query.id} was not found in database`);                    
+                }
+            }, 1000);
+        });
+    }
 
-if((req.protocol+"://"+req.get('host'))==("http://"+host))
-{
-    console.log("Domain is matched. Information is from Authentic email");
-    console.log(rand);
-    if(req.query.id==rand)
-    {
-        console.log("email is verified");
+    function validateRegistration(regCode){    
+        console.log("email is verified");        
         //Update emailRegistration status in database
         dbconnect.connect();
-        dbconnect.validateRegistration(rand);
+        dbconnect.validateRegistration(regCode);
         dbconnect.end();
         req.session.msg = "Email successfully verified.";
         res.status(200).redirect('/login');
+        return new Promise (function (resolve, reject) {
+            setTimeout (function () {
+                resolve("Email successfully verified");
+            }, 1000);
+        });
     }
-    else
-    {
-        console.log("email is not verified");
-        res.end("<h1>Bad Request</h1>");
+
+    //if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
+    if (req.query.id){
+        console.log("Domain is matched. Information is from Authentic email");    
+        getRegCodeExistence()
+        .then(validateRegistration(req.query.id), null)
+        .catch( function(rejectMsg){
+            console.log("email is not verified");
+            console.log(rejectMsg);
+            res.end(`<h1>Bad Request</h1>`);
+        });
+    } else {
+        //console.log("from bad request:", req.protocol+"://"+req.get('host'));
+        //console.log("from bad request:","http://"+host);        
+        res.send("<h1>Request is from unknown source");
     }
-}
-else
-{
-    res.send("<h1>Request is from unknown source");
-}
 });   //email verification end
 
 
@@ -610,6 +642,12 @@ app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
         dbconnect.end();
     }
 });
+
+//logout route - 
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

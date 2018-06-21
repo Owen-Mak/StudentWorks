@@ -27,7 +27,11 @@ SET password = 'qwerty'
 WHERE userName = 'NotOwen';
 
 SELECT * FROM USERS WHERE userName = 'NotOwen';
-*/
+
 SELECT * 
 FROM PROJECTS
 WHERE status = 'approved';
+*/
+
+SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = 123) AS regCodeExist 
+FROM USERS LIMIT 1;
