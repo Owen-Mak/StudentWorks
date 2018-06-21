@@ -161,7 +161,7 @@ app.post('/send', urlencodedParser, function(req,res){
         mailOptions={
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a><input type="hidden" value="foo" name="${rand}"/>"`
+            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -220,7 +220,6 @@ app.post('/send', urlencodedParser, function(req,res){
 app.get('/verify',function(req,res){
 console.log(req.protocol+"://"+req.get('host'));
 console.log(req.query.name);
-var registerCode;
 
 function checkCode() {
     return new Promise(function(resolve, reject){
@@ -231,14 +230,14 @@ function checkCode() {
                 } else {                        
                     var user = JSON.parse(JSON.stringify(data));
                     registerCode = user[0].registrationCode;
-                    resolve();
+                    resolve(registerCode);
                 }
             dbconnect.end();
         });
     });
 };
 
-function validateRegistration() {
+function validateRegistration(registerCode) {
     return new Promise(function(resolve, reject){
         if((req.protocol+"://"+req.get('host'))==("http://"+host)){
             console.log("Domain is matched. Information is from Authentic email");
@@ -330,7 +329,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                         var newMailOptions = {
                             to : user[0].email,
                             subject : "StudentWorks Password Recovery",
-                            html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
+                            html: "Hello, " + user[0].userName + "<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
                         }
                         smtpTransport.sendMail(newMailOptions, function(error, response){
                             console.log('got into /sendMail');
@@ -469,6 +468,8 @@ app.post('/complete', urlencodedParser, function(req,res){
     });    
     
 });
+
+
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
