@@ -60,7 +60,7 @@ module.exports.createUser = function (user) {
 };
 
 module.exports.getAllProjects = function (callback) {
-	var sql = 'SELECT * FROM PROJECTS';
+	var sql = `SELECT * FROM PROJECTS WHERE status = 'approved';`;
     runQuery(sql, callback);
 };
 

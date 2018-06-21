@@ -479,6 +479,8 @@ app.get('/api/getAllProjects', function(req, res) {
 	});	
 });
 
+/* sends a list of 6 projects for rendering
+   additional projects can be sent by changing the page number */
 app.get('/api/getAllProjects/:page', function(req, res) {
     dbconnect.connect();
     var page = req.params.page;
