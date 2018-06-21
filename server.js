@@ -157,11 +157,11 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+rand;
+        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;
         mailOptions={
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
+            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a><input type="hidden" value="foo" name="${rand}"/>"`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -219,31 +219,58 @@ app.post('/send', urlencodedParser, function(req,res){
 
 app.get('/verify',function(req,res){
 console.log(req.protocol+"://"+req.get('host'));
+console.log(req.query.name);
+var registerCode;
 
-if((req.protocol+"://"+req.get('host'))==("http://"+host))
-{
-    console.log("Domain is matched. Information is from Authentic email");
-    console.log(rand);
-    if(req.query.id==rand)
-    {
-        console.log("email is verified");
-        //Update emailRegistration status in database
-        dbconnect.connect();
-        dbconnect.validateRegistration(rand);
-        dbconnect.end();
-        req.session.msg = "Email successfully verified.";
-        res.status(200).redirect('/login');
-    }
-    else
-    {
-        console.log("email is not verified");
-        res.end("<h1>Bad Request</h1>");
-    }
-}
-else
-{
-    res.send("<h1>Request is from unknown source");
-}
+function checkCode() {
+    return new Promise(function(resolve, reject){
+            dbconnect.connect()
+            dbconnect.getOneUser(req.query.name, function(err, data){
+                if (err) { 
+                    reject(err);
+                } else {                        
+                    var user = JSON.parse(JSON.stringify(data));
+                    registerCode = user[0].registrationCode;
+                    resolve();
+                }
+            dbconnect.end();
+        });
+    });
+};
+
+function validateRegistration() {
+    return new Promise(function(resolve, reject){
+        if((req.protocol+"://"+req.get('host'))==("http://"+host)){
+            console.log("Domain is matched. Information is from Authentic email");
+            if(req.query.id == registerCode) 
+            {
+                console.log("email is verified");
+                //Update emailRegistration status in database
+                dbconnect.connect();
+                dbconnect.validateRegistration(rand);
+                dbconnect.end();
+                req.session.msg = "Email successfully verified.";
+                res.status(200).redirect('/login');
+                resolve();
+            }
+            else
+            {
+                reject("email is not verified");
+            }
+        } else {
+            res.send("<h1>Request is from unknown source");
+        }
+    });
+};
+
+checkCode()
+.then(validateRegistration, null)
+.catch(function(rejectMsg){
+    console.log('rejectMsg: ', rejectMsg);
+    req.session.msg = rejectMsg;
+    res.status(401).redirect('/register');
+});    
+
 });   //email verification end
 
 
@@ -354,7 +381,6 @@ app.get("/forgotpass/complete", (req, res) => {
 });
 //Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
-    console.log('got to /complete');
     dbconnect.connect();
     var password;
     function checkUser() {
