@@ -44,7 +44,11 @@ After running the Forever script, you can view the website by going to your loca
 
 
 
-<------- Installation Over-------->
+<------- Logging Errors ---------->
+
+If the server goes down, you can check an error log which is attriubuted to the NodeJS process. Any console.logs, or throw messages will appear in this log.
+To find the log, simply type forever list, and look under the log column for the directory which stores the log file.
+You can then run the cat command to view the file and see what went wrong.
 
 
 

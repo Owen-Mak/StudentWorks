@@ -5,8 +5,8 @@ $(document).ready(() => {
 
   id = 2;
   httpRequest.onreadystatechange = renderProfile;
-  //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-  httpRequest.open('GET', "http://localhost:3000/api/getProjectsByUser/UserID/" + id, true);
+  httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + 2, true);
+  //httpRequest.open('GET', "http://localhost:3000/api/getProjectsByUser/UserID/" + id, true);
   httpRequest.send();
 });
 
@@ -19,12 +19,11 @@ function renderProfile() {
           let projectList = "";
           let projectStatusList = "";
           let projectYearList = "";
-
           $.each(jsData, (key, value) => {
-
-            projectList += "<li>"+ jsData.title + "</li>";
+			
+            projectList += "<li>"+ value.title + "</li>";
             projectStatusList += "<li>NO STATUS IN OUR MODEL</li>";
-            projectYearList += "<li>"+ jsDavalue.creationDate.substring(0, 4) + "</li>";
+            projectYearList += "<li>"+ value.creationDate.substring(0, 4) + "</li>";
         });
 
           $("#projectName").html(projectList);
