@@ -47,7 +47,10 @@ app.set('view engine', '.hbs');
 
 // Main Page
 app.get("/", (req,res) =>{
-    res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+    //res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+    res.status(200).render('main', {authenticate :  req.session.authenticate,
+                                    userID       :  req.session.userID,
+                                    userType     :  req.session.userType});
 });
 
 //Registration page
@@ -100,15 +103,15 @@ app.post('/login', urlencodedParser, function(req, res){
                 res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
-                    //set your session information here
+                    //set your session information here                    
                     req.session.authenticate = true;
                     req.session.userName = username;
-                    //have to get userType here somehow
-
-
-                    
+                    req.session.userID = jsonResult[0].userID;
+                    req.session.userType = jsonResult[0].userType;
                     //redirect back to main page
-                    res.render('main', {authenticate : req.session.authenticate}, {userName : req.session.userName});
+                    res.status(200).render('main', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
                     //res.redirect('/');                                  
                 } else {
                     if (jsonResult[0].registrationStatus == false){
