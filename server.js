@@ -108,7 +108,8 @@ app.post('/login', urlencodedParser, function(req, res){
 
                     
                     //redirect back to main page
-                    res.redirect('/');                                  
+                    res.render('main', {authenticate : req.session.authenticate}, {userName : req.session.userName});
+                    //res.redirect('/');                                  
                 } else {
                     if (jsonResult[0].registrationStatus == false){
                         req.session.msg = "Login failed, please verify your email.";
@@ -160,11 +161,14 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+rand;
-        mailOptions={
+        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
+        mailOptions = {
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
+            html : `Hello ${req.body.name},<br> 
+                    Please Click on the link to verify your email.<br>
+                    <a href="${link}">Click here to verify</a>
+                    <input type="hidden" value=${req.body.name} name="userName"/>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -214,7 +218,7 @@ app.post('/send', urlencodedParser, function(req,res){
     .then(sendMail, null)
     .then(addUsertoDb, null)
     .catch(function(rejectMsg){
-        console.log('rejectMsg: ', rejectMsg);
+        //console.log('rejectMsg: ', rejectMsg);
         req.session.msg = rejectMsg;
         res.status(401).redirect('/register');
     });    
@@ -223,22 +227,23 @@ app.post('/send', urlencodedParser, function(req,res){
 app.get('/verify',function(req,res){
     console.log(req.protocol+"://"+req.get('host'));
     var regCodeExist = false;
+
     function getRegCodeExistence() {        
         dbconnect.connect();
         dbconnect.getRegCodeExist(req.query.id, function (err, data) {
             if (err){
                 throw err;
             } else {
-                console.log("regCode:", data[0].regCodeExist)
+                //console.log("regCode:", data[0].regCodeExist)
                 regCodeExist = data[0].regCodeExist;
             }
-        });
+        })
         dbconnect.end();
         return new Promise(function (resolve, reject){
             setTimeout(function() {
                 if (regCodeExist == 1){
-                    console.log('resolved at getRegCodeExisitence');
-                    resolve(regCodeExist);
+                    //console.log('resolved at getRegCodeExisitence');
+                    resolve(req.query.id, regCodeExist);
                 } else {
                     reject(`regCode ${req.query.id} was not found in database`);                    
                 }
@@ -246,8 +251,8 @@ app.get('/verify',function(req,res){
         });
     }
 
-    function validateRegistration(regCode){    
-        console.log("email is verified");        
+    function validateRegistration(regCode, regCodeExist){    
+        console.log("inside validate registration");        
         //Update emailRegistration status in database
         dbconnect.connect();
         dbconnect.validateRegistration(regCode);
@@ -265,8 +270,8 @@ app.get('/verify',function(req,res){
     if (req.query.id){
         console.log("Domain is matched. Information is from Authentic email");    
         getRegCodeExistence()
-        .then(validateRegistration(req.query.id), null)
-        .catch( function(rejectMsg){
+        .then(validateRegistration, null)
+        .catch(function(rejectMsg) {
             console.log("email is not verified");
             console.log(rejectMsg);
             res.end(`<h1>Bad Request</h1>`);
@@ -274,7 +279,7 @@ app.get('/verify',function(req,res){
     } else {
         //console.log("from bad request:", req.protocol+"://"+req.get('host'));
         //console.log("from bad request:","http://"+host);        
-        res.send("<h1>Request is from unknown source");
+        res.send("<h1>Request is from unknown source</h1>");
     }
 });   //email verification end
 
