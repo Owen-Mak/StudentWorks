@@ -7,17 +7,19 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="main/main.js"></script>
+    <script src="header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="main/nav.css">
+    <link rel="stylesheet" href="header/nav.css">
     <link rel="stylesheet" href="main/main.css">
 </head>
 
 <body>
     {{#if authenticate}}
-        <div><p>userID: {{userID}}</p>
-             <p>userType: {{userType}}</p></div>
+    <div hidden id="auth">{{authenticate}}</div>
+    <div hidden id="userID">{{userID}}</div>
+    <div hidden id="userType">{{userType}}</div>
     {{else}}
-        <div><p>Not authenticated</p></div>
+    <div hidden id="userType">Visitor</div>
     {{/if}}
     <div class="container">
         <div class="row hidden-xs">
@@ -27,7 +29,7 @@
                 </a>
             </div>
             <div class="text-right">
-                <p class="swMoto" >"By the students, for the students"</p>
+                <p class="swMoto">"By the students, for the students"</p>
             </div>
         </div>
         <div class="row">
@@ -35,76 +37,38 @@
                 <div class="container">
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
-                            <li class="active">
-                                <a href="" >
+                            <li class="">
+                                <a href="#" onclick="displayALLProjets()">
                                     <space class="glyphicon glyphicon-home"></space>
                                 </a>
                             </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Language
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu lngList" id="lngList" role="menu"></ul>
-                            </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Framework
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu frmList" id="frmList" role="menu"></ul>
-                            </li>
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">by Year
-                                    <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu yearList" id="yearList" role="menu"></ul>
-                            </li>
                         </ul>
+                        <!-- for main page -->
+                        <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
+                        <!-- for all page to push data into-->
+                        <div id="pageTitleID"></div>      
                         <a href="#">
-                            <span class="glyphicon glyphicon-search srchIcon"></span>
-                        </a>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-barcode profilefIcon" data-toggle="modal" data-target="#myModal"></span>
+                            <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
                         </a>
 
-                        <!-- MODAL WINDOW.....................................................................................-->
+                        <!-- USER MENU .....................................................................................-->
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog" role="document" style="width:300px;">
+                            <div class="modal-dialog" role="document" id="userMenuModal">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <h4 class="modal-title" id="myModalLabel">Profile</h4>
+                                        <h4 class="modal-title" id="myModalLabel" style="text-align:center;">User menu</h4>
                                     </div>
-                                    <div class="modal-body">
-                                        <ul>
-                                            <li>
-                                                <a href="login">Login</a>
-                                            </li>
-                                            <li>
-                                                <a href="register">Register</a>
-                                            </li>
-                                            <li>
-                                                <a href="login/forgotpass">Forgot password</a>
-                                            </li>
-                                            <li>
-                                                <a href="profile">Profile</a>
-                                            </li>
-                                            <li>
-                                                <a href="../contribute/contribute.html">Contribute</a>
-                                            </li>
-                                        </ul>
-
-                                    </div>
+                                    <!-- populated by usermenu.js -->
+                                    <div class="modal-body" id="userMenu"></div>
                                     <div class="modal-footer"></div>
                                 </div>
                             </div>
-                            <!-- END of MODAL WINDOW.............................................................................-->
-
                         </div>
+                        <!-- END of USER MENU.............................................................................-->
+
                     </div>
                 </div>
             </nav>
@@ -122,4 +86,5 @@
     <hr class="clearfix w-100 d-md-none pb-3">
 
 </body>
+
 </html>
