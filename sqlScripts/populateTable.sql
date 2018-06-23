@@ -43,7 +43,9 @@ VALUES
     ('John', 'Doe', 'm1ss1ng', 'unknown@nowhere.com', 'jDoe', 'Contributor', null, FALSE, '2013-06-06', '789'),
     ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890'),
     ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901'),
-    ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234');
+    ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234'),
+    ('yuriy', 'yuriy', 'yuriy', 'y.kartuzov@gmail.com', 'yuriy', 'Contributor', null, TRUE, now(), '12345'),
+    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345');
 
 
 /* Associate users to projects:
