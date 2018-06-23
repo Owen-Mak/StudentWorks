@@ -16,7 +16,7 @@ CREATE TABLE USERS (
     password    CHAR(50)  NOT NULL,
     email	    VARCHAR(50) NOT NULL,    
     userName    VARCHAR(20) NOT NULL UNIQUE,    
-    userType    VARCHAR(25) CHECK(userType IN ('User','Contributor', 'Administrator')),
+    userType    ENUM ('Visitor', 'Contributor', 'Admin'),
     program     VARCHAR(25) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
