@@ -47,7 +47,10 @@ app.set('view engine', '.hbs');
 
 // Main Page
 app.get("/", (req,res) =>{
-    res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+    //res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+    res.status(200).render('main', {authenticate :  req.session.authenticate,
+                                    userID       :  req.session.userID,
+                                    userType     :  req.session.userType});
 });
 
 //Registration page
@@ -93,19 +96,23 @@ app.post('/login', urlencodedParser, function(req, res){
             console.log (err); throw err;
         } else {                        
             //validate the data here!!
-            var jsonResult = JSON.parse(JSON.stringify(data));
-            //console.log("result:", jsonResult[0]);
+            var jsonResult = JSON.parse(JSON.stringify(data));            
             if (jsonResult.length < 1){
                 //case of username not found
                 req.session.msg = "Invalid Username/Password. Login Failed.";
                 res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
-                    //set your session information here
+                    //set your session information here                    
                     req.session.authenticate = true;
-                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    req.session.userName = username;
+                    req.session.userID = jsonResult[0].userID;
+                    req.session.userType = jsonResult[0].userType;
                     //redirect back to main page
-                    res.redirect('/');                                  
+                    res.status(200).render('main', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+                    //res.redirect('/');                                  
                 } else {
                     if (jsonResult[0].registrationStatus == false){
                         req.session.msg = "Login failed, please verify your email.";
@@ -157,11 +164,14 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+rand;
-        mailOptions={
+        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
+        mailOptions = {
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
+            html : `Hello ${req.body.name},<br> 
+                    Please Click on the link to verify your email.<br>
+                    <a href="${link}">Click here to verify</a>
+                    <input type="hidden" value=${req.body.name} name="userName"/>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -211,39 +221,69 @@ app.post('/send', urlencodedParser, function(req,res){
     .then(sendMail, null)
     .then(addUsertoDb, null)
     .catch(function(rejectMsg){
-        console.log('rejectMsg: ', rejectMsg);
+        //console.log('rejectMsg: ', rejectMsg);
         req.session.msg = rejectMsg;
         res.status(401).redirect('/register');
     });    
 });
 
 app.get('/verify',function(req,res){
-console.log(req.protocol+"://"+req.get('host'));
+    console.log(req.protocol+"://"+req.get('host'));
+    var regCodeExist = false;
 
-if((req.protocol+"://"+req.get('host'))==("http://"+host))
-{
-    console.log("Domain is matched. Information is from Authentic email");
-    console.log(rand);
-    if(req.query.id==rand)
-    {
-        console.log("email is verified");
+    function getRegCodeExistence() {        
+        dbconnect.connect();
+        dbconnect.getRegCodeExist(req.query.id, function (err, data) {
+            if (err){
+                throw err;
+            } else {
+                //console.log("regCode:", data[0].regCodeExist)
+                regCodeExist = data[0].regCodeExist;
+            }
+        })
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (regCodeExist == 1){
+                    //console.log('resolved at getRegCodeExisitence');
+                    resolve(req.query.id, regCodeExist);
+                } else {
+                    reject(`regCode ${req.query.id} was not found in database`);                    
+                }
+            }, 1000);
+        });
+    }
+
+    function validateRegistration(regCode, regCodeExist){    
+        console.log("inside validate registration");        
         //Update emailRegistration status in database
         dbconnect.connect();
-        dbconnect.validateRegistration(rand);
+        dbconnect.validateRegistration(regCode);
         dbconnect.end();
         req.session.msg = "Email successfully verified.";
         res.status(200).redirect('/login');
+        return new Promise (function (resolve, reject) {
+            setTimeout (function () {
+                resolve("Email successfully verified");
+            }, 1000);
+        });
     }
-    else
-    {
-        console.log("email is not verified");
-        res.end("<h1>Bad Request</h1>");
+
+    //if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
+    if (req.query.id){
+        console.log("Domain is matched. Information is from Authentic email");    
+        getRegCodeExistence()
+        .then(validateRegistration, null)
+        .catch(function(rejectMsg) {
+            console.log("email is not verified");
+            console.log(rejectMsg);
+            res.end(`<h1>Bad Request</h1>`);
+        });
+    } else {
+        //console.log("from bad request:", req.protocol+"://"+req.get('host'));
+        //console.log("from bad request:","http://"+host);        
+        res.send("<h1>Request is from unknown source</h1>");
     }
-}
-else
-{
-    res.send("<h1>Request is from unknown source");
-}
 });   //email verification end
 
 
@@ -479,6 +519,8 @@ app.get('/api/getAllProjects', function(req, res) {
 	});	
 });
 
+/* sends a list of 6 projects for rendering
+   additional projects can be sent by changing the page number */
 app.get('/api/getAllProjects/:page', function(req, res) {
     dbconnect.connect();
     var page = req.params.page;
@@ -608,6 +650,12 @@ app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
         dbconnect.end();
     }
 });
+
+//logout route - 
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

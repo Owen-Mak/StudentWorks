@@ -60,7 +60,7 @@ module.exports.createUser = function (user) {
 };
 
 module.exports.getAllProjects = function (callback) {
-	var sql = 'SELECT * FROM PROJECTS';
+	var sql = `SELECT * FROM PROJECTS WHERE status = 'approved';`;
     runQuery(sql, callback);
 };
 
@@ -113,12 +113,14 @@ module.exports.getAllProjectsFilterByYear = function (year, callback){
     runQuery (sql, callback);
 }
 
+//returns 1 if username is found in database, otherwise, returns 0
 module.exports.getUserExist = function (userName, callback){
     var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE userName = '${userName}') AS userExist 
                 FROM USERS LIMIT 1;`
     runQuery(sql, callback);
 }
 
+//returns all projects performed by given user
 module.exports.getProjectsByUser = function (userID, callback){
     var sql = ` SELECT proj.* FROM PROJECTS proj
                     JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
@@ -127,10 +129,18 @@ module.exports.getProjectsByUser = function (userID, callback){
     runQuery(sql, callback);
 }
 
+//updates the password field of the given username
 module.exports.updatePasswordByUsername = function (userName, password, callback) {
     var sql = ` UPDATE USERS
                 SET password = '${password}'
                 WHERE userName = '${userName}';`;
+    runQuery(sql, callback);
+}
+
+//returns 0 if registration code does not exist in database, and 1 if it is found
+module.exports.getRegCodeExist = function (registrationCode, callback) {
+    var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = ${registrationCode}) AS regCodeExist 
+                FROM USERS LIMIT 1;`;
     runQuery(sql, callback);
 }
 

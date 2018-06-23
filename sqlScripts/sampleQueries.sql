@@ -7,11 +7,7 @@ SELECT * FROM USERS WHERE userName = 'omak';
 SELECT p.*, b.userID
 FROM PROJECTS p, BRIDGE_USERS_PROJECTS b
 WHERE (p.ProjectID = b.ProjectID);
-<<<<<<< HEAD
-=======
 
-
->>>>>>> master
 SELECT proj.*, u.*
 FROM PROJECTS proj
   JOIN BRIDGE_USERS_PROJECTS b on proj.ProjectID = b.ProjectID
@@ -20,22 +16,22 @@ WHERE proj.ProjectID = 1;
 */
 /*
 SELECT * FROM USERS  WHERE EXISTS (SELECT * FROM USERS WHERE userName = 'NotOwen');
-<<<<<<< HEAD
-=======
 
->>>>>>> master
 SELECT proj FROM PROJECTS proj
     JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
     JOIN USERS u on b.userID = u.userID
 WHERE u.userID = 1;
-*/
 
 UPDATE USERS
 SET password = 'qwerty'
 WHERE userName = 'NotOwen';
 
-<<<<<<< HEAD
 SELECT * FROM USERS WHERE userName = 'NotOwen';
-=======
-SELECT * FROM USERS WHERE userName = 'NotOwen';
->>>>>>> master
+
+SELECT * 
+FROM PROJECTS
+WHERE status = 'approved';
+*/
+
+SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = 123) AS regCodeExist 
+FROM USERS LIMIT 1;
