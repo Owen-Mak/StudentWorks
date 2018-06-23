@@ -2,6 +2,7 @@
 $(document).ready(() => {
   httpRequest = new XMLHttpRequest();
   if (!httpRequest)
+  console.log("Cannot create an XMLHTTP instance");
 
   id = 2;
   httpRequest.onreadystatechange = renderProfile;

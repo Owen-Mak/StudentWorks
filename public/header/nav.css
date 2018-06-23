@@ -18,17 +18,22 @@ body {
 }
 
 /* NAVIGATION BAR ---------------------------------------------------- */
+
+#homeIconID {
+    color:rgb(106, 201, 91);    
+    font-size: 16px;
+}
 .srchIcon {
     font-size: 17px;
-    padding-top: 17px;
-    padding-left: 25px;
+    padding-top: 15px;
+    padding-left: 15px;
     color: rgb(235, 235, 235);
 }
 
 .profilefIcon{
-    font-size: 26px;
+    font-size: 18px;
     float: right; 
-    padding-top: 11px;
+    padding-top: 15px;
     color: rgb(210, 58, 47);
 }
 .navbar.navbar-inverse {
@@ -52,4 +57,17 @@ body {
     box-shadow: inset 0px -28px 23px -21px rgba(255, 255, 255, 0.15);
     border-left: 1px solid #2A2A2A;
     border-right: 1px solid #272727;
+}
+
+
+#pageTitleID{
+    display:inline-block;
+}
+
+
+#userMenuModal {
+    width:200px; 
+    padding-top:110px;  
+    position: relative;
+    left: 530px;
 }

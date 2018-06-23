@@ -6,8 +6,8 @@ $(document).ready(() => {
 
     id = getQueryStr('id');
     httpRequest.onreadystatechange = renderProject;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
+    //httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id, true);
+    httpRequest.open('GET', "http://localhost:3000/api/getOneProject?id=" + id, true);
     httpRequest.send();
 });
 
@@ -22,7 +22,7 @@ function renderProject() {
                 let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
                 let videoLink = "../" + jsData[0].VideoUrl;
                 
-                let contributors = "<br><h4><u>Contributors:</u></h4>";
+                let contributors = "<br><h4><u>Developers:</u></h4>";
                 $.each(jsData[0].users, (key, value) => {
                     contributors += " <p>" + value.firstName + " " + value.lastName + "</p>";
                 });
@@ -33,9 +33,10 @@ function renderProject() {
                 let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
 
                 // Title
-                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " (" + year + ") </h2><br>";
+                let title = jsData[0].title + " (" + year + ")";
 
                 // Video and Info
+                let prjHtml = "";  
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
                 prjHtml += "      <div class='col-md-8' id='videoCol' >";
@@ -51,6 +52,7 @@ function renderProject() {
                 prjHtml += "   </div>";
                 prjHtml += "</div>";
 
+                $("#pageTitleID").html(title);
                 $("#projectBody").html(prjHtml);
                 $("#tileNav").empty();
             }
