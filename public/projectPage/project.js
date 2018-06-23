@@ -33,9 +33,10 @@ function renderProject() {
                 let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
 
                 // Title
-                let prjHtml = "<h2 style='text-align: center;'>" + jsData[0].title + " (" + year + ") </h2><br>";
+                let title = jsData[0].title + " (" + year + ")";
 
                 // Video and Info
+                let prjHtml = "";  
                 prjHtml += "<div class='container'>";
                 prjHtml += "   <div class='row'>";
                 prjHtml += "      <div class='col-md-8' id='videoCol' >";
@@ -51,6 +52,7 @@ function renderProject() {
                 prjHtml += "   </div>";
                 prjHtml += "</div>";
 
+                $("#pageTitleID").html(title);
                 $("#projectBody").html(prjHtml);
                 $("#tileNav").empty();
             }

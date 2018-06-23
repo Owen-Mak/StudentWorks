@@ -59,6 +59,15 @@ body {
     border-right: 1px solid #272727;
 }
 
-#homeIconID {
-    color:rgb(106, 201, 91);    
+
+#pageTitleID{
+    display:inline-block;
+}
+
+
+#userMenuModal {
+    width:200px; 
+    padding-top:110px;  
+    position: relative;
+    left: 530px;
 }
