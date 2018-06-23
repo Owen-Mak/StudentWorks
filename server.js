@@ -188,6 +188,10 @@ app.post('/send', urlencodedParser, function(req,res){
         })
     }
 
+    /* this will create a new user into the database based on the 3 fields supplied in login webform
+        The user created user will be initially be a contriubtor, without a firstName, lastName or affiliated program
+        The registrationCode will be the random value created when the email was sent
+    */
     function addUsertoDb(){
         dbconnect.connect(); 
         var user = {
@@ -196,8 +200,9 @@ app.post('/send', urlencodedParser, function(req,res){
             email: req.body.email,
             password: req.body.password1,                
             username: req.body.name,
-            userType: 'NULL',
+            userType: 'Contributor',
             program: 'NULL',
+            registrationStatus : 'FALSE',
             registrationCode: rand
         };
         var errorMsg = "";

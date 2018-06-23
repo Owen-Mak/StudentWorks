@@ -33,5 +33,13 @@ FROM PROJECTS
 WHERE status = 'approved';
 */
 
+/*
 SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = 123) AS regCodeExist 
-FROM USERS LIMIT 1;
+FROM USERS LIMIT 1;*/
+
+/*
+UPDATE USERS 
+SET userType = 'Contributor'
+WHERE userID > 10;
+*/
+

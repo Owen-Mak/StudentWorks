@@ -48,7 +48,7 @@ module.exports.getAllUsers = function (callback) {
 module.exports.createUser = function (user) {
     console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode) \
-    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now(), ${user.registrationCode})`;   
+    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', ${user.registrationStatus}, now(), ${user.registrationCode})`;   
     connection.query(sql, (err, result) => {
         if (err) {
             console.log ("Failed SQL:", sql);
