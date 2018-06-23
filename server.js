@@ -293,8 +293,12 @@ app.get('/verify',function(req,res){
 
 
 //Project page
-app.get("/project", (req,res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
+app.get('/projectPage', (req,res) => {
+    //res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
+    console.log ('routing project id=', req.query.id);
+    res.status(200).render('project', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
 });
 
 //Profile Page

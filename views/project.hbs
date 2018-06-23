@@ -6,25 +6,28 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="project/project.js"></script>
+    <script src="/projectPage/project.js"></script>
+    <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="header/nav.css">
-    <link rel="stylesheet" href="projectPage/project.css">
+    <link rel="stylesheet" href="/header/nav.css">
+    <link rel="stylesheet" href="/projectPage/project.css">
 </head>
 
 <body>
     {{#if authenticate}}
     <div hidden id="auth">{{authenticate}}</div>
     <div hidden id="userID">{{userID}}</div>
+    {{userID}}
     <div hidden id="userType">{{userType}}</div>
+    {{userType}}
     {{else}}
     <div hidden id="userType">Visitor</div>
     {{/if}}
     <div class="container">
         <div class="row hidden-xs">
             <div class="col-xs-7 col-sm-7">
-                <a href="">
-                    <img class="swLogo" alt="logo" src="images/logo.png">
+                <a href="/">
+                    <img class="swLogo" alt="logo" src="/images/logo.png">
                 </a>
             </div>
             <div class="text-right">

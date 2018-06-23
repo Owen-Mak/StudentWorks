@@ -55,6 +55,7 @@ function renderProject() {
                 $("#pageTitleID").html(title);
                 $("#projectBody").html(prjHtml);
                 $("#tileNav").empty();
+                renderUserMenu(); 
             }
         }
     }
