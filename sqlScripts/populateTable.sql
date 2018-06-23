@@ -36,8 +36,8 @@ INSERT INTO USERS (firstName, lastName, password, email, userName, userType, pro
 VALUES
     ('Fred', 'Smith', 'PassWrd', 'fs@myseneca.ca', 'fred_s', 'Contributor', 'BSD', TRUE, now(), '123'),
     ('Charlotte', 'Baptist', 'cbaptist@myseneca.ca', 'MyNameIsCB12', 'cbaptist', 'Contributor', 'DDA', TRUE, now(), '234'),
-    ('Huda', 'Al Dallal', 'myPassw0rd4', 'hal-dallal@myseneca.ca', 'huda_a', 'Administrator', 'CPA', TRUE, now(), '345'),
-    ('John','Smith', 'pass1234', 'johnsmith12@myseneca.ca', 'johns', 'User', 'CPD', FALSE, '2017-12-25', '456'),
+    ('Huda', 'Al Dallal', 'myPassw0rd4', 'hal-dallal@myseneca.ca', 'huda_a', 'Admin', 'CPA', TRUE, now(), '345'),
+    ('John','Smith', 'pass1234', 'johnsmith12@myseneca.ca', 'johns', 'Contributor', 'CPD', FALSE, '2017-12-25', '456'),
     ('Owen', 'Mak', '123', 'omak@myseneca.ca', 'omak', 'Admin', 'CPA', FALSE, now(), '567'),
     ('Jon', 'Snow', 'Winterfell', 'john@gmail.com', 'jsnow', 'Contributor', null, FALSE, '2016-01-01', '678'),
     ('John', 'Doe', 'm1ss1ng', 'unknown@nowhere.com', 'jDoe', 'Contributor', null, FALSE, '2013-06-06', '789'),
