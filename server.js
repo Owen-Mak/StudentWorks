@@ -39,7 +39,7 @@ app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
                     saveUninitialized: false,
-                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                    cookie: {maxAge: 600000} //cookies expire in 10 minutes
                 }));  // used to generate session tokens
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
@@ -76,6 +76,13 @@ app.get('/contribute', (req,res) => {
 //RECORDING page
 app.get('/recording', (req,res) => {
     res.status(200).render('recording', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//ADMINISTRATION page
+app.get('/adminPage', (req,res) => {
+    res.status(200).render('admin', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
                                             userType     :  req.session.userType});
 });

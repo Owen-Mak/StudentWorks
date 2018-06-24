@@ -21,7 +21,7 @@ function renderUserMenu(){
         userMenu += "<ul>";
         userMenu += "  <li><a href='/profile'>Profile</a></li>";
         userMenu += "  <li><a href='/contribute'>Contribute</a></li>";
-        userMenu += "  <li><a href='/pending/pending.html'>Administration</a></li>";
+        userMenu += "  <li><a href='/adminPage'>Administration</a></li>";
         userMenu += "  <li><a href='/login'>Logout</a></li>";
         userMenu += "<li><a style='color: red;' href='/recording'>Video Recording</a></li>";
         userMenu += "</ul>";
