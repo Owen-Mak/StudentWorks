@@ -42,4 +42,4 @@ UPDATE USERS
 SET userType = 'Contributor'
 WHERE userID > 10;
 */
-
+SELECT * FROM USERS WHERE userID = 1;
