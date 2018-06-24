@@ -9,5 +9,7 @@ $(document).ready(() => {
         console.log(data);
     });
 
+    renderUserMenu();
+
 
 });

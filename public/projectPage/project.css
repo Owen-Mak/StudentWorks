@@ -4,8 +4,10 @@
     font-size: 24px;
     color : #ddd;
     padding-top: 7px;
-    margin-left: 350px;
+    width: 900px;
     font-family: 'Poppins', sans-serif;
+    text-align: center;
+    margin-left:50px;
 }
 
 #infoCol {

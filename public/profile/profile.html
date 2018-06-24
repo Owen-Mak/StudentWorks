@@ -2,79 +2,73 @@
 <html>
 
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>StudentWorks</title>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="profile.js"></script>
+    <script src="/header/usermenu.js"></script>
     <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-    <link rel='stylesheet prefetch' href='https://rawgit.com/adrotec/knockout-file-bindings/master/knockout-file-bindings.css'>        
+    <link rel='stylesheet prefetch' href='https://rawgit.com/adrotec/knockout-file-bindings/master/knockout-file-bindings.css'>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="profile.css">
-    
+    <link rel="stylesheet" href="/header/nav.css">
+
 </head>
 
 <body>
+    <div hidden id="userType">Regular</div>
+    <div hidden id="userID">2</div>
+
     <div class="container">
-        <!-- START OF LOGO SECTION -->
-        <div class="row hidden-xs topper">
+        <div class="row hidden-xs">
             <div class="col-xs-7 col-sm-7">
                 <a href="/">
-                    <img logo alt="logo" src="../images/logo.png">
+                    <img class="swLogo" alt="logo" src="../images/logo.png">
                 </a>
             </div>
-            <div class="col-xs-5 col-xs-offset-1 col-sm-5 col-sm-offset-0 text-right ">
-                <p moto>"By the students, for the students"</p>
+            <div class="text-right">
+                <p class="swMoto">"By the students, for the students"</p>
             </div>
         </div>
-        <!-- END OF LOGO SECTION -->
-
-        <!-- START OF NAV SECTION -->
         <div class="row">
-             <nav class="navbar navbar-inverse" role="navigation">
+            <nav class="navbar navbar-inverse" role="navigation">
                 <div class="container">
-                    <div class="collapse navbar-collapse navbar-ex1-collapse"> 
+                    <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
-                            <li>
-                               <div class ="txt3">Profile</div>
+                            <li class="">
+                                <a href="/" onclick="displayALLProjets()">
+                                    <space class="glyphicon glyphicon-home"></space>
+                                </a>
                             </li>
-
                         </ul>
+                        <!-- for main page -->
+                        <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
+                        <!-- for all page to push data into-->
+                        <div id="pageTitleID"></div>
                         <a href="#">
-                            <span class="glyphicon glyphicon-indent-right prfIcon"  data-toggle="modal" data-target="#myModal"></span>
+                            <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
                         </a>
 
+                        <!-- USER MENU .....................................................................................-->
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog" role="document" style="width:300px;">
+                            <div class="modal-dialog" role="document" id="userMenuModal">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <h4 class="modal-title" id="myModalLabel">Profile</h4>
+                                        <h4 class="modal-title" id="myModalLabel" style="text-align:center;">User menu</h4>
                                     </div>
-                                    <div class="modal-body">
-                                        <ul>
-                                            <li>
-                                                <a href="login">Login</a>
-                                            </li>
-                                            <li>
-                                                <a href="register">Register</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Forgot password</a>
-                                            </li>
-                                        </ul>
-
-                                    </div>
+                                    <!-- populated by usermenu.js -->
+                                    <div class="modal-body" id="userMenu"></div>
                                     <div class="modal-footer"></div>
                                 </div>
                             </div>
-                        -->
-                            <!-- END of MODAL WINDOW.............................................................................-->
-
                         </div>
+                        <!-- END of USER MENU.............................................................................-->
+
                     </div>
                 </div>
             </nav>
@@ -85,57 +79,59 @@
 
     <!-- BODY INPUT...................................................................... -->
     <div class="container">
-            <form onsubmit="return validateForm()" class="profile-form validate-form flex-sb" id="profile" name ="profile" method="POST" action="/send">                    
-                <div class="formgroup left-container col-md-6">
-                    <div class="row">
-                        <div class="form-group fname col-md-6">
-                            <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
-                        </div>
-                        <div class="form-group lname col-md-6">
-                                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
-                            </div>
+        <form onsubmit="return validateForm()" class="profile-form validate-form flex-sb" id="profile" name="profile" method="POST"
+            action="/send">
+            <div class="formgroup left-container col-md-6">
+                <div class="row">
+                    <div class="form-group fname col-md-6">
+                        <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name">
                     </div>
-
-                    <div class="row">
-                            <div class="form-group email col-md-6">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="exam@email.com">
-                            </div>
-                            <div class="form-group program col-md-6">
-                                    <input type="text" class="form-control" id="program" name="program" placeholder="Program of Study">
-                            </div>
+                    <div class="form-group lname col-md-6">
+                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name">
                     </div>
-                    
-                    <div class="row">
-                            <div class="form-group username col-md-6">
-                                    <input type="text" class="form-control" id="username" name="usernmae" placeholder="Username">
-                            </div>
-                            <div class="form-group password col-md-6">
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-                            </div>
-     
-                        </div>
-
-                        <textarea style="resize:none" name="name" cols="100" rows="5"></textarea>
-                        <div class="container-profile-form-btn">
-                            <button type="submit" class="profile-form-btn">Save</button><br>
-                        </div>
                 </div>
 
-                <!-- FILE UPLOAD STARTS HERE -->
-                <div class="formgroup right-container col-md-4">
-                        <dd class="avatar-upload-container clearfix">
-                                <div id="img-preview"> 
-                                    <img class="avatar rounded-2" src="../images/empty.png" width="180" height="180" />
-                                    </div>
-                        <img class="avatar rounded-2" width="180" height="180" />
-                        <input type="file" id="img-input"/>
-                        </dd>
+                <div class="row">
+                    <div class="form-group email col-md-6">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="exam@email.com">
+                    </div>
+                    <div class="form-group program col-md-6">
+                        <input type="text" class="form-control" id="program" name="program" placeholder="Program of Study">
+                    </div>
                 </div>
-            </form>
-     </div>
-     <!-- End of BODY.............................................................. -->
 
-          <!-- Begin of Projects .............................................................. -->
+                <div class="row">
+                    <div class="form-group username col-md-6">
+                        <input type="text" class="form-control" id="username" name="usernmae" placeholder="Username">
+                    </div>
+                    <div class="form-group password col-md-6">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                    </div>
+
+                </div>
+
+                <textarea style="resize:none" name="name" cols="100" rows="5"></textarea>
+                <div class="container-profile-form-btn">
+                    <button type="submit" class="profile-form-btn">Save</button>
+                    <br>
+                </div>
+            </div>
+
+            <!-- FILE UPLOAD STARTS HERE -->
+            <div class="formgroup right-container col-md-4">
+                <dd class="avatar-upload-container clearfix">
+                    <div id="img-preview">
+                        <img class="avatar rounded-2" src="../images/empty.png" width="180" height="180" />
+                    </div>
+                    <img class="avatar rounded-2" width="180" height="180" />
+                    <input type="file" id="img-input" />
+                </dd>
+            </div>
+        </form>
+    </div>
+    <!-- End of BODY.............................................................. -->
+
+    <!-- Begin of Projects .............................................................. -->
 
     <div class="container">
         <div class="formgroup list-container col-md-6">
@@ -146,22 +142,22 @@
         </div>
 
         <div class="formgroup status-container col-md-4">
-                <div class="row">
-                    <h4>Status</h4>
-                    <ul id="projectStatus"></ul>
-                </div>
+            <div class="row">
+                <h4>Status</h4>
+                <ul id="projectStatus"></ul>
             </div>
+        </div>
 
-            <div class="formgroup year-container col-md-2">
-                    <div class="row">
-                        <h4>Year</h4>
-                    </div>
-                    <ul id="projectYear"></ul>
-                </div>
+        <div class="formgroup year-container col-md-2">
+            <div class="row">
+                <h4>Year</h4>
+            </div>
+            <ul id="projectYear"></ul>
+        </div>
 
     </div>
     <hr class="clearfix w-100 d-md-none pb-3">
-    <script  src="profile.js"></script>
+    <script src="profile.js"></script>
 
 </body>
 

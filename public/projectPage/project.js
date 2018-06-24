@@ -52,6 +52,7 @@ function renderProject() {
                 prjHtml += "   </div>";
                 prjHtml += "</div>";
 
+                renderUserMenu();
                 $("#pageTitleID").html(title);
                 $("#projectBody").html(prjHtml);
                 $("#tileNav").empty();
