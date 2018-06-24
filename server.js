@@ -109,10 +109,10 @@ app.post('/login', urlencodedParser, function(req, res){
                     req.session.userID = jsonResult[0].userID;
                     req.session.userType = jsonResult[0].userType;
                     //redirect back to main page
-                    res.status(200).render('main', {    authenticate :  req.session.authenticate,
+                    /*res.status(200).render('main', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
-                                            userType     :  req.session.userType});
-                    //res.redirect('/');                                  
+                                            userType     :  req.session.userType});*/
+                    res.status(200).redirect('/');                                  
                 } else {
                     if (jsonResult[0].registrationStatus == false){
                         req.session.msg = "Login failed, please verify your email.";
@@ -515,6 +515,26 @@ app.get('/api/getAllUsers', function(req, res){
     dbconnect.end();    
 });
 
+app.get('/api/getUserByID', function(req, res) {
+    var userID = req.query.id;
+    if (req.query.id && !isNaN(req.query.id)){
+        dbconnect.connect();
+        var results = dbconnect.getOneUserByID(userID, function(err, data){
+            if (err){
+                console.log ("Error at getUserByID: ", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+			    res.end(JSON.stringify(data));
+            }
+        });  
+        dbconnect.end();      
+    } else {
+        res.status(400).end('Bad request, invalid userId');
+    }
+
+})
+
 app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
@@ -525,7 +545,8 @@ app.get('/api/getAllProjects', function(req, res) {
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
 		}
-	});	
+    });
+    dbconnect.end();	
 });
 
 /* sends a list of 6 projects for rendering
@@ -580,7 +601,7 @@ app.get('/api/getOneProject', function(req, res){
             }
     	})
     } else { 
-        res.send('Invalid project id provided');
+        res.status(400).end('Invalid project id provided');
     }
 });
     
