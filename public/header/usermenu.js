@@ -13,15 +13,15 @@ function renderUserMenu(){
     }else if (userType === "Contributor") {
         userMenu += "<ul>";
         userMenu += "  <li><a href='/profile'>Profile</a></li>";
-        userMenu += "  <li><a href='/contribute/contribute.html'>Contribute</a></li>";
+        userMenu += "  <li><a href='/contribute'>Contribute</a></li>";
         userMenu += "  <li><a href='/login'>Logout</a></li>";
         userMenu += "<li><a style='color: red;' href='/recording'>Video Recording</a></li>";
         userMenu += "</ul>";
     } else if (userType === "Admin"){
         userMenu += "<ul>";
         userMenu += "  <li><a href='/profile'>Profile</a></li>";
-        userMenu += "  <li><a href='/contribute/contribute.html'>Contribute</a></li>";
-        userMenu += "  <li><a href='/pending/pending.html'>Pending file</a></li>";
+        userMenu += "  <li><a href='/contribute'>Contribute</a></li>";
+        userMenu += "  <li><a href='/pending/pending.html'>Administration</a></li>";
         userMenu += "  <li><a href='/login'>Logout</a></li>";
         userMenu += "<li><a style='color: red;' href='/recording'>Video Recording</a></li>";
         userMenu += "</ul>";

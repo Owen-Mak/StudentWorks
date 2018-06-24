@@ -14,5 +14,6 @@ $(document).ready(() => {
 
     renderUserMenu();
 
+    $("#pageTitleID").html("Project Upload");
 
 });

@@ -186,13 +186,4 @@ padding-left: 250px;
   text-shadow: 1px 1px #1e1e1f;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Poppins');
-  #pageTitleID {
-  font-size: 24px;
-  color : #ddd;
-  padding-top: 7px;
-  width: 900px;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  margin-left:50px;
-}
+

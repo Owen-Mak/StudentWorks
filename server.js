@@ -45,7 +45,7 @@ app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file e
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
-// MAIN Page
+//MAIN Page
 app.get("/", (req,res) =>{
     res.status(200).render('main', {authenticate :  req.session.authenticate,
                                     userID       :  req.session.userID,
@@ -62,6 +62,13 @@ app.get('/projectPage', (req,res) => {
 //PROFILE page
 app.get('/profile', (req,res) => {
     res.status(200).render('profile', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//PROJECT UPLOAD page
+app.get('/contribute', (req,res) => {
+    res.status(200).render('contribute', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
                                             userType     :  req.session.userType});
 });

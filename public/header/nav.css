@@ -60,8 +60,18 @@ body {
 }
 
 
-#pageTitleID{
+
+
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+  #pageTitleID {
     display:inline-block;
+  font-size: 24px;
+  color : #ddd;
+  padding-top: 9px;
+  width: 900px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin-left:50px;
 }
 
 
