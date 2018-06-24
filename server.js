@@ -66,6 +66,13 @@ app.get('/profile', (req,res) => {
                                             userType     :  req.session.userType});
 });
 
+//RECORDING page
+app.get('/recording', (req,res) => {
+    res.status(200).render('recording', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
 //Registration page
 app.get('/register', function(req, res){
     if (req.session.msg) {
