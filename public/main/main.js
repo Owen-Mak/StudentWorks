@@ -11,6 +11,7 @@ var allProjects;
 // Entry point
 $(document).ready(() => {
     $.getJSON("http://localhost:3000/api/getAllProjects", (data) => {
+    //$.getJSON("http://myvmlab.senecacollege.ca:6193/api/getAllProjects", (data) => {
         allProjects = data;
         displayALLProjets();
     });
@@ -172,7 +173,7 @@ function renderTile(title, year, icon, language, framework, id) {
     tileHtml += "<div class='col-md-4'>";
     tileHtml += "<div class='panel panel-default swTile'>";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-    tileHtml += "       <a href='projectPage/project.html?id=" + id + "' class ='tileLink'>";
+    tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
     tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
