@@ -16,18 +16,18 @@ function renderProfile() {
     if (httpRequest.status === 200) {
 
       var jsData = JSON.parse(httpRequest.responseText);
-
+      console.log(jsData);
       let projectList = "";
       let projectStatusList = "";
       let projectYearList = "";
       $.each(jsData, (key, value) => {
 
         projectList += "<li>" + value.title + "</li>";
-        projectStatusList += "<li>NO STATUS IN OUR MODEL</li>";
+        projectStatusList += "<li>" + value.status + "</li>";
         projectYearList += "<li>" + value.creationDate.substring(0, 4) + "</li>";
       });
 
-      renderUserMenu();
+      renderUserMenu(); // function declared in usermenue.js
       $("#pageTitleID").html("Profile");
       $("#projectName").html(projectList);
       $("#projectStatus").html(projectStatusList);

@@ -5,14 +5,21 @@ function renderUserMenu(){
 
     if(userType === "Visitor"){
         userMenu += "<ul>";
-        userMenu += "  <li><a href='login'>Login</a></li>";
-        userMenu += "  <li><a href='register'>Register</a></li>";
-        userMenu += "  <li><a href='login/forgotpass'>Forgot password</a></li>";
+        userMenu += "  <li><a href='/login'>Login</a></li>";
+        userMenu += "  <li><a href='/register'>Register</a></li>";
+        userMenu += "  <li><a href='/login/forgotpass'>Forgot password</a></li>";
         userMenu += "</ul>";
-    }else {
+    }else if (userType === "Contributor") {
         userMenu += "<ul>";
-        userMenu += "  <li><a href='/profile/profile.html'>Profile</a></li>";
+        userMenu += "  <li><a href='/profile'>Profile</a></li>";
         userMenu += "  <li><a href='/contribute/contribute.html'>Contribute</a></li>";
+        userMenu += "  <li><a href='/login'>Logout</a></li>";
+        userMenu += "</ul>";
+    } else if (userType === "Admin"){
+        userMenu += "<ul>";
+        userMenu += "  <li><a href='/profile'>Profile</a></li>";
+        userMenu += "  <li><a href='/contribute/contribute.html'>Contribute</a></li>";
+        userMenu += "  <li><a href='/pending/pending.html'>Pending file</a></li>";
         userMenu += "  <li><a href='/login'>Logout</a></li>";
         userMenu += "</ul>";
     }

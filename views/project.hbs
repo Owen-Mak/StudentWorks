@@ -14,13 +14,10 @@
 </head>
 
 <body>
-    <div>asdfasf</div>
     {{#if authenticate}}
     <div hidden id="auth">{{authenticate}}</div>
     <div hidden id="userID">{{userID}}</div>
-    {{userID}}
     <div hidden id="userType">{{userType}}</div>
-    {{userType}}
     {{else}}
     <div hidden id="userType">Visitor</div>
     {{/if}}
@@ -41,7 +38,7 @@
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
                             <li class="">
-                                <a href="#" onclick="displayALLProjets()">
+                                <a href="/" >
                                     <space class="glyphicon glyphicon-home"></space>
                                 </a>
                             </li>
