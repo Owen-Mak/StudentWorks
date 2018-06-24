@@ -13,6 +13,8 @@ $(document).ready(()=>{
     html += "<a href='/images/recording2.png'>android</a><br>";
 
     $('#footerHTMLid').html(html);
+
+    renderUserMenu();
 });
 
 // Happy coding man :)
