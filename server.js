@@ -492,6 +492,10 @@ app.post('/complete', urlencodedParser, function(req,res){
     });    
     
 });
+
+app.post ('/profile', function (req,res){
+    
+})
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
