@@ -12,7 +12,7 @@ $(document).ready(() => {
 
   // PRODUCTION
   let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
-  let usrUrl = "http://myvmlab.senecacollege.ca:6193/getUserByID/" + id;
+  let usrUrl = "http://myvmlab.senecacollege.ca:6193/api/getUserByID?id=" + id;
 
   $.getJSON(prjUrl, (jsData) => { renderProjectList(jsData); });
   $.getJSON(usrUrl, (jsData) => { renderUserDetails(jsData); });
