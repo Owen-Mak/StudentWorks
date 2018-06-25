@@ -6,11 +6,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="/projectPage/project.js"></script>
+    <script src="/adminPage/admin.js"></script>
     <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/header/nav.css">
-    <link rel="stylesheet" href="/projectPage/project.css">
+    <link rel="stylesheet" href="contribute/contribute.css">
 </head>
 
 <body>
@@ -38,7 +38,7 @@
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
                             <li class="">
-                                <a href="/" >
+                                <a href="/" onclick="displayALLProjets()">
                                     <space class="glyphicon glyphicon-home"></space>
                                 </a>
                             </li>
@@ -77,8 +77,9 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <div class="row" id="projectBody"></div>
+        <div class="row" id="mainBody"></div>
     </div>
     <!-- End of BODY.............................................................. -->
+     <hr class="clearfix w-100 d-md-none pb-3">
 </body>
 </html>

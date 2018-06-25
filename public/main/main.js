@@ -10,8 +10,13 @@ var allProjects;
 
 // Entry point
 $(document).ready(() => {
-    $.getJSON("http://localhost:3000/api/getAllProjects", (data) => {
-    //$.getJSON("http://myvmlab.senecacollege.ca:6193/api/getAllProjects", (data) => {
+    // LOCAL
+    //let prjUrl = "http://localhost:3000/api/getAllProjects";
+
+    // PRODUCTION
+    let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
+
+    $.getJSON(prjUrl, (data) => {
         allProjects = data;
         displayALLProjets();
     });

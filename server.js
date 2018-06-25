@@ -39,18 +39,52 @@ app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
                     saveUninitialized: false,
-                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                    cookie: {maxAge: 600000} //cookies expire in 10 minutes
                 }));  // used to generate session tokens
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
-// Main Page
+//MAIN Page
 app.get("/", (req,res) =>{
-    //res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
     res.status(200).render('main', {authenticate :  req.session.authenticate,
                                     userID       :  req.session.userID,
                                     userType     :  req.session.userType});
+});
+
+//PROJECT page
+app.get('/projectPage', (req,res) => {
+    res.status(200).render('project', {    authenticate :  req.session.authenticate,
+                                           userID       :  req.session.userID,
+                                           userType     :  req.session.userType});
+});
+
+//PROFILE page
+app.get('/profile', (req,res) => {
+    res.status(200).render('profile', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//PROJECT UPLOAD page
+app.get('/contribute', (req,res) => {
+    res.status(200).render('contribute', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//RECORDING page
+app.get('/recording', (req,res) => {
+    res.status(200).render('recording', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//ADMINISTRATION page
+app.get('/adminPage', (req,res) => {
+    res.status(200).render('admin', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
 });
 
 //Registration page
@@ -292,20 +326,6 @@ app.get('/verify',function(req,res){
 });   //email verification end
 
 
-//Project page
-app.get('/projectPage', (req,res) => {
-    //res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
-    console.log ('routing project id=', req.query.id);
-    res.status(200).render('project', {    authenticate :  req.session.authenticate,
-                                            userID       :  req.session.userID,
-                                            userType     :  req.session.userType});
-});
-
-//Profile Page
-app.get("/profile", (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public/profile/profile.html'));
-});
-
 //Forgot password
 app.get("/login/forgotpass", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/login/forgot.html'));
@@ -401,6 +421,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
 app.get("/forgotpass/complete", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
 });
+
 //Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
     console.log('got to /complete');
@@ -549,27 +570,23 @@ app.get('/api/getAllProjects', function(req, res) {
     dbconnect.end();	
 });
 
-/* sends a list of 6 projects for rendering
-   additional projects can be sent by changing the page number */
-app.get('/api/getAllProjects/:page', function(req, res) {
-    dbconnect.connect();
-    var page = req.params.page;
-    if (isNaN(page)){
-        res.send("Invalid page number");
-    }else {
-        var results = dbconnect.getAllProjects(function(err, data){
+
+app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
+    var userID = req.params.userID;
+    if (isNaN(userID) || (userID < 0)){
+        res.send('Invalid userID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
             if (err) {
-                console.log ("ERROR: ", err);
-                throw err;			
+                console.log ("ERROR", err);
+                throw err;
             } else {
                 res.writeHead(200, {"Content-type":"application/json"});
-                var parsedData = new Array();
-                for (var i=(6*page); i < (page*6+6); i++){
-                    parsedData.push(data[i]);
-                }
-                res.end(JSON.stringify(parsedData));
+                res.end(JSON.stringify(data));
             }
-        });	
+        });
+        dbconnect.end();
     }
 });
 
@@ -604,7 +621,32 @@ app.get('/api/getOneProject', function(req, res){
         res.status(400).end('Invalid project id provided');
     }
 });
-    
+
+
+/* NOT USED sends a list of 6 projects for rendering
+   additional projects can be sent by changing the page number */
+app.get('/api/getAllProjects/:page', function(req, res) {
+    dbconnect.connect();
+    var page = req.params.page;
+    if (isNaN(page)){
+        res.send("Invalid page number");
+    }else {
+        var results = dbconnect.getAllProjects(function(err, data){
+            if (err) {
+                console.log ("ERROR: ", err);
+                throw err;			
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                var parsedData = new Array();
+                for (var i=(6*page); i < (page*6+6); i++){
+                    parsedData.push(data[i]);
+                }
+                res.end(JSON.stringify(parsedData));
+            }
+        });	
+    }
+});
+
 app.get('/api/getAllProjects/language/:language', function (req, res) {
     var language = req.params.language;
     if (language === null) {
@@ -662,24 +704,6 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
     }
 });
 
-app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
-    var userID = req.params.userID;
-    if (isNaN(userID) || (userID < 0)){
-        res.send('Invalid userID provided');
-    } else {
-        dbconnect.connect();
-        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
-            if (err) {
-                console.log ("ERROR", err);
-                throw err;
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                res.end(JSON.stringify(data));
-            }
-        });
-        dbconnect.end();
-    }
-});
 
 //logout route - 
 app.get('/logout', function (req, res) {

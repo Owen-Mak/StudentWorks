@@ -1,4 +1,4 @@
-<!Doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -6,21 +6,26 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="project.js"></script>
+    <script src="/contribute/contribute.js"></script>
+    <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../header/nav.css">
-    <link rel="stylesheet" href="project.css">
+    <link rel="stylesheet" href="/header/nav.css">
+    <link rel="stylesheet" href="contribute/contribute.css">
 </head>
 
 <body>
-   
-    <div hidden id="userType"></div>
-    
+    {{#if authenticate}}
+    <div hidden id="auth">{{authenticate}}</div>
+    <div hidden id="userID">{{userID}}</div>
+    <div hidden id="userType">{{userType}}</div>
+    {{else}}
+    <div hidden id="userType">Visitor</div>
+    {{/if}}
     <div class="container">
         <div class="row hidden-xs">
             <div class="col-xs-7 col-sm-7">
                 <a href="/">
-                    <img class="swLogo" alt="logo" src="../images/logo.png">
+                    <img class="swLogo" alt="logo" src="/images/logo.png">
                 </a>
             </div>
             <div class="text-right">
@@ -69,10 +74,12 @@
             </nav>
         </div>
     </div>
+
     <!-- BODY...................................................................... -->
     <div class="container">
-        <div class="row" id="projectBody"></div>
+        <div class="row" id="mainBody"></div>
     </div>
     <!-- End of BODY.............................................................. -->
+     <hr class="clearfix w-100 d-md-none pb-3">
 </body>
 </html>
