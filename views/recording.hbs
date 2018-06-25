@@ -6,11 +6,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="/projectPage/project.js"></script>
+    <script src="/recording/recording.js"></script>
     <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/header/nav.css">
-    <link rel="stylesheet" href="/projectPage/project.css">
+    <link rel="stylesheet" href="/recording/recording.css">
 </head>
 
 <body>
@@ -45,7 +45,7 @@
                         </ul>
                         <!-- for main page -->
                         <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
-                        <!-- for all page to push data into-->
+                        <!-- PAGE TITLE -->
                         <div id="pageTitleID"></div>      
                         <a href="#">
                             <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
@@ -63,7 +63,7 @@
                                     </div>
                                     <!-- populated by usermenu.js -->
                                     <div class="modal-body" id="userMenu"></div>
-                                    <div class="modal-footer"></div>
+                                    <div class="modal-footer" ></div>
                                 </div>
                             </div>
                         </div>
@@ -77,8 +77,16 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <div class="row" id="projectBody"></div>
+        <div class="row" id="mainBody"></div>
+    </div>
+    <div class="container">
+        <div class="row center" id="tileNav"></div>
     </div>
     <!-- End of BODY.............................................................. -->
+    <hr class="clearfix w-100 d-md-none pb-3">
+   <div class="container">
+        <div class="row center" id="footerHTMLid"></div>
+    </div>
 </body>
+
 </html>

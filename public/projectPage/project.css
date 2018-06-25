@@ -1,12 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins');
 
-#pageTitleID {
-    font-size: 24px;
-    color : #ddd;
-    padding-top: 7px;
-    margin-left: 350px;
-    font-family: 'Poppins', sans-serif;
-}
 
 #infoCol {
     padding-left: 10px;
