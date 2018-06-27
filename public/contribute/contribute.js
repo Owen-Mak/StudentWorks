@@ -4,6 +4,8 @@ let platform = "";
 
 $(document).ready(() => {
     let userID = $("#userID").text();
+    $("#userIDhtml").val(userID);
+;
 
     renderUserMenu();
 
@@ -73,23 +75,29 @@ $(document).ready(() => {
     });
 
     $("#photo").change(function () {
-        displayImage(this);
+        displayImage(this); // add validation to make sure what's passed in is a picture
+    });
+
+    $("#video").change(function () {
+        displayVideo(this); // add validation to make sure what's passed in is video
     });
 
 });
 
 function renderEmptyTile() {
     let tileHtml = "" +
-        "<div class='col-md-8'>" +
-        "  <div class='panel panel-default swTile'>" +
-        "    <div class='panel-heading' style='text-align: center;'></div>" +
-        "    <div class='panel-body'>" +
-        "      <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon'>" +
-        "    </div>" +
+        "<div class='panel panel-default swTile'>" +
+        "  <div class='panel-heading' style='text-align: center;'></div>" +
+        "  <div class='panel-body'>" +
+        "    <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon'/>" +
+        "  </div>" +
         "  <div class='panel-footer' style='text-align: right;'></div>" +
+        "</div>" +
+        "<div><video id='vd'controls hidden='hidden'><source src='' type='video/mp4'></video>" +
         "</div>";
 
     $("#mainBody").html(tileHtml);
+    console.log(tileHtml);
 }
 
 function renderFooter() {
@@ -108,12 +116,24 @@ function renderFooter() {
 }
 
 function displayImage(input) {
-
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
             $('#img').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+function displayVideo(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#vd').removeAttr('hidden'); 
+            $('#vd').attr('src', e.target.result);
         }
 
         reader.readAsDataURL(input.files[0]);
