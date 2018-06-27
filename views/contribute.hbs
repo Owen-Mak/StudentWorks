@@ -10,7 +10,7 @@
     <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/header/nav.css">
-    <link rel="stylesheet" href="contribute/contribute.css">
+    <link rel="stylesheet" href="/contribute/contribute.css">
 </head>
 
 <body>
@@ -46,7 +46,7 @@
                         <!-- for main page -->
                         <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
                         <!-- for all page to push data into-->
-                        <div id="pageTitleID"></div>      
+                        <div id="pageTitleID"></div>
                         <a href="#">
                             <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
                         </a>
@@ -78,8 +78,113 @@
     <!-- BODY...................................................................... -->
     <div class="container">
         <div class="row" id="mainBody"></div>
+
+        <form onsubmit="return false;" method="POST" enctype="multipart/form-data">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="name" class="lbl">Title</label>
+                        </td>
+                        <td>
+                            <input id="titleInput" type="text" name="name" class="inpt" autofocus="autofocus" maxlength="50" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="lngInput" class="lbl">Language</label>
+                        </td>
+                        <td>
+                            <select id="lngList">
+                                <option selected value="default">Select one</option>
+                                <option value="C++">C++</option>
+                                <option value="Java">Java</option>
+                                <option value="JavaScript">JavaScript</option>
+                                <option value="Swift">Swift</option>
+                            </select>
+                            <label class="subLbl">Other</label>
+                            <input id="lngInput" type="text" name="lngInput" class="inpt" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="frmInput" class="lbl">Framework</label>
+                        </td>
+                        <td>
+                            <select id="frmList">
+                                <option selected value="default">Select one</option>
+                                <option value="Node JS">Node JS</option>
+                                <option value="Unity">Unity</option>
+                                <option value="ASP.NET">ASP.NET</option>
+                                <option value="React">React</option>
+                                <option value="Angular">Angular</option>
+                                <option value="Vue.js">Vue.js</option>
+                            </select>
+                            <label class="subLbl">Other</label>
+                            <input id="frmInput" type="text" name="frmInput" class="inpt"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="pltInput" class="lbl">Platform</label>
+                        </td>
+                        <td>
+                            <select id="pltList">
+                                <option selected value="default">Select one</option>
+                                <option value="Windows">Windows</option>
+                                <option value="macOS">macOS</option>
+                                <option value="Unix/Linux">Unix/Linux</option>
+                                <option value="Web">Web</option>
+                                <option value="Android">Android</option>
+                                <option value="iOS">iOS</option>
+                            </select>
+                            <label class="subLbl">Other</label>
+                            <input id="pltInput" type="text" name="pltInput" class="inpt" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="ctgInput" class="lbl">Category<small> (optioal)</small></label>
+                        </td>
+                        <td>
+                            <select id="ctgList">
+                                <option selected value="default">Select one</option>
+                                <option value="Game">Game</option>
+                                <option value="Utility">Utility</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Commerce">Commerce</option>
+                                <option value="Algorithm">Algorithm</option>
+                                <option value="Content Management">Content Management</option>
+                                <option value="Plug-in">Plug-in</option>
+                            </select>
+                            <label class="subLbl">Other</label>
+                            <input id="ctgInput" type="text" name="ctgInput" class="inpt" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="photo" class="lbl">Icon</label>
+                        </td>
+                        <td>
+                            <input id="photo" type="file" name="photo" />
+                        </td>
+                    </tr>
+                    <tr class="seperator"><td></td></tr>
+                    <tr>
+                        <td>
+                            <!-- empty tag for allignment -->
+                        </td>
+                        <td>
+                            <input type="submit" value="Submit" id="sbmBtn" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+
     </div>
     <!-- End of BODY.............................................................. -->
-     <hr class="clearfix w-100 d-md-none pb-3">
+    <hr class="clearfix w-100 d-md-none pb-3">
 </body>
+
 </html>

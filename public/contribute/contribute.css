@@ -1,0 +1,66 @@
+.lbl {
+    width:150px;
+    font-weight:700;
+    font-size: 16px;
+}
+
+form {
+    float: left;
+    width: 55%;
+    height: 300px;
+    padding-left: 110px;
+    padding-top: 25px;
+}
+
+#mainBody {
+    width:45%;
+    padding-left:10px;
+    margin-top: -34px;
+    float: right;
+    transform:scale(0.75);
+}
+
+#titleInput {
+    width: 364px;
+}
+
+select {
+    width: 150px;
+}
+
+td{
+    padding-top: 7px;
+}
+
+.subLbl {
+    font-weight:400;
+    padding-left: 10px;
+}
+
+.seperator {
+    height: 50px;
+}
+
+.swTile {
+    width:380px; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+}
+
+
+.panel-heading {
+    height:65px;
+}
+
+.panel-footer {
+    min-height: 40px;
+    font-size: 0.8em;
+}
+
+.panel-body {
+    height:250px;
+}
+
+.swPrjImage {
+    height: 220px; 
+    margin: auto;
+}

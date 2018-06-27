@@ -1,8 +1,107 @@
+let language = "";
+let framework = "";
+let platform = "";
+
 $(document).ready(() => {
-    userID = $("#userID").text();
+    let userID = $("#userID").text();
 
     renderUserMenu();
 
     $("#pageTitleID").html("Project Upload");
 
+    renderEmptyTile();
+
+    $("#titleInput").change(() => {
+        let val = $("#titleInput").val();
+        $(".panel-heading").html("<h4>" + val + "</h4>");
+    });
+
+    // LANGUAGE CHANGE
+    $("#lngList").change(() => {
+        let val = $("#lngList option:selected").val();
+        language = (val != "default") ? val : "";
+        $("#lngInput").val("");
+        renderFooter();
+    });
+
+    $("#lngInput").change(() => {
+        let val = $("#lngInput").val();
+        language = val;
+        $("#lngList").val("default");
+        renderFooter();
+
+    });
+
+    // FRAMEWORK CHANGE
+    $("#frmList").change(() => {
+        let val = $("#frmList option:selected").val();
+        framework = (val == "default") ? "" : val;
+        $("#frmInput").val("");
+        renderFooter();
+    });
+
+    $("#frmInput").change(() => {
+        let val = $("#frmInput").val();
+        framework = val;
+        $("#frmList").val("default");
+        renderFooter();
+    });
+
+
+    // PLATFORM CHANGE
+    $("#pltList").change(() => {
+        let val = $("#pltList option:selected").val();
+        platform = (val != "default") ? val : "";
+        $("#pltInput").val("");
+        renderFooter();
+    });
+
+    $("#pltInput").change(() => {
+        let val = $("#pltInput").val();
+        platform = val;
+        $("#pltList").val("default");
+        renderFooter();
+    });
+
+    // CATEGORY CHANGE
+    $("#ctgList").change(() => {
+        $("#ctgInput").val("");
+    });
+
+    $("#ctgInput").change(() => {
+        $("#ctgList").val("default");
+    });
+
+
 });
+
+function renderEmptyTile() {
+    let icon = "/images/empty.png";
+    let imageShow = '<img src="' + icon + '" class="img-responsive center-block swPrjImage" alt="icon">';
+
+    let tileHtml = "" +
+        "<div class='col-md-8'>" +
+        "<div class='panel panel-default swTile'>" +
+        "<div class='panel-heading' style='text-align: center;'></div>" +
+        "<div class='panel-body'>" + imageShow + "</div>" +
+        "<div class='panel-footer' style='text-align: right;'>" +
+        "</div>" +
+        "</div>";
+
+    $("#mainBody").html(tileHtml);
+}
+
+function renderFooter() {
+    let footerHtml = "";
+
+    if (language != "")
+        footerHtml += "<b>Language: </b>" + language;
+
+    if (framework != "")
+        footerHtml += footerHtml ? ", <b>Framework: </b>" + framework : "<b>Framework: </b>";
+
+    if (platform != "")
+        footerHtml += footerHtml ? ", <b>Platform: </b>" + platform : "<b>Platform: </b>";
+
+    $(".panel-footer").html(footerHtml);
+}
