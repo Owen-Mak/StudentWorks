@@ -77,7 +77,7 @@ function renderHeader(data) {
     let yearArr = [];
 
     filterOpt = "";
-    
+
     filterOpt += "<li class='dropdown' id='byLanguageLi'>";
     filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Language<b class='caret'></b></a>";
     filterOpt += "  <ul class='dropdown-menu' id='lngList' role='menu'></ul>";
@@ -179,7 +179,7 @@ function renderTile(title, year, icon, language, framework, id) {
     tileHtml += "<div class='panel panel-default swTile'>";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
     tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
-    tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
+    tileHtml += "          <div class='panel-body' style='height:200px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
     tileHtml += "</div>";
@@ -196,7 +196,7 @@ function renderEmptyTile() {
     emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
     emptyTileHtml += "       <a href='../contribute' class ='tileLinkEmpty'>";
-    emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
+    emptyTileHtml += "          <div class='panel-body' style='height:200px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
     emptyTileHtml += "</div>";
@@ -206,13 +206,20 @@ function renderEmptyTile() {
 
 function renderTileNavigation() {
     let tileNav = "";
-    tileNav += '<div class="row center">';
-    tileNav += '<div style="display: inline;"><button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'; // PREVIOUS Button
-    tileNav += '<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></div>';
-    tileNav += '<div id="pageId"  style="display: inline; class="center"></div>';
-    tileNav += '<div  style="display: inline;"><button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'; // NEXT Button
-    tileNav += '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button><div>';
-    tileNav += '</div>'
+    tileNav += '' +
+        '<div class="row center">' +
+        '  <div style="display: inline;">' +
+        '    <button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'+ // PREVIOUS Button
+        '      <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'+
+        '    </button>'+
+        '  </div>'+
+        '  <div id="pageId"  style="display: inline; class="center"></div>'+
+        '  <div style="display: inline;">' +
+        '    <button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'+ // NEXT Button
+        '      <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>' +
+        '    </button>'+
+        '  </div>'+
+        '</div>';
 
     $("#tileNav").append(tileNav);
 }

@@ -13,7 +13,7 @@
 form {
     float: left;
     padding-left: 80px;
-    padding-top: 15px;
+    padding-top: 0px;
 }
 
 #titleInput, #devs, #roles {
@@ -49,7 +49,7 @@ td{
     width:500px;
     float: right;
     padding-left: 30px; 
-    margin-top: -40px;
+    margin-top: -53px;
        
 }
 
