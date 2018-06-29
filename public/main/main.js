@@ -6,62 +6,68 @@ var httpRequest;
 var start;
 var pageNum;
 var lastPage;
+var allProjects;
 
-// This function get called when main.js and main.html are loaded
+// Entry point
 $(document).ready(() => {
-    httpRequest = new XMLHttpRequest();
-    if (!httpRequest)
-        console.log("Cannot create an XMLHTTP instance");
+    // LOCAL
+    //let prjUrl = "http://localhost:3000/api/getAllProjects";
 
-    httpRequest.onreadystatechange = renderFirstPage;
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
+    // PRODUCTION
+    let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
 
-    httpRequest.send();
+    $.getJSON(prjUrl, (data) => {
+        allProjects = data;
+        displayALLProjets();
+    });
+
 });
 
-function renderFirstPage() {
-    if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
+function displayALLProjets() {
+    let data = allProjects; //grabbing all projects from global JSON
+    lastPage = false;
+    pageNum = 1;
 
-            var jsData = JSON.parse(httpRequest.responseText);
-            lastPage = false;
-            pageNum = 1;
+    // Initialization
+    $("#mainBody").empty();
+    $("#tileNav").empty();
+    $("#lngList").empty();
+    $("#frmList").empty();
+    $("#yearList").empty();
+    $("#byLanguageLi").attr({ "class": "dropdown" });
+    $("#byFrameworkLi").attr({ "class": "dropdown" });
+    $("#byYearLi").attr({ "class": "dropdown" });
 
-            // 1. NAVIGATION
-            // List
-            renderNavigation(jsData);
+    // HEADER
+    renderHeader(data);
 
-            // 2. TILE navigation (has to be rendered before tiles, but appears after tiles ) TODO refactor
-            renderTileNavigation();
+    // TILE, navigation (has to be rendered before tiles, but appears after tiles ) TODO refactor
+    renderTileNavigation();
 
-            // 3. six BODY Tiles
+    // BODY, 6 Tiles
+    start = 0; // sets page count to 0, global
+    renderSixProjectTiles(data);
+
+    //NEXT Button
+    $("#prevBtn").click(() => {
+        $("#mainBody").empty();
+        start -= 12;
+        if (start < 0)
             start = 0;
-            renderSixProjectTiles(jsData);
 
-            // 4. BUTTONS event handlers
-            //NEXT
-            $("#prevBtn").click(() => {
-                $("#mainBody").empty();
-                start -= 12;
-                if (start < 0)
-                    start = 0;
+        renderSixProjectTiles(data);
+    });
 
-                renderSixProjectTiles(jsData);
-            });
-
-            // PREV
-            $("#nextBtn").click(() => {
-                if (!lastPage) {
-                    $("#mainBody").empty();
-                    renderSixProjectTiles(jsData);
-                }
-            });
+    // PREV Button
+    $("#nextBtn").click(() => {
+        if (!lastPage) {
+            $("#mainBody").empty();
+            renderSixProjectTiles(data);
         }
-    }
+    });
 }
 
-function renderNavigation(data) {
+function renderHeader(data) {
     let languageList = "";
     let frameworkList = "";
     let yearList = "";
@@ -70,12 +76,32 @@ function renderNavigation(data) {
     let frameworkArr = [];
     let yearArr = [];
 
+    filterOpt = "";
+    
+    filterOpt += "<li class='dropdown' id='byLanguageLi'>";
+    filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Language<b class='caret'></b></a>";
+    filterOpt += "  <ul class='dropdown-menu' id='lngList' role='menu'></ul>";
+    filterOpt += "</li>";
+
+    filterOpt += "<li class='dropdown' id='byFrameworkLi'>";
+    filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Framework<b class='caret'></b></a>";
+    filterOpt += "  <ul class='dropdown-menu frmList' id='frmList' role='menu'></ul>";
+    filterOpt += "</li>";
+
+    filterOpt += "<li class='dropdown' id='byYearLi'>";
+    filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Year<b class='caret'></b></a>";
+    filterOpt += "  <ul class='dropdown-menu yearList' id='yearList' role='menu'></ul>";
+    filterOpt += "</li>";
+    filterOpt += "<a href='#'><span class='glyphicon glyphicon-search srchIcon'></span></a>";
+
+    $("#optHeader").html(filterOpt);
+
     // Building HTLM for Filtering lists: Framework, Language, Year
     $.each(data, (key, value) => {
         if (value.language) {
             if (!languageArr.includes(value.language)) {
                 languageArr.push(value.language);
-                languageList += "<li> <a href='#' onclick='prepareFilter(\"language\" ,\"" + value.language + "\")'>";
+                languageList += "<li> <a href='#' onclick='filterProjectsBy(\"language\" ,\"" + value.language + "\")'>";
                 languageList += value.language + "</a></li>";
             }
         }
@@ -83,7 +109,7 @@ function renderNavigation(data) {
         if (value.framework) {
             if (!frameworkArr.includes(value.framework)) {
                 frameworkArr.push(value.framework);
-                frameworkList += "<li> <a href='#' onclick='prepareFilter(\"framework\" ,\"" + value.framework + "\")'>";
+                frameworkList += "<li> <a href='#' onclick='filterProjectsBy(\"framework\" ,\"" + value.framework + "\")'>";
                 frameworkList += value.framework + "</a></li>";
             }
         }
@@ -92,7 +118,7 @@ function renderNavigation(data) {
             var year = value.creationDate.substring(0, 4);
             if (!yearArr.includes(year)) {
                 yearArr.push(year);
-                yearList += "<li> <a href='#' onclick='prepareFilter(\"year\" ,\"" + year + "\")'>";
+                yearList += "<li> <a href='#' onclick='filterProjectsBy(\"year\" ,\"" + year + "\")'>";
                 yearList += year + "</a></li>";
             }
         }
@@ -101,6 +127,8 @@ function renderNavigation(data) {
     $("#lngList").append(languageList);
     $("#frmList").append(frameworkList);
     $("#yearList").append(yearList);
+
+    renderUserMenu(); // function declaration is in username.js
 }
 
 function renderSixProjectTiles(jsData) {
@@ -150,7 +178,7 @@ function renderTile(title, year, icon, language, framework, id) {
     tileHtml += "<div class='col-md-4'>";
     tileHtml += "<div class='panel panel-default swTile'>";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
-    tileHtml += "       <a href='projectPage/project.html?id=" + id + "' class ='tileLink'>";
+    tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
     tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -167,7 +195,7 @@ function renderEmptyTile() {
     emptyTileHtml += "<div class='col-md-4'>";
     emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
-    emptyTileHtml += "       <a href='#' class ='tileLinkEmpty'>";
+    emptyTileHtml += "       <a href='../contribute/contribute.html' class ='tileLinkEmpty'>";
     emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
@@ -189,70 +217,61 @@ function renderTileNavigation() {
     $("#tileNav").append(tileNav);
 }
 
-// FILTERING - 2 functions
-function prepareFilter(key, value) {
+// Render Filtering
+function filterProjectsBy(sKey, sValue) {
+    let jsData = allProjects; // 'allProjects' is a global JSON obj
+
     $("#mainBody").empty();
     $("#tileNav").empty();
 
-    let httpRequest = new XMLHttpRequest();
-    if (!httpRequest)
-        console.log("Cannot create an XMLHTTP instance");
+    let newData = [];
 
-    httpRequest.onreadystatechange = renderFilter(key, value);
-    httpRequest.open('GET', "http://myvmlab.senecacollege.ca:6193/api/getAllProjects", true);
-    //httpRequest.open('GET', "http://localhost:3000/api/getAllProjects", true);
-    httpRequest.send();
-}
-
-// Render Filtering
-function renderFilter(sKey, sValue) {
-    if (httpRequest.readyState === 4) {
-        if (httpRequest.status === 200) {
-
-            let jsData = JSON.parse(httpRequest.responseText);
-            let newData = [];
-
-            if (sKey == "language") {
-                $.each(jsData, (key, value) => {
-                    if (value.language == sValue) newData.push(value);
-                });
-            }
-            else if (sKey == "framework") {
-                $.each(jsData, (key, value) => {
-                    if (value.framework == sValue) newData.push(value);
-                });
-            }
-            else if (sKey == "year") {
-                console.log("The year is: " + sValue);
-                $.each(jsData, (key, value) => {
-
-                    if (value.creationDate) {
-                        console.log(value.creationDate);
-                        var year = value.creationDate.substring(0, 4);
-                        if (year == sValue) newData.push(value);
-                    }
-                });
-            }
-
-            start = 0;
-            renderTileNavigation();
-            renderSixProjectTiles(newData);
-
-            $("#prevBtn").click(() => {
-                $("#mainBody").empty();
-                start -= 12;
-                if (start < 0)
-                    start = 0;
-
-                renderSixProjectTiles(newData);
-            });
-
-            $("#nextBtn").click(() => {
-                if (!lastPage) {
-                    $("#mainBody").empty();
-                    renderSixProjectTiles(newData);
-                }
-            });
-        }
+    if (sKey == "language") {
+        $("#byLanguageLi").attr({ "class": "dropdown active" });
+        $("#byFrameworkLi").attr({ "class": "dropdown" });
+        $("#byYearLi").attr({ "class": "dropdown" });
+        $.each(jsData, (key, value) => {
+            if (value.language == sValue) newData.push(value);
+        });
     }
+    else if (sKey == "framework") {
+        $("#byLanguageLi").attr({ "class": "dropdown" });
+        $("#byFrameworkLi").attr({ "class": "dropdown active" });
+        $("#byYearLi").attr({ "class": "dropdown" });
+        $.each(jsData, (key, value) => {
+            if (value.framework == sValue) newData.push(value);
+        });
+    }
+    else if (sKey == "year") {
+        $("#byLanguageLi").attr({ "class": "dropdown" });
+        $("#byFrameworkLi").attr({ "class": "dropdown" });
+        $("#byYearLi").attr({ "class": "dropdown active" });
+        $.each(jsData, (key, value) => {
+
+            if (value.creationDate) {
+                var year = value.creationDate.substring(0, 4);
+                if (year == sValue) newData.push(value);
+            }
+        });
+    }
+
+    start = 0;
+    renderTileNavigation();
+    renderSixProjectTiles(newData);
+
+    $("#prevBtn").click(() => {
+        $("#mainBody").empty();
+        start -= 12;
+        if (start < 0)
+            start = 0;
+
+        renderSixProjectTiles(newData);
+    });
+
+    $("#nextBtn").click(() => {
+        if (!lastPage) {
+            $("#mainBody").empty();
+            renderSixProjectTiles(newData);
+        }
+    });
 }
