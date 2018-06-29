@@ -77,15 +77,16 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <form onsubmit="console.log('Sent'); return false;" method="POST" enctype="multipart/form-data">
+        <form onsubmit="" method="POST" enctype="multipart/form-data" id="uForm">
             <table>
                 <tbody>
                     <tr>
                         <td>
-                            <label for="name" class="lbl">Title</label>
+                            <input hidden="hidden" type="text" id="userIDhtml" name="userID" />
+                            <label for="title" class="lbl">Title</label>
                         </td>
                         <td>
-                            <input id="titleInput" type="text" name="name" class="inpt" autofocus="autofocus" maxlength="50" />
+                            <input required="required" id="titleInput" type="text" name="title" class="inpt" autofocus="autofocus" maxlength="50" />
                         </td>
                     </tr>
                     <tr>
@@ -93,15 +94,23 @@
                             <label for="lngInput" class="lbl">Language</label>
                         </td>
                         <td>
-                            <select id="lngList">
+                            <select id="lngList" name="languageChoice">
                                 <option selected value="default">Select one</option>
+                                <option value="C">C</option>
                                 <option value="C++">C++</option>
                                 <option value="Java">Java</option>
                                 <option value="JavaScript">JavaScript</option>
+                                <option value="PHP">PHP</option>
+                                <option value="C#">C#</option>
+                                <option value="Python">Python</option>
+                                <option value="R">R</option>
+                                <option value="Go">Go</option>
+                                <option value="Ruby">Ruby</option>
                                 <option value="Swift">Swift</option>
+                                <option value="Python">MATLAB</option>
                             </select>
                             <label class="subLbl">Other</label>
-                            <input id="lngInput" type="text" name="lngInput" class="inpt" />
+                            <input id="lngInput" type="text" name="lngInput" class="inpt" class="green-border" />
                         </td>
                     </tr>
                     <tr>
@@ -109,14 +118,18 @@
                             <label for="frmInput" class="lbl">Framework</label>
                         </td>
                         <td>
-                            <select id="frmList">
+                            <select id="frmList" name="frameworkChoice">
                                 <option selected value="default">Select one</option>
-                                <option value="Node JS">Node JS</option>
+                                <option value="Express.js">Express.js</option>
+                                <option value="Ruby on Rails">Ruby on Rails</option>
+                                <option value="Django">Django</option>
                                 <option value="Unity">Unity</option>
                                 <option value="ASP.NET">ASP.NET</option>
                                 <option value="React">React</option>
                                 <option value="Angular">Angular</option>
                                 <option value="Vue.js">Vue.js</option>
+                                <option value="Vue.js">Spring MVC</option>
+                                <option value="Apache Struts">Apache Struts</option>
                             </select>
                             <label class="subLbl">Other</label>
                             <input id="frmInput" type="text" name="frmInput" class="inpt" />
@@ -127,7 +140,7 @@
                             <label for="pltInput" class="lbl">Platform</label>
                         </td>
                         <td>
-                            <select id="pltList">
+                            <select id="pltList" name="platformChoice">
                                 <option selected value="default">Select one</option>
                                 <option value="Windows">Windows</option>
                                 <option value="macOS">macOS</option>
@@ -135,6 +148,7 @@
                                 <option value="Web">Web</option>
                                 <option value="Android">Android</option>
                                 <option value="iOS">iOS</option>
+                                <option value="Raspberry Pi">Raspberry Pi</option>
                             </select>
                             <label class="subLbl">Other</label>
                             <input id="pltInput" type="text" name="pltInput" class="inpt" />
@@ -166,7 +180,7 @@
                             <label for="photo" class="lbl">Icon</label>
                         </td>
                         <td>
-                            <input id="photo" type="file" name="photo" />
+                            <input required="required" id="photo" type="file" name="photo" accept=".png,jpg,jpeg" />
                         </td>
                     </tr>
                     <tr class="seperator">
@@ -177,7 +191,8 @@
                             <label for="devs" class="lbl">Developers</label>
                         </td>
                         <td>
-                            <input id="devs" type="text" name="devs" />
+                            <input required="required" id="devs" type="text" name="devs" title="Comma separated list: First name Last name [, First name Last name] ..."
+                            />
                         </td>
                     </tr>
                     <tr>
@@ -185,7 +200,8 @@
                             <label for="roles" class="lbl">Roles</label>
                         </td>
                         <td>
-                            <input id="roles" type="text" name="roles" />
+                            <input required="required" id="roles" type="text" name="roles" title="Comma separated list matching order of developer names."
+                            />
                         </td>
                     </tr>
                     <tr>
@@ -193,7 +209,7 @@
                             <label for="desc" class="lbl">Description</label>
                         </td>
                         <td>
-                            <textarea id="desc" name="desc" rows="5" cols="53" style="color:#999;">250 words</textarea>
+                            <textarea required="required" id="desc" name="desc" rows="5" cols="53" maxlength="1000" placeholder="1000 characters"></textarea>
                         </td>
                     </tr>
                     <tr class="seperator">
@@ -201,32 +217,42 @@
                     </tr>
                     <tr>
                         <td>
-                            <label for="video" class="lbl">Upload Video</label>
+                            <label for="video" class="lbl">Video upload</label>
                         </td>
                         <td>
-                            <input id="video" type="file" name="video" />
+                            <input required="required" id="video" type="file" name="video" accept=".mp4,.webm,.ogg" />
                         </td>
                     </tr>
-                                      <tr class="seperator">
+                    <tr class="seperator">
                         <td></td>
                     </tr>
                     <tr>
                         <td>
-                            <label for="recB" class="lbl">Record Video</label>
+                            <label for="recB" class="lbl">Video record</label>
                         </td>
                         <td>
-                             <button class="btn btn-primary" type="submit" id="sbmBtn">Submit for Review</button>
+                            <button class="btn btn-primary" type="submit" id="sbmBtn">Submit for Review</button>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input hidden="hidden" type="text" id="userIDhtml" />
                             <a href="/recording">
                                 <img src="/images/recBtn.png" alt="record" id="recB" name="recB" />
                             </a>
                         </td>
                         <td>
-                           
+                        </td>
+                    </tr>
+                    <tr class="seperator">
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="lbl">Instructions</label>
+                        </td>
+                        <td>
+                            <input type="text" name="cs" value="Coming soon" readonly>
+                            <b class='caret'></b>
                         </td>
                     </tr>
                 </tbody>

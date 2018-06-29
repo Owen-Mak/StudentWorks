@@ -1,14 +1,17 @@
-let language = "";
-let framework = "";
-let platform = "";
+let gl_language = "";
+let gl_framework = "";
+let gl_platform = "";
+let gl_category = "";
 
 $(document).ready(() => {
+    // Adding userID to the hidden field
     let userID = $("#userID").text();
     $("#userIDhtml").val(userID);
-;
 
+    // User Menu - defined in usermenu.js
     renderUserMenu();
 
+    // Set the page title
     $("#pageTitleID").html("Project Upload");
 
     renderEmptyTile();
@@ -21,14 +24,13 @@ $(document).ready(() => {
     // LANGUAGE CHANGE
     $("#lngList").change(() => {
         let val = $("#lngList option:selected").val();
-        language = (val != "default") ? val : "";
+        gl_language = (val != "default") ? val : "";
         $("#lngInput").val("");
         renderFooter();
     });
 
     $("#lngInput").change(() => {
-        let val = $("#lngInput").val();
-        language = val;
+        gl_language = $("#lngInput").val();
         $("#lngList").val("default");
         renderFooter();
 
@@ -37,52 +39,126 @@ $(document).ready(() => {
     // FRAMEWORK CHANGE
     $("#frmList").change(() => {
         let val = $("#frmList option:selected").val();
-        framework = (val == "default") ? "" : val;
+        gl_framework = (val == "default") ? "" : val;
         $("#frmInput").val("");
         renderFooter();
     });
 
     $("#frmInput").change(() => {
-        let val = $("#frmInput").val();
-        framework = val;
+        gl_framework = $("#frmInput").val();
         $("#frmList").val("default");
         renderFooter();
     });
 
-
     // PLATFORM CHANGE
     $("#pltList").change(() => {
         let val = $("#pltList option:selected").val();
-        platform = (val != "default") ? val : "";
+        gl_platform = (val != "default") ? val : "";
         $("#pltInput").val("");
         renderFooter();
     });
 
     $("#pltInput").change(() => {
-        let val = $("#pltInput").val();
-        platform = val;
+        gl_platform = $("#pltInput").val();
         $("#pltList").val("default");
         renderFooter();
     });
 
     // CATEGORY CHANGE
     $("#ctgList").change(() => {
+        let val = $("#ctgList option:selected").val(); 
+        gl_category = (val != "default") ? val : "";
         $("#ctgInput").val("");
     });
 
     $("#ctgInput").change(() => {
+        gl_category = (this).val();
         $("#ctgList").val("default");
     });
 
+    // DISPLAY image
     $("#photo").change(function () {
         displayImage(this); // add validation to make sure what's passed in is a picture
+        //displayColors();
     });
 
+    // DISPLAY video
     $("#video").change(function () {
         displayVideo(this); // add validation to make sure what's passed in is video
     });
 
+    // FORM SUBMISSION LOGIC
+    $("form").on("submit", submitProject);
 });
+
+function submitProject(event) {
+    event.preventDefault();
+
+    //Validation
+    
+    if (gl_language == "") {
+        $("#lngList").focus();
+        return;
+    } else if (gl_framework == "") {
+        $("#frmList").focus();
+        return;
+    } else if (gl_platform == "") {
+        $("#pltList").focus();
+        return;
+    }
+
+    // Developer processing
+    var developers = [];
+    var devs = $("#devs").val().split(",");
+    var roles = $("#roles").val().split(",");
+    if(devs.length != roles.length){
+        $("#devs").focus();
+        return;
+    }
+    for(var i = 0; i<devs.length; i++){
+        developers.push(devs[i]+':'+roles[i]);
+    }
+
+    // Image processing
+    var date = new Date().getTime();
+    var image = document.getElementById("photo").files[0];
+    var imExt = image.type.split('/')[1];
+    var photoName = date + "." + imExt;
+
+    // Video processing
+    var video = document.getElementById("video").files[0];
+    var vidExt = video.type.split('/')[1];
+    var videoName = date + "." + vidExt;
+   
+    // Creating a processed form
+    var formData = new FormData();
+    formData.append("userID", $("#userID").val());
+    formData.append("title", $("#titleInput").val());
+    formData.append("language", gl_language);
+    formData.append("framework", gl_framework);
+    formData.append("platform", gl_platform);
+    formData.append("category", gl_category);
+    formData.append("desc", $("#desc").val());
+    formData.append("developers", developers);
+    formData.append("photo", photoName);
+    formData.append("video", videoName);
+    formData.append("media", image, photoName);
+    formData.append("media", video, videoName);
+
+    // Sending a form
+    $.ajax({
+        url: '/upload-project',
+        data: formData,
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        success : (data, textStatus, jXHR)=>{
+            alert(data);
+            window.location.replace("/profile");
+        }
+    });
+
+}
 
 function renderEmptyTile() {
     let tileHtml = "" +
@@ -93,28 +169,35 @@ function renderEmptyTile() {
         "  </div>" +
         "  <div class='panel-footer' style='text-align: right;'></div>" +
         "</div>" +
+        "<div id='colChoice'></div>" +
         "<div><video id='vd'controls hidden='hidden'><source src='' type='video/mp4'></video>" +
         "</div>";
 
     $("#mainBody").html(tileHtml);
-    console.log(tileHtml);
 }
 
+// Render Tile footer: Language, gl_framework, Platform
+// TODO to make a dynamic list from DB
 function renderFooter() {
     let footerHtml = "";
 
-    if (language != "")
-        footerHtml += "<b>Language: </b>" + language;
+    if (gl_language != "") {
+        footerHtml += "<b>Language: </b>" + gl_language;
+    }
 
-    if (framework != "")
-        footerHtml += footerHtml ? ", <b>Framework: </b>" + framework : "<b>Framework: </b>";
-
-    if (platform != "")
-        footerHtml += footerHtml ? ", <b>Platform: </b>" + platform : "<b>Platform: </b>";
+    if (gl_framework != "") {
+        footerHtml += (footerHtml != "") ? ", " : "";
+        footerHtml += "<b>Framework: </b>" + gl_framework;
+    }
+    if (gl_platform != "") {
+        footerHtml += (footerHtml != "") ? ", " : "";
+        footerHtml += "<b>Platform: </b>" + gl_platform;
+    }
 
     $(".panel-footer").html(footerHtml);
 }
 
+// Display image preview before uploaded
 function displayImage(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -127,12 +210,13 @@ function displayImage(input) {
     }
 }
 
+// Display video preview before uploaded
 function displayVideo(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            $('#vd').removeAttr('hidden'); 
+            $('#vd').removeAttr('hidden');
             $('#vd').attr('src', e.target.result);
         }
 
@@ -140,3 +224,7 @@ function displayVideo(input) {
     }
 }
 
+// TODO - to finish
+function displayColors() {
+    console.log("i'm here");
+}
