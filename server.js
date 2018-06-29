@@ -198,13 +198,8 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-<<<<<<< HEAD
-        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;
-        mailOptions={
-=======
         link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
         mailOptions = {
->>>>>>> master
             to : req.body.email,
             subject : "Please confirm your Email account",
             html : `Hello ${req.body.name},<br> 
@@ -272,60 +267,6 @@ app.post('/send', urlencodedParser, function(req,res){
 });
 
 app.get('/verify',function(req,res){
-<<<<<<< HEAD
-console.log(req.protocol+"://"+req.get('host'));
-console.log(req.query.name);
-
-function checkCode() {
-    return new Promise(function(resolve, reject){
-            dbconnect.connect()
-            dbconnect.getOneUser(req.query.name, function(err, data){
-                if (err) { 
-                    reject(err);
-                } else {                        
-                    var user = JSON.parse(JSON.stringify(data));
-                    registerCode = user[0].registrationCode;
-                    resolve(registerCode);
-                }
-            dbconnect.end();
-        });
-    });
-};
-
-function validateRegistration(registerCode) {
-    return new Promise(function(resolve, reject){
-        if((req.protocol+"://"+req.get('host'))==("http://"+host)){
-            console.log("Domain is matched. Information is from Authentic email");
-            if(req.query.id == registerCode) 
-            {
-                console.log("email is verified");
-                //Update emailRegistration status in database
-                dbconnect.connect();
-                dbconnect.validateRegistration(rand);
-                dbconnect.end();
-                req.session.msg = "Email successfully verified.";
-                res.status(200).redirect('/login');
-                resolve();
-            }
-            else
-            {
-                reject("email is not verified");
-            }
-        } else {
-            res.send("<h1>Request is from unknown source");
-        }
-    });
-};
-
-checkCode()
-.then(validateRegistration, null)
-.catch(function(rejectMsg){
-    console.log('rejectMsg: ', rejectMsg);
-    req.session.msg = rejectMsg;
-    res.status(401).redirect('/register');
-});    
-
-=======
     console.log(req.protocol+"://"+req.get('host'));
     var regCodeExist = false;
 
@@ -382,7 +323,6 @@ checkCode()
         //console.log("from bad request:","http://"+host);        
         res.send("<h1>Request is from unknown source</h1>");
     }
->>>>>>> master
 });   //email verification end
 
 
