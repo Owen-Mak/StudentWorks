@@ -66,6 +66,7 @@ app.post("/upload-project", upload.array("media", 2),(req, res) => {
     let platform    = req.body.platform;
     let category    = req.body.category;
     let developers  = req.body.developers;
+    let color       = req.body.color;
     let description = req.body.desc;
     let picName     = req.body.photo;
     let videoName   = req.body.video;

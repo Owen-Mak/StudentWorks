@@ -2,6 +2,7 @@ let gl_language = "";
 let gl_framework = "";
 let gl_platform = "";
 let gl_category = "";
+let colorCh = "#f5f5f5";
 
 $(document).ready(() => {
     // Adding userID to the hidden field
@@ -10,6 +11,7 @@ $(document).ready(() => {
 
     // User Menu - defined in usermenu.js
     renderUserMenu();
+    renderColorPick();
 
     // Set the page title
     $("#pageTitleID").html("Project Upload");
@@ -128,7 +130,7 @@ function submitProject(event) {
     var vidExt = video.type.split('/')[1];
     var videoName = date + "." + vidExt;
 
-    // Creating a processed form
+    // Creating a final form
     var formData = new FormData();
     formData.append("userID", $("#userID").val());
     formData.append("title", $("#titleInput").val());
@@ -138,6 +140,7 @@ function submitProject(event) {
     formData.append("category", gl_category);
     formData.append("desc", $("#desc").val());
     formData.append("developers", developers);
+    formData.append("color", colorCh);
     formData.append("photo", photoName);
     formData.append("video", videoName);
     formData.append("media", image, photoName);
@@ -208,6 +211,32 @@ function displayVideo(input) {
 }
 
 // TODO
-function displayColors() {
-    console.log("i'm here");
+
+function renderColorPick() {
+    var colRow = $("#colRow");
+    var colorArray = ["#f5f5f5", "#eda3a3", "#efeba0", "#a0efa1", "#a0d9ef", "#cca9d8"];
+    var colHtml = "";
+
+    $.each(colorArray, (key, color) => {
+        colHtml +=
+            "<td class='colTile'>" +
+            "  <button type='button' class='btn colBtn' onclick='changeColor(\"" + color +"\")'" +
+            "    style='background-color:"+color+"; border:solid 0.5px #dcdcdc;'></button>"+
+            "</td>";
+    });
+   colRow.html(colHtml);
+   return;
 }
+
+function changeColor(col) {
+    var styleH = $(".panel-heading").attr("style");
+    var styleF = $(".panel-footer").attr("style");
+
+    $(".panel-heading").attr('style', styleH + "background-color:" + col + ";");
+    $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
+    $(".swTile").attr('style', "border: solid 1px " + col + ";" );
+
+    colorCh = color; // assigning to global var
+    return;
+}
+

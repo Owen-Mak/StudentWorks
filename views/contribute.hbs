@@ -220,7 +220,7 @@
                             <label for="video" class="lbl">Video upload</label>
                         </td>
                         <td>
-                            <input required="required" id="video" type="file" name="video" accept=".mp4,.webm,.ogg" />
+                            <input required="required" id="video" type="file" name="video" accept=".mp4,.webm,.ogg,.mov" />
                         </td>
                     </tr>
                     <tr class="seperator">
@@ -266,7 +266,11 @@
                 </div>
                 <div class='panel-footer' style='text-align: right;'></div>
             </div>
-            <div id='colChoice'></div>
+            <div id='colChoice'>
+                <table id="colTable">
+                    <tr id="colRow"></tr>
+                </table>
+            </div>
             <div id='videoPrv'></div>
         </div>
     </div>
