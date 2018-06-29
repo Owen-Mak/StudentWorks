@@ -8,6 +8,9 @@ const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
+const multer = require("multer");
+var sftpStorage = require('multer-sftp')
+var storage;
 
 //This is for parsing json POST requests in text
 // create application/json parser
@@ -15,8 +18,33 @@ var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+if (process.env.HOSTNAME === 'studentworks'){ 
+    storage = multer.diskStorage({
+        destination: "public/userPhotos",
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + path.extname(file.originalname));
+        }
+    });
+} else {    
+    storage = sftpStorage({
+        sftp: {
+          host: 'myvmlab.senecacollege.ca',
+          port: 6185,
+          username: 'sftpUser',
+          password: 'sftpUser'
+        },
+        destination: function (req, file, cb) {
+            console.log (path.posix.join ('./StudentWorks', 'public', 'userPhotos'));            
+            cb(null, path.posix.join ('./StudentWorks', 'public', 'userPhotos'));
+          
+        },
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + path.posix.extname(file.originalname));
+        } 
+      })        
+}
 
-
+var upload = multer({ storage: storage });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -514,8 +542,29 @@ app.post('/complete', urlencodedParser, function(req,res){
     
 });
 
-app.post ('/profile', function (req,res){
-    
+app.post ('/profile', urlencodedParser, upload.single("img-input"), function (req,res){
+    if (!req.body){
+        return res.sendStatus(400).redirect('/profile');
+    }
+    var username = req.body.username;
+    var fname = req.body.fname;
+    var lname = req.body.lname;
+    var email = req.body.email;
+    var password = req.body.password;
+    var program = req.body.program;
+    var imagePath = `/userPhotos/${req.file.filename}`;
+    const formData = req.body;
+    const formFile = req.file;
+    console.log ("formFile", JSON.stringify(req.file));
+    console.log ("imagePath: ", imagePath);
+    //console.log ("POST profile:", username, fname, lname, email, password, program);
+/*    const dataReceived = "Your submission was received:<br/><br/>" +
+    "Your form data was:<br/>" + JSON.stringify(formData) + "<br/><br/>" +
+    "Your File data was:<br/>" + JSON.stringify(formFile) +
+    "<br/><p>This is the image you sent:<br/><img src='/photos/" + formFile.filename + "'/>";
+  res.send(dataReceived);*/    
+    res.send(formData);
+    //res.redirect('profile');
 })
 /*------------------Routing End ------------------------*/
 
