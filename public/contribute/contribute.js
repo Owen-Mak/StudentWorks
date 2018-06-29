@@ -14,14 +14,13 @@ $(document).ready(() => {
     // Set the page title
     $("#pageTitleID").html("Project Upload");
 
-    renderEmptyTile();
-
+    // PROJECT TITLE change
     $("#titleInput").change(() => {
         let val = $("#titleInput").val();
         $(".panel-heading").html("<h4>" + val + "</h4>");
     });
 
-    // LANGUAGE CHANGE
+    // LANGUAGE change
     $("#lngList").change(() => {
         let val = $("#lngList option:selected").val();
         gl_language = (val != "default") ? val : "";
@@ -36,7 +35,7 @@ $(document).ready(() => {
 
     });
 
-    // FRAMEWORK CHANGE
+    // FRAMEWORK change
     $("#frmList").change(() => {
         let val = $("#frmList option:selected").val();
         gl_framework = (val == "default") ? "" : val;
@@ -50,7 +49,7 @@ $(document).ready(() => {
         renderFooter();
     });
 
-    // PLATFORM CHANGE
+    // PLATFORM change
     $("#pltList").change(() => {
         let val = $("#pltList option:selected").val();
         gl_platform = (val != "default") ? val : "";
@@ -64,9 +63,9 @@ $(document).ready(() => {
         renderFooter();
     });
 
-    // CATEGORY CHANGE
+    // CATEGORY change
     $("#ctgList").change(() => {
-        let val = $("#ctgList option:selected").val(); 
+        let val = $("#ctgList option:selected").val();
         gl_category = (val != "default") ? val : "";
         $("#ctgInput").val("");
     });
@@ -78,13 +77,13 @@ $(document).ready(() => {
 
     // DISPLAY image
     $("#photo").change(function () {
-        displayImage(this); // add validation to make sure what's passed in is a picture
+        displayImage(this);
         //displayColors();
     });
 
     // DISPLAY video
     $("#video").change(function () {
-        displayVideo(this); // add validation to make sure what's passed in is video
+        displayVideo(this);
     });
 
     // FORM SUBMISSION LOGIC
@@ -95,7 +94,6 @@ function submitProject(event) {
     event.preventDefault();
 
     //Validation
-    
     if (gl_language == "") {
         $("#lngList").focus();
         return;
@@ -111,12 +109,12 @@ function submitProject(event) {
     var developers = [];
     var devs = $("#devs").val().split(",");
     var roles = $("#roles").val().split(",");
-    if(devs.length != roles.length){
+    if (devs.length != roles.length) {
         $("#devs").focus();
         return;
     }
-    for(var i = 0; i<devs.length; i++){
-        developers.push(devs[i]+':'+roles[i]);
+    for (var i = 0; i < devs.length; i++) {
+        developers.push(devs[i] + ':' + roles[i]);
     }
 
     // Image processing
@@ -129,7 +127,7 @@ function submitProject(event) {
     var video = document.getElementById("video").files[0];
     var vidExt = video.type.split('/')[1];
     var videoName = date + "." + vidExt;
-   
+
     // Creating a processed form
     var formData = new FormData();
     formData.append("userID", $("#userID").val());
@@ -152,28 +150,12 @@ function submitProject(event) {
         type: 'POST',
         contentType: false,
         processData: false,
-        success : (data, textStatus, jXHR)=>{
+        success: (data, textStatus, jXHR) => {
             alert(data);
             window.location.replace("/profile");
         }
     });
 
-}
-
-function renderEmptyTile() {
-    let tileHtml = "" +
-        "<div class='panel panel-default swTile'>" +
-        "  <div class='panel-heading' style='text-align: center;'></div>" +
-        "  <div class='panel-body'>" +
-        "    <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon'/>" +
-        "  </div>" +
-        "  <div class='panel-footer' style='text-align: right;'></div>" +
-        "</div>" +
-        "<div id='colChoice'></div>" +
-        "<div><video id='vd'controls hidden='hidden'><source src='' type='video/mp4'></video>" +
-        "</div>";
-
-    $("#mainBody").html(tileHtml);
 }
 
 // Render Tile footer: Language, gl_framework, Platform
@@ -216,15 +198,16 @@ function displayVideo(input) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            $('#vd').removeAttr('hidden');
-            $('#vd').attr('src', e.target.result);
+            videoHtml = "<video id='vd'controls><source src='" +
+                e.target.result + "' type='video/mp4'></video>";
+            $("#videoPrv").html(videoHtml);
         }
 
         reader.readAsDataURL(input.files[0]);
     }
 }
 
-// TODO - to finish
+// TODO
 function displayColors() {
     console.log("i'm here");
 }

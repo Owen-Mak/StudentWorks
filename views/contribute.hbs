@@ -86,7 +86,7 @@
                             <label for="title" class="lbl">Title</label>
                         </td>
                         <td>
-                            <input required="required" id="titleInput" type="text" name="title" class="inpt" autofocus="autofocus" maxlength="50" />
+                            <input autofocus="autofocus" required="required" id="titleInput" type="text" name="title" class="inpt" maxlength="50" />
                         </td>
                     </tr>
                     <tr>
@@ -258,7 +258,17 @@
                 </tbody>
             </table>
         </form>
-        <div class="row" id="mainBody"></div>
+        <div class="row" id="mainBody">
+            <div class='panel panel-default swTile'>
+                <div class='panel-heading' style='text-align: center;'></div>
+                <div class='panel-body'>
+                    <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon' />
+                </div>
+                <div class='panel-footer' style='text-align: right;'></div>
+            </div>
+            <div id='colChoice'></div>
+            <div id='videoPrv'></div>
+        </div>
     </div>
     <!-- End of BODY.............................................................. -->
     <hr class="clearfix w-100 d-md-none pb-3">
