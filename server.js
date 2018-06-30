@@ -39,15 +39,52 @@ app.use(session({   secret: "keyboard warriors",
                     name: "session",
                     resave: true,
                     saveUninitialized: false,
-                    cookie: {maxAge: 300000} //cookies expire in 5 minutes
+                    cookie: {maxAge: 600000} //cookies expire in 10 minutes
                 }));  // used to generate session tokens
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
-// Main Page
+//MAIN Page
 app.get("/", (req,res) =>{
-    res.status(200).sendFile(path.join(__dirname, 'public/main/main.html'));
+    res.status(200).render('main', {authenticate :  req.session.authenticate,
+                                    userID       :  req.session.userID,
+                                    userType     :  req.session.userType});
+});
+
+//PROJECT page
+app.get('/projectPage', (req,res) => {
+    res.status(200).render('project', {    authenticate :  req.session.authenticate,
+                                           userID       :  req.session.userID,
+                                           userType     :  req.session.userType});
+});
+
+//PROFILE page
+app.get('/profile', (req,res) => {
+    res.status(200).render('profile', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//PROJECT UPLOAD page
+app.get('/contribute', (req,res) => {
+    res.status(200).render('contribute', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//RECORDING page
+app.get('/recording', (req,res) => {
+    res.status(200).render('recording', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
+});
+
+//ADMINISTRATION page
+app.get('/adminPage', (req,res) => {
+    res.status(200).render('admin', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});
 });
 
 //Registration page
@@ -93,19 +130,23 @@ app.post('/login', urlencodedParser, function(req, res){
             console.log (err); throw err;
         } else {                        
             //validate the data here!!
-            var jsonResult = JSON.parse(JSON.stringify(data));
-            //console.log("result:", jsonResult[0]);
+            var jsonResult = JSON.parse(JSON.stringify(data));            
             if (jsonResult.length < 1){
                 //case of username not found
                 req.session.msg = "Invalid Username/Password. Login Failed.";
                 res.status(401).redirect('/login');
             } else {
                 if (jsonResult[0].password === req.body.pass  && jsonResult[0].registrationStatus == true) {
-                    //set your session information here
+                    //set your session information here                    
                     req.session.authenticate = true;
-                    //req.session.msg = `Welcome ${username}, you are now logged in.`;
+                    req.session.userName = username;
+                    req.session.userID = jsonResult[0].userID;
+                    req.session.userType = jsonResult[0].userType;
                     //redirect back to main page
-                    res.redirect('/');                                  
+                    /*res.status(200).render('main', {    authenticate :  req.session.authenticate,
+                                            userID       :  req.session.userID,
+                                            userType     :  req.session.userType});*/
+                    res.status(200).redirect('/');                                  
                 } else {
                     if (jsonResult[0].registrationStatus == false){
                         req.session.msg = "Login failed, please verify your email.";
@@ -157,11 +198,14 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+rand;
-        mailOptions={
+        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
+        mailOptions = {
             to : req.body.email,
             subject : "Please confirm your Email account",
-            html : `Hello ${req.body.name},<br> Please Click on the link to verify your email.<br><a href="${link}">Click here to verify</a>`
+            html : `Hello ${req.body.name},<br> 
+                    Please Click on the link to verify your email.<br>
+                    <a href="${link}">Click here to verify</a>
+                    <input type="hidden" value=${req.body.name} name="userName"/>`
         }
         smtpTransport.sendMail(mailOptions, function(error, response){
             console.log('got into /sendMail');
@@ -178,6 +222,10 @@ app.post('/send', urlencodedParser, function(req,res){
         })
     }
 
+    /* this will create a new user into the database based on the 3 fields supplied in login webform
+        The user created user will be initially be a contriubtor, without a firstName, lastName or affiliated program
+        The registrationCode will be the random value created when the email was sent
+    */
     function addUsertoDb(){
         dbconnect.connect(); 
         var user = {
@@ -186,8 +234,9 @@ app.post('/send', urlencodedParser, function(req,res){
             email: req.body.email,
             password: req.body.password1,                
             username: req.body.name,
-            userType: 'NULL',
+            userType: 'Contributor',
             program: 'NULL',
+            registrationStatus : 'FALSE',
             registrationCode: rand
         };
         var errorMsg = "";
@@ -211,51 +260,71 @@ app.post('/send', urlencodedParser, function(req,res){
     .then(sendMail, null)
     .then(addUsertoDb, null)
     .catch(function(rejectMsg){
-        console.log('rejectMsg: ', rejectMsg);
+        //console.log('rejectMsg: ', rejectMsg);
         req.session.msg = rejectMsg;
         res.status(401).redirect('/register');
     });    
 });
 
 app.get('/verify',function(req,res){
-console.log(req.protocol+"://"+req.get('host'));
+    console.log(req.protocol+"://"+req.get('host'));
+    var regCodeExist = false;
 
-if((req.protocol+"://"+req.get('host'))==("http://"+host))
-{
-    console.log("Domain is matched. Information is from Authentic email");
-    console.log(rand);
-    if(req.query.id==rand)
-    {
-        console.log("email is verified");
+    function getRegCodeExistence() {        
+        dbconnect.connect();
+        dbconnect.getRegCodeExist(req.query.id, function (err, data) {
+            if (err){
+                throw err;
+            } else {
+                //console.log("regCode:", data[0].regCodeExist)
+                regCodeExist = data[0].regCodeExist;
+            }
+        })
+        dbconnect.end();
+        return new Promise(function (resolve, reject){
+            setTimeout(function() {
+                if (regCodeExist == 1){
+                    //console.log('resolved at getRegCodeExisitence');
+                    resolve(req.query.id, regCodeExist);
+                } else {
+                    reject(`regCode ${req.query.id} was not found in database`);                    
+                }
+            }, 1000);
+        });
+    }
+
+    function validateRegistration(regCode, regCodeExist){    
+        console.log("inside validate registration");        
         //Update emailRegistration status in database
         dbconnect.connect();
-        dbconnect.validateRegistration(rand);
+        dbconnect.validateRegistration(regCode);
         dbconnect.end();
         req.session.msg = "Email successfully verified.";
         res.status(200).redirect('/login');
+        return new Promise (function (resolve, reject) {
+            setTimeout (function () {
+                resolve("Email successfully verified");
+            }, 1000);
+        });
     }
-    else
-    {
-        console.log("email is not verified");
-        res.end("<h1>Bad Request</h1>");
+
+    //if((req.protocol+"://"+req.get('host'))==("http://"+host)) {
+    if (req.query.id){
+        console.log("Domain is matched. Information is from Authentic email");    
+        getRegCodeExistence()
+        .then(validateRegistration, null)
+        .catch(function(rejectMsg) {
+            console.log("email is not verified");
+            console.log(rejectMsg);
+            res.end(`<h1>Bad Request</h1>`);
+        });
+    } else {
+        //console.log("from bad request:", req.protocol+"://"+req.get('host'));
+        //console.log("from bad request:","http://"+host);        
+        res.send("<h1>Request is from unknown source</h1>");
     }
-}
-else
-{
-    res.send("<h1>Request is from unknown source");
-}
 });   //email verification end
 
-
-//Project page
-app.get("/project", (req,res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public/projectPage/project.html'));
-});
-
-//Profile Page
-app.get("/profile", (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public/profile/profile.html'));
-});
 
 //Forgot password
 app.get("/login/forgotpass", (req, res) => {
@@ -352,6 +421,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
 app.get("/forgotpass/complete", (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public/registration/complete.html'));
 });
+
 //Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
     console.log('got to /complete');
@@ -466,6 +536,26 @@ app.get('/api/getAllUsers', function(req, res){
     dbconnect.end();    
 });
 
+app.get('/api/getUserByID', function(req, res) {
+    var userID = req.query.id;
+    if (req.query.id && !isNaN(req.query.id)){
+        dbconnect.connect();
+        var results = dbconnect.getOneUserByID(userID, function(err, data){
+            if (err){
+                console.log ("Error at getUserByID: ", err);
+                throw err;
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+			    res.end(JSON.stringify(data));
+            }
+        });  
+        dbconnect.end();      
+    } else {
+        res.status(400).end('Bad request, invalid userId');
+    }
+
+})
+
 app.get('/api/getAllProjects', function(req, res) {
 	dbconnect.connect();
 	var results = dbconnect.getAllProjects(function(err, data){
@@ -476,28 +566,27 @@ app.get('/api/getAllProjects', function(req, res) {
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
 		}
-	});	
+    });
+    dbconnect.end();	
 });
 
-app.get('/api/getAllProjects/:page', function(req, res) {
-    dbconnect.connect();
-    var page = req.params.page;
-    if (isNaN(page)){
-        res.send("Invalid page number");
-    }else {
-        var results = dbconnect.getAllProjects(function(err, data){
+
+app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
+    var userID = req.params.userID;
+    if (isNaN(userID) || (userID < 0)){
+        res.send('Invalid userID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
             if (err) {
-                console.log ("ERROR: ", err);
-                throw err;			
+                console.log ("ERROR", err);
+                throw err;
             } else {
                 res.writeHead(200, {"Content-type":"application/json"});
-                var parsedData = new Array();
-                for (var i=(6*page); i < (page*6+6); i++){
-                    parsedData.push(data[i]);
-                }
-                res.end(JSON.stringify(parsedData));
+                res.end(JSON.stringify(data));
             }
-        });	
+        });
+        dbconnect.end();
     }
 });
 
@@ -529,10 +618,35 @@ app.get('/api/getOneProject', function(req, res){
             }
     	})
     } else { 
-        res.send('Invalid project id provided');
+        res.status(400).end('Invalid project id provided');
     }
 });
-    
+
+
+/* NOT USED sends a list of 6 projects for rendering
+   additional projects can be sent by changing the page number */
+app.get('/api/getAllProjects/:page', function(req, res) {
+    dbconnect.connect();
+    var page = req.params.page;
+    if (isNaN(page)){
+        res.send("Invalid page number");
+    }else {
+        var results = dbconnect.getAllProjects(function(err, data){
+            if (err) {
+                console.log ("ERROR: ", err);
+                throw err;			
+            } else {
+                res.writeHead(200, {"Content-type":"application/json"});
+                var parsedData = new Array();
+                for (var i=(6*page); i < (page*6+6); i++){
+                    parsedData.push(data[i]);
+                }
+                res.end(JSON.stringify(parsedData));
+            }
+        });	
+    }
+});
+
 app.get('/api/getAllProjects/language/:language', function (req, res) {
     var language = req.params.language;
     if (language === null) {
@@ -590,24 +704,12 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
     }
 });
 
-app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
-    var userID = req.params.userID;
-    if (isNaN(userID) || (userID < 0)){
-        res.send('Invalid userID provided');
-    } else {
-        dbconnect.connect();
-        var results = dbconnect.getProjectsByUser(userID, function (err, data) {
-            if (err) {
-                console.log ("ERROR", err);
-                throw err;
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                res.end(JSON.stringify(data));
-            }
-        });
-        dbconnect.end();
-    }
-});
+
+//logout route - 
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
 
 /* Catches all unhandled requests */
 app.use(function(req, res){

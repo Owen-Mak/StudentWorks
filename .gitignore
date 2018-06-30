@@ -10,3 +10,7 @@ node_modules
 
 #ignore project media content
 project
+
+#Who knows what this is
+.DS_Store
+public/.DS_Store
