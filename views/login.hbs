@@ -14,21 +14,14 @@
 <body>
 	
 		<div class="container">
-				<!-- START OF LOGO SECTION -->
-						<div class="row hidden-xs topper">
-								<div class="col-xs-7 col-sm-7">
-										<a href="/">
-												<img logo alt="logo" src="../images/logo.png">
-										</a>
-										<p moto>"By the students, for the students"</p>
-								</div>
-						</div>
-				<!-- END OF LOGO SECTION -->
 			<div class="row">
 				<div class="app">
 					<div class="content-wrapper">
 				<form class="login-form validate-form flex-sb" method="POST" action="/login" name="login" onsubmit="return validateForm()">
-						<span style="color:#b60909" class="title"> - LOGIN - </span>
+					<a href="/">
+						<img logo alt="logo" src="../images/logo_graybg.png">
+					</a>
+						<span style="color:#dadada" class="title"> - LOGIN - </span>
 						{{#if serverMsg}}
 						<div>
 							<span class="txt error" id="serverMsg" style="color:#dfdfdf; font-weight: bold;">{{serverMsg}}</span>
@@ -40,7 +33,7 @@
 
 
 					<div class="input-wrapper">
-						<input class="input" type="text" name="username1" id="username1" onchange="validUser()">
+						<input class="input" type="text" name="username1" id="username1" onchange="validUser()" autofocus="autofocus">
 						<span class="focus-input"></span>
 					</div>
 					

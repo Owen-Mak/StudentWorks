@@ -1,41 +1,40 @@
-var userCheck = true; 
-var passCheck = true;
 
-function validateForm() {
+/**** basic validation for input fields: Name, Last Name, and Email ****/
 
-   if(validUser(userCheck) && validPass(passCheck)){
-       return true;
-   }else{
-       return false;
-   }
-}
-
-
-function validUser(str) {
-	var name = document.login.username1.value.trim();
-
-	if(name == "") {
-		document.querySelector("#errorMsg").innerHTML = '- This field is required';
-		userCheck = false;
-	}else{
-		document.querySelector("#errorMsg").innerHTML = "";
-        userCheck = true;
+document.getElementById("login").onsubmit = function () {
+	var username = document.forms["login"]["username1"].value;
+	var pass = document.forms["login"]["pass"].value;
+  
+	var submit = true;
+  
+	/** First Name **/
+  
+	if (username == null || username == "") {
+	  nameError = "- This field is required";
+	  document.getElementById("errorMsg").innerHTML = nameError;
+	  submit = false;
 	}
-	return userCheck;
-}
-
-
-
-function validPass(str) {
-	var pass = document.login.pass.value.trim();
-
-	if(pass == "") {
-		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
-		passCheck = false;
-
-	}else{
-		document.querySelector("#errorMsg2").innerHTML = "";
-        passCheck = true;
+	
+	if (pass == null || pass == "") {
+		nameError = "- This field is required";
+		document.getElementById("errorMsg2").innerHTML = nameError;
+		submit = false;
+	  }
+	  
+	/* To remove warning after user inputs correct info */
+  
+	function removeUserWarning() {
+	  document.querySelector("#errorMsg").innerHTML = "";
 	}
-	return passCheck;
-}
+  
+	function removePasswordWarning() {
+	  document.querySelector("#errorMsg2").innerHTML = "";
+	}
+  
+
+	document.getElementById("username1").onkeyup = removeUserWarning;
+	document.getElementById("pass").onkeyup = removePasswordWarning;
+	return submit
+  }
+  
+  

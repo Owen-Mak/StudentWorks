@@ -1,28 +1,26 @@
-var userCheck = true; 
-var passCheck = true;
-
-
-function validateForm() {
-   console.log(userCheck);
-   if(userCheck){
-       return true;
-   }else{
-       return false;
-   }
-}
-
-
-function validUser(str) {
-	var name = str;
-	if(name == "") {
-		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
-		userCheck = false;
-	}else{
-		document.querySelector("#errorMsg2").innerHTML = "";
-        userCheck = true;
+document.getElementById("forgot").onsubmit = function () {
+	var username = document.forms["forgot"]["username1"].value;
+  
+	var submit = true;
+  
+	/** First Name **/
+  
+	if (username == null || username == "") {
+	  nameError = "- This field is required";
+	  document.getElementById("errorMsg2").innerHTML = nameError;
+	  submit = false;
 	}
-	return userCheck;
-}
+	 
+	/* To remove warning after user inputs correct info */
+  
+	function removeUserWarning() {
+	  document.querySelector("#errorMsg2").innerHTML = "";
+	}
+ 
 
-
+	document.getElementById("username1").onkeyup = removeUserWarning;
+	return submit
+  }
+  
+  
 
