@@ -9,7 +9,7 @@ const exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 const multer = require("multer");
-var sftpStorage = require('multer-sftp')
+var sftpStorage = require('multer-sftp-linux');
 var storage;
 
 //This is for parsing json POST requests in text
@@ -27,11 +27,11 @@ if (process.env.HOSTNAME === 'studentworks'){
     });
 } else {    
     storage = sftpStorage({
-        sftp: {
+       sftp: {
           host: 'myvmlab.senecacollege.ca',
           port: 6185,
-          username: 'sftpUser',
-          password: 'sftpUser'
+          username: 'stephen',
+          password: 'sucks'
         },
         destination: function (req, file, cb) {
             console.log (path.posix.join ('./StudentWorks', 'public', 'userPhotos'));            

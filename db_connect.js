@@ -5,7 +5,7 @@ var connectInfo = {
     host : null,
     user : null,
     password : null,
-    database : "studentworks",
+    database : "sw",
     port : null
 };
 
