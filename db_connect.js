@@ -32,7 +32,7 @@ module.exports.connect = function(err) {
         database: connectInfo.database,
         port : connectInfo.port
     });
-      console.log("Connected!");  
+      //console.log("Connected!");  only errors should be displayed, success expected
 };
 
 //-------USERS----------------
@@ -164,6 +164,6 @@ function runQuery(sql, callback){
 }
 
 module.exports.end = function (){
-    console.log ("Disconnect!");
+    //console.log ("Disconnect!");
     connection.end();
 };

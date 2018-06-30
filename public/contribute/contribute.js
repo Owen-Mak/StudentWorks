@@ -5,9 +5,7 @@ let gl_category = "";
 let colorCh = "#f5f5f5";
 
 $(document).ready(() => {
-    // Adding userID to the hidden field
-    let userID = $("#userID").text();
-    $("#userIDhtml").val(userID);
+
 
     // User Menu - defined in usermenu.js
     renderUserMenu();
@@ -95,7 +93,7 @@ $(document).ready(() => {
 function submitProject(event) {
     event.preventDefault();
 
-    //Validation
+    //Validation   
     if (gl_language == "") {
         $("#lngList").focus();
         return;
@@ -132,7 +130,7 @@ function submitProject(event) {
 
     // Creating a final form
     var formData = new FormData();
-    formData.append("userID", $("#userID").val());
+    formData.append("userID", $("#userID").text());
     formData.append("title", $("#titleInput").val());
     formData.append("language", gl_language);
     formData.append("framework", gl_framework);

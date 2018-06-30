@@ -77,6 +77,8 @@ app.post("/upload-project", upload.array("media", 2),(req, res) => {
     // Updating DB
     // TODO
 
+    // Move files around
+    
     res.status(200).send('Your project is uploaded successfully! Thank you.')
     //res.status(404).send('Sorry! Try again, later.');
 });
