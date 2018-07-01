@@ -14,3 +14,6 @@ project
 #Who knows what this is
 .DS_Store
 public/.DS_Store
+
+#ignore user photos directory
+userPhotos

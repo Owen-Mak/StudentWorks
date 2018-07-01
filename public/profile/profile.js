@@ -76,3 +76,48 @@ $(function () {
   };
 });
 
+window.addEventListener("load", function () {
+  function sendData() {
+    var XHR = new XMLHttpRequest();
+
+    
+    var FD = new FormData();
+    FD.append("fname", fname.value);
+    FD.append("lname", lname.value);
+    FD.append("email", email.value);
+    FD.append("program", program.value);    
+    FD.append("password", password.value);
+    FD.append("username", username.value);
+    FD.append("img-input", imgFile.files[0]);
+
+    XHR.addEventListener("load", function(event) {
+      //alert(event.target.responseText);
+    });
+
+    XHR.addEventListener("error", function(event) {
+      alert('Oops! Something went wrong.');
+    });
+
+    XHR.open("POST", "/profile");
+
+    XHR.send(FD);
+  }
+ 
+  // Access the form element...
+  var form = document.getElementById("profile");
+  var fname = document.getElementById("fname");
+  var lname = document.getElementById("lname");
+  var email = document.getElementById("email");
+  var program = document.getElementById("program");
+  var username = document.getElementById("username");
+  var password = document.getElementById("password");
+  var imgFile = document.getElementById("img-input");
+
+  // ...and take over its submit event.
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    console.log('submit event detected');
+    sendData();
+  });
+});
+
