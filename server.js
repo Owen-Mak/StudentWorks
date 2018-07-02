@@ -9,6 +9,9 @@ const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
+//const multer = require("multer");
+var sftpStorage = require('multer-sftp-linux');
+var storage;
 
 //This is for parsing json POST requests in text
 // create application/json parser
@@ -16,8 +19,31 @@ var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+if (process.env.HOSTNAME === 'studentworks'){ 
+    storage = multer.diskStorage({
+        destination: "public/userPhotos",
+        filename: function (req, file, cb) {
+            cb(null, Date.now() + path.extname(file.originalname));
+        }
+    });
+} else {    
+    storage = sftpStorage({
+       sftp: {
+          host: 'myvmlab.senecacollege.ca',
+          port: 6185,
+          username: 'stephen',
+          password: 'sucks'
+        },
+        destination: function (req, file, cb) {            
+            cb(null, path.posix.join ('./StudentWorks', 'public', 'userPhotos'));          
+        },
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + path.posix.extname(file.originalname));
+        } 
+      })        
+}
 
-
+var upload = multer({ storage: storage });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -53,8 +79,7 @@ const mediaForProject = multer.diskStorage({
         callback(null, file.originalname);
     }
 });
-
-const upload = multer({ storage: mediaForProject });
+var uploadProfile = multer({ storage: mediaForProject });
 
 app.post("/upload-project", upload.array("media", 2),(req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
@@ -548,7 +573,41 @@ app.post('/complete', urlencodedParser, function(req,res){
     
 });
 
+<<<<<<< HEAD
 
+=======
+app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
+    if (!req.body){
+        return res.sendStatus(400).redirect('/profile');
+    }
+    
+    const formData = req.body;
+    const formFile = req.file;
+    console.log ("server.js => formFile", JSON.stringify(req.file));
+   // console.log ("server.js => imagePath: ", imagePath);
+    console.log("req.body", req.body);
+    
+    var user = {
+        userName : req.body.username,
+        firstName:  req.body.fname,
+        lastName : req.body.lname,
+        email    : req.body.email,    
+        program  : req.body.program,
+        imagePath: `/userPhotos/${req.file.filename}`
+    }
+    dbconnect.connect();
+    dbconnect.updateUserProfile(user, function(err, data) {
+        if (err){
+            res.send (err);
+            throw err;
+        } else{
+            // tells the ajax that request was successful
+            res.send("success");
+        }
+    });
+    dbconnect.end();    
+})
+>>>>>>> profileBackend
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */

@@ -1,4 +1,4 @@
-use sw;
+use studentworks;
 /*
     Delete user accounts that have not been verified through email after 1 week
 DELETE FROM USERS
@@ -31,15 +31,20 @@ SELECT * FROM USERS WHERE userName = 'NotOwen';
 SELECT * 
 FROM PROJECTS
 WHERE status = 'approved';
-*/
 
-/*
 SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = 123) AS regCodeExist 
-FROM USERS LIMIT 1;*/
+FROM USERS LIMIT 1;
 
-/*
 UPDATE USERS 
 SET userType = 'Contributor'
 WHERE userID > 10;
-*/
+
 SELECT * FROM USERS WHERE userID = 1;
+*/
+UPDATE USERS
+SET firstName = 'Owen2',
+    lastName = 'Mak2',
+    email = 'owenmak325@gmail.com',
+    program = 'CPA',
+    imagePath = '/userPhotos/temp.jpg'
+WHERE userName = 'johns'; 

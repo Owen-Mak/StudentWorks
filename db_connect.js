@@ -5,7 +5,7 @@ var connectInfo = {
     host : null,
     user : null,
     password : null,
-    database : "sw",
+    database : "studentworks",
     port : null
 };
 
@@ -148,6 +148,18 @@ module.exports.updatePasswordByUsername = function (userName, password, callback
 module.exports.getRegCodeExist = function (registrationCode, callback) {
     var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = ${registrationCode}) AS regCodeExist 
                 FROM USERS LIMIT 1;`;
+    runQuery(sql, callback);
+}
+
+//------------ Profile -------------------
+module.exports.updateUserProfile = function (user, callback) {
+    var sql =   `UPDATE USERS
+                SET firstName = '${user.firstName}',
+                    lastName = '${user.lastName}',
+                    email = '${user.email}',
+                    program = '${user.program}',
+                    imagePath = '${user.imagePath}'
+                WHERE userName = '${user.userName}'; `;
     runQuery(sql, callback);
 }
 
