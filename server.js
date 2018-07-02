@@ -33,10 +33,8 @@ if (process.env.HOSTNAME === 'studentworks'){
           username: 'stephen',
           password: 'sucks'
         },
-        destination: function (req, file, cb) {
-            console.log (path.posix.join ('./StudentWorks', 'public', 'userPhotos'));            
-            cb(null, path.posix.join ('./StudentWorks', 'public', 'userPhotos'));
-          
+        destination: function (req, file, cb) {            
+            cb(null, path.posix.join ('./StudentWorks', 'public', 'userPhotos'));          
         },
         filename: function (req, file, cb) {
           cb(null, Date.now() + path.posix.extname(file.originalname));
@@ -543,28 +541,35 @@ app.post('/complete', urlencodedParser, function(req,res){
 });
 
 app.post ('/profile', upload.single("img-input"), function (req,res){
-    //if (!req.body){
-      //  return res.sendStatus(400).redirect('/profile');
-    //}
-    var username = req.body.username;
-    var fname = req.body.fname;
-    var lname = req.body.lname;
-    var email = req.body.email;
-    var password = req.body.password;
-    var program = req.body.program;
-    var imagePath = `/userPhotos/${req.file.filename}`;
+    if (!req.body){
+        return res.sendStatus(400).redirect('/profile');
+    }
+    
     const formData = req.body;
     const formFile = req.file;
     console.log ("server.js => formFile", JSON.stringify(req.file));
-    console.log ("server.js => imagePath: ", imagePath);
-    //console.log ("POST profile:", username, fname, lname, email, password, program);
-/*    const dataReceived = "Your submission was received:<br/><br/>" +
-    "Your form data was:<br/>" + JSON.stringify(formData) + "<br/><br/>" +
-    "Your File data was:<br/>" + JSON.stringify(formFile) +
-    "<br/><p>This is the image you sent:<br/><img src='/photos/" + formFile.filename + "'/>";
-  res.send(dataReceived);*/    
-    res.send("Done");
-    //res.redirect('profile');
+   // console.log ("server.js => imagePath: ", imagePath);
+    console.log("req.body", req.body);
+    
+    var user = {
+        userName : req.body.username,
+        firstName:  req.body.fname,
+        lastName : req.body.lname,
+        email    : req.body.email,    
+        program  : req.body.program,
+        imagePath: `/userPhotos/${req.file.filename}`
+    }
+    dbconnect.connect();
+    dbconnect.updateUserProfile(user, function(err, data) {
+        if (err){
+            res.send (err);
+            throw err;
+        } else{
+            // tells the ajax that request was successful
+            res.send("success");
+        }
+    });
+    dbconnect.end();    
 })
 /*------------------Routing End ------------------------*/
 
