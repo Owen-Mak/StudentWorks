@@ -195,7 +195,7 @@ function renderEmptyTile() {
     emptyTileHtml += "<div class='col-md-4'>";
     emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
-    emptyTileHtml += "       <a href='../contribute/contribute.html' class ='tileLinkEmpty'>";
+    emptyTileHtml += "       <a href='../contribute' class ='tileLinkEmpty'>";
     emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
