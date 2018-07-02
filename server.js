@@ -79,7 +79,7 @@ app.post("/upload-project", upload.array("media", 2),(req, res) => {
 
     // Move files around
     
-    res.status(200).send('Your project is uploaded successfully! Thank you.')
+    res.status(200).send('Your project is uploaded successfully! Thank you.');
     //res.status(404).send('Sorry! Try again, later.');
 });
 
@@ -560,17 +560,10 @@ app.get('/api/getAllUsers', function(req, res){
         if (err){
             console.log ("ERROR: ", err);
         }else{
-            console.log("result:", data);
 			res.writeHead(200, {"Content-type":"application/json"});
 			res.end(JSON.stringify(data));
-            /* example for traversing the query results
-            data.forEach((data) => {
-                console.log(data.firstName);
-            });
-            */
         }
     });
-   // res.send("Successful query!");    
     dbconnect.end();    
 });
 
@@ -670,6 +663,40 @@ app.get('/api/getOneProject', function(req, res){
     	})
     } else { 
         res.status(400).end('Invalid project id provided');
+    }
+});
+
+app.get('/api/approveProject/:prjID', function(req, res){
+    var projectID = req.params.prjID;
+    if (isNaN(projectID) || (projectID < 0)){
+        res.send('Invalid projectID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.approveProject(projectID, function (err, data) {
+            if (err) {
+                res.status(400).send('invalid');
+            } else {
+                res.status(200).send('changed');
+            }
+        });
+        dbconnect.end();
+    }
+});
+
+app.get('/api/takedownProject/:prjID', function(req, res){
+    var projectID = req.params.prjID;
+    if (isNaN(projectID) || (projectID < 0)){
+        res.send('Invalid projectID provided');
+    } else {
+        dbconnect.connect();
+        var results = dbconnect.takedownProject(projectID, function (err, data) {
+            if (err) {
+                res.status(400).send('invalid');
+            } else {
+                res.status(200).send('changed');
+            }
+        });
+        dbconnect.end();
     }
 });
 

@@ -1,20 +1,23 @@
+// LOCAL
+let prjUrl = "http://localhost:3000/api/getAllProjectsAdmin";
+let userUrl = "http://localhost:3000/api/getAllUsers";
+let aprUrl = "http://localhost:3000/api/approveProject/";
+let dwnUrl = "http://localhost:3000/api/takedownProject/";
+
+// PRODUCTION
+//let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjectsAdmin";
+//let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllUsers";
+
+// DATA
 let allProjects;
 let allUsers;
 
 $(document).ready(() => {
     let userType = $("#userType").text();
     if (userType != "Admin") {
-        console.log("User is not logged in on ADMIN page. Add logic for production");
+        //alert("Opps, how did we get here?");  // SET IN PRODUCTION
+        //window.location.replace("/");
     }
-
-    // GET ALL DATA
-    let prjUrl = "http://localhost:3000/api/getAllProjectsAdmin";
-    let userUrl = "http://localhost:3000/api/getAllUsers";
-
-    // PRODUCTION
-    //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjectsAdmin";
-    //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllUsers";
-
 
     renderUserMenu(); // defined in usermenu.js
 
@@ -24,15 +27,15 @@ $(document).ready(() => {
     // Left menu
     $.getJSON(prjUrl, (data) => {
         allProjects = data;
+        live();
     });
 
     $.getJSON(userUrl, (data) => {
         allUsers = data;
     });
 
-    // Render LEft
+    // Left menu
     renderLeft();
-
 
     // Right menu
     renderRight();
@@ -41,10 +44,13 @@ $(document).ready(() => {
 
 function renderLeft() {
     let linksHtml = "" +
-        "<button type='button' id='aprPrj'>Live Projects</button><br/>" +
-        "<button type='button' id='penPrj'>Pending Projects</button><br/>" +
-        "<button type='button' id='allUsr'>Contributors</button><br/>" +
-        "<button type='button' id='netw'>Network</button><br/>";
+        "<div class='btn-group'>" +
+        "  <a class='btn text-right'id='aprPrj'>Live Projects</a><br/>" +
+        "  <a class='btn text-right'id='penPrj'>Pending Approval</a><br/>" +
+        "  <a class='btn text-right'id='allUsr'>Contributors</a><br/>" +
+        "  <a class='btn text-right'id='netw'>Network</a><br/>" +
+        "</div>";
+
     $("#div1").html(linksHtml);
 
     // Event handlers   
@@ -61,6 +67,10 @@ function renderLeft() {
     $("#allUsr").click(() => {
         $("div2").empty();
         users();
+    });
+
+    $("#netw").click(() => {
+        $("#div2").empty();
     });
 }
 
@@ -79,13 +89,14 @@ function live() {
     $.each(allProjects, (key, value) => {
         if (value.status == "approved") {
             let date = value.creationDate.substring(0, 4);
+            let id = value.projectID;
 
             tableGuts += "<tr>" +
                 "<td><a href='/" + value.ImageFilePath + "'><img src='/images/icon2.png' id='im'/></a></td>" +
                 "<td><a href='/projectPage/?id=" + value.projectID + "'>" + value.title + "</a></td>" +
                 "<td>user</td>" +
                 "<td>" + date + "</td>" +
-                "<td><a href='#' style='color:red;'><img id='im2' src='/images/cancel.png'/><a>";
+                "<td><a href='#' onclick='takedownPrj(" + id + ")'><img id='im2' src='/images/cancel.png'/><a>";
             "</tr>";
         }
     });
@@ -108,15 +119,16 @@ function pending() {
 
     let tableGuts = "";
     $.each(allProjects, (key, value) => {
-        if (value.status == "approved") {
+        if (value.status == "pending") {
             let date = _getDateApr(value.creationDate);
+            let id = value.projectID;
 
             tableGuts += "<tr>" +
                 "<td><a href='/" + value.ImageFilePath + "'><img src='/images/icon2.png' id='im'/></a></td>" +
                 "<td><a href='/projectPage/?id=" + value.projectID + "'>" + value.title + "</a></td>" +
                 "<td>user</td>" +
                 "<td>" + date + "</td>" +
-                "<td><a href='#' style='color:red;'><img id='im2' src='/images/ok.png'/><a>";
+                "<td><a href='#' onclick='approvePrj(" + id + ")'><img id='im2' src='/images/ok.png'/><a>";
             "</tr>";
         }
     });
@@ -147,7 +159,7 @@ function users() {
 
         tableGuts += "<tr>" +
             "<td>" + value.firstName + " " + value.lastName + "</td>" +
-            "<td>" + value.program + "</td>"+
+            "<td>" + value.program + "</td>" +
             "<td>" + value.email + "</td>" +
             "<td>" + date + "</td>" +
             "<td></td>";
@@ -159,7 +171,6 @@ function users() {
     $("#div2").html(tableHtml);
     return;
 }
-
 
 function renderRight() {
 }
@@ -174,4 +185,34 @@ function _getDate(dt) {
     let date = new Date(dt);
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return months[date.getMonth()] + " " + date.getFullYear();
+}
+
+function approvePrj(id) {
+    $.get(aprUrl + id, (data) => {
+        if (data == "changed") {
+            $.get(prjUrl, (data) => {
+                allProjects = data;
+                $("#div2").empty();
+                pending();
+            })
+        } else {
+            alert("Server is unable to process request at this time");
+        }
+    });
+    return false;
+}
+
+function takedownPrj(id) {
+    $.get(dwnUrl + id, (data) => {
+        if (data == "changed") {
+            $.get(prjUrl, (data) => {
+                allProjects = data;
+                $("#div2").empty();
+                live();
+            })
+        } else {
+            alert("Server is unable to process request at this time");
+        }
+    });
+    return false;
 }

@@ -96,6 +96,20 @@ module.exports.getAllProjectsAdmin = function (callback) {
     runQuery(sql, callback);
 };
 
+module.exports.approveProject = function(projectID, callback) {
+    var sql = `UPDATE PROJECTS 
+                SET status='approved'
+                WHERE projectID = ${projectID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.takedownProject = function(projectID, callback) {
+    var sql = `UPDATE PROJECTS 
+                SET status='pending'
+                WHERE projectID = ${projectID}`;
+    runQuery (sql, callback);
+}
+
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
                 FROM PROJECTS proj
