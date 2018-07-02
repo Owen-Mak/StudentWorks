@@ -4,11 +4,12 @@ const app=express();
 const auth = require('./auth');
 const dbconnect = require ('./db_connect');
 const path = require("path");
+const multer = require('multer');
 const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
-const multer = require("multer");
+//const multer = require("multer");
 var sftpStorage = require('multer-sftp-linux');
 var storage;
 
@@ -70,6 +71,39 @@ app.use(session({   secret: "keyboard warriors",
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
+
+// PROJECT UPLOAD page
+const mediaForProject = multer.diskStorage({
+    destination: "project/temp/",
+    filename: (req, file, callback) => {
+        callback(null, file.originalname);
+    }
+});
+var uploadProfile = multer({ storage: mediaForProject });
+
+app.post("/upload-project", upload.array("media", 2),(req, res) => {
+    // FRONT-END guarantees that all values are present, escept 'category' which is optional;
+    // Project image and video is in /project/temp folder and of proper format
+    let userID      = req.body.userID;
+    let title       = req.body.title;
+    let language    = req.body.language;
+    let framework   = req.body.framework;
+    let platform    = req.body.platform;
+    let category    = req.body.category;
+    let developers  = req.body.developers;
+    let description = req.body.desc;
+    let picName     = req.body.photo;
+    let videoName   = req.body.video;
+
+    // Server side validation
+    // TODO
+
+    // Updating DB
+    // TODO
+
+    res.status(200).send('Your project is uploaded successfully! Thank you.')
+    //res.status(404).send('Sorry! Try again, later.');
+});
 
 //MAIN Page
 app.get("/", (req,res) =>{
@@ -540,7 +574,7 @@ app.post('/complete', urlencodedParser, function(req,res){
     
 });
 
-app.post ('/profile', upload.single("img-input"), function (req,res){
+app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     if (!req.body){
         return res.sendStatus(400).redirect('/profile');
     }
