@@ -91,6 +91,11 @@ module.exports.getAllProjects = function (callback) {
     runQuery(sql, callback);
 };
 
+module.exports.getAllProjectsAdmin = function (callback) {
+	var sql = `SELECT * FROM PROJECTS;`;
+    runQuery(sql, callback);
+};
+
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
                 FROM PROJECTS proj

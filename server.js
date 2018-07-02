@@ -608,6 +608,19 @@ app.get('/api/getAllProjects', function(req, res) {
     dbconnect.end();	
 });
 
+app.get('/api/getAllProjectsAdmin', function(req, res) {
+	dbconnect.connect();
+	var results = dbconnect.getAllProjectsAdmin(function(err, data){
+		if (err) {
+            console.log ("ERROR: ", err);
+            throw err;			
+		} else {
+			res.writeHead(200, {"Content-type":"application/json"});
+			res.end(JSON.stringify(data));
+		}
+    });
+    dbconnect.end();	
+});
 
 app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
     var userID = req.params.userID;
@@ -660,10 +673,39 @@ app.get('/api/getOneProject', function(req, res){
     }
 });
 
+//logout route - 
+app.get('/logout', function (req, res) {
+    req.session.destroy();
+    res.redirect('/');
+})
+
+/* Catches all unhandled requests */
+app.use(function(req, res){
+    res.status(404).send("Page not found");
+});
+
+/*--------------------Routing Over----------------------------*/
+
+app.listen(3000,function(){
+    console.log("Express Started on Port 3000");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* NOT USED sends a list of 6 projects for rendering
    additional projects can be sent by changing the page number */
-app.get('/api/getAllProjects/:page', function(req, res) {
+   app.get('/api/getAllProjects/:page', function(req, res) {
     dbconnect.connect();
     var page = req.params.page;
     if (isNaN(page)){
@@ -740,22 +782,4 @@ app.get('/api/getAllProjects/year/:year', function (req, res) {
         });
         dbconnect.end();
     }
-});
-
-
-//logout route - 
-app.get('/logout', function (req, res) {
-    req.session.destroy();
-    res.redirect('/');
-})
-
-/* Catches all unhandled requests */
-app.use(function(req, res){
-    res.status(404).send("Page not found");
-});
-
-/*--------------------Routing Over----------------------------*/
-
-app.listen(3000,function(){
-    console.log("Express Started on Port 3000");
 });

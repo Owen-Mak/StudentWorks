@@ -1,0 +1,63 @@
+div.divInl {
+    float: left;
+    height:650px;
+}
+
+#div1 {
+    width:20%;
+    overflow:auto;
+    margin-left:auto; 
+    margin-right:0;
+}
+
+#div2 {
+    width:55%;
+    background-color: rgb(250, 250, 250);
+    overflow:auto;
+    padding-left: 50px;
+    padding-right:50px;
+    border-left: solid 1px #5e5e5e;
+    border-right: 0.1px;
+    border-right-style: dashed;
+    margin-top: -25px;
+}
+
+#div3 {
+    width:25%;
+    margin-bottom: 20px;
+}
+
+#TT, #penPrjTitle, #usrTitle {  /* Table Title */
+    margin-top: 40px;
+    font-weight: 200;
+    font-size: 22px;
+}
+
+table {
+    margin-top: 25px;
+}
+
+#im{
+    width:18px;
+    opacity: 0.65;
+}
+
+#im2{
+    width:20px;
+    padding-bottom: 2px;
+}
+
+
+#pageTitleID {
+    color: rgb(242, 232, 232);
+    font-weight: 500;
+    text-shadow: 2px 2px 6px #ae4f4f;
+    letter-spacing: 1px;
+}
+
+#emptyTable {
+    text-align: center;
+    font-weight: 200;
+    font-size: 16px;
+    vertical-align: bottom;
+}
