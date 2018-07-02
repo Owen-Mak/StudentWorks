@@ -43,13 +43,15 @@ function renderUserDetails(jsData) {
   let email = jsData[0].email ? jsData[0].email : "sample@email.com";
   let program = jsData[0].program ? jsData[0].program : "Program of study";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
-
+  let host = "http://myvmlab.senecacollege.ca:6193";
+  let imagePath = jsData[0].imagePath ? host + jsData[0].imagePath :"../images/empty.png";
 
   $("#fname").attr({ "placeholder": fName });
   $("#lname").attr({ "placeholder": lName });
   $("#email").attr({ "placeholder": email });
   $("#program").attr({ "placeholder": program });
   $("#username").attr({ "placeholder": username });
+  $("#imgPreview").attr({ "src": imagePath });
 }
 
 
