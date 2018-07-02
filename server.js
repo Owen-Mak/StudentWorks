@@ -9,7 +9,7 @@ const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
 var session = require('express-session');
-const multer = require("multer");
+//const multer = require("multer");
 var sftpStorage = require('multer-sftp-linux');
 var storage;
 
@@ -79,8 +79,7 @@ const mediaForProject = multer.diskStorage({
         callback(null, file.originalname);
     }
 });
-
-const upload = multer({ storage: mediaForProject });
+var uploadProfile = multer({ storage: mediaForProject });
 
 app.post("/upload-project", upload.array("media", 2),(req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
@@ -575,7 +574,7 @@ app.post('/complete', urlencodedParser, function(req,res){
     
 });
 
-app.post ('/profile', upload.single("img-input"), function (req,res){
+app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     if (!req.body){
         return res.sendStatus(400).redirect('/profile');
     }
