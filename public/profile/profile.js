@@ -93,6 +93,9 @@ window.addEventListener("load", function () {
     if (program.value == ""){
       program.value = program.placeholder;
     }
+    if (username.value == ""){
+      username.value = username.placeholder;
+    }
     // rebuild form using form data object such that file will be at the end of the form in post request
     var FD = new FormData();
     FD.append("fname", fname.value);
