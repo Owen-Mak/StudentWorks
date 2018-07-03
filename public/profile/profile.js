@@ -81,7 +81,18 @@ $(function () {
 window.addEventListener("load", function () {
   function sendData() {
     var XHR = new XMLHttpRequest();
-    
+    if (fname.value == ""){
+      fname.value = fname.placeholder;
+    }
+    if (lname.value == ""){
+      lname.value = lname.placeholder;
+    }
+    if (email.value == ""){
+      email.value = email.placeholder;
+    }
+    if (program.value == ""){
+      program.value = program.placeholder;
+    }
     // rebuild form using form data object such that file will be at the end of the form in post request
     var FD = new FormData();
     FD.append("fname", fname.value);

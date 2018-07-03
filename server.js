@@ -121,9 +121,13 @@ app.get('/projectPage', (req,res) => {
 
 //PROFILE page
 app.get('/profile', (req,res) => {
+    if (req.session.authenticate){
     res.status(200).render('profile', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
                                             userType     :  req.session.userType});
+    } else {
+        res.status(200).redirect("/login");
+    }
 });
 
 //PROJECT UPLOAD page
