@@ -601,9 +601,10 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     
     const formData = req.body;
     const formFile = req.file;
-    console.log ("server.js => formFile", JSON.stringify(req.file));
-   // console.log ("server.js => imagePath: ", imagePath);
-    //console.log("req.body", req.body);
+    // console.log ("server.js => formFile", JSON.stringify(req.file));
+    // console.log ("server.js => imagePath: ", imagePath);
+    // ra
+    console.log("req.body", req.body);
     
     var user = {
         userName : req.body.username,        
