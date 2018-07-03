@@ -419,7 +419,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    res.status(200).redirect('/check-email');
                                     resolve();
                             }
                         });
@@ -454,6 +454,10 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
         res.status(401).redirect('/login');
     });   
       
+});
+
+app.get("/check-email", (req, res) => {
+    res.render('email');
 });
 
 app.get("/forgotpass/complete", (req, res) => {

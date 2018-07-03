@@ -24,10 +24,6 @@
   width: 100%;
 }
 
-
-/****************** TAGS ******************/
-
-  
   * {
       margin: 0px; 
       padding: 0px; 
@@ -41,22 +37,18 @@
 
   }
   
- 
   
   a:hover {
       text-decoration: underline;
   }
   
   
-  /*---------------------------------------------*/
   input {
       outline: none;
       border: none;
   }
   
   
-  
-  /*---------------------------------------------*/
   button {
       outline: none !important;
       border: none;
@@ -70,9 +62,6 @@
     }
   
 
-  
-  /*//////////////////////////////////////////////////////////////////
-  [ Utility ]*/
   .txt1 {
     text-shadow: 1px 1px #1e1e1f;
     font-family: 'Roboto', serif;
@@ -122,10 +111,7 @@
     padding-bottom: 20px;
 
   }
-  
-  
-  /*//////////////////////////////////////////////////////////////////
-  [ login ]*/
+
   
   .app {
     width: 100%;
@@ -146,8 +132,6 @@
   padding-top: 13px;
   width:808px; margin:0 auto;
 }
-
-
   
   .content-wrapper {
     background:#363941;
@@ -192,7 +176,6 @@
   }
   
   
-  
   .input-wrapper {
     width: 100%;
     position: relative;
@@ -202,8 +185,6 @@
   }
   
   
-  
-  /*---------------------------------------------*/
   .input {
     font-family: 'Roboto', serif;
     color: #e4e4e4;
@@ -214,9 +195,10 @@
     background: transparent;
     height: 40px;
     padding: 0 25px 0 25px;
+    width: 370px;
+
   }
-  /*------------------------------------------------------------------
-  [ Focus Input ]*/
+
   
   .focus-input {
     position: absolute;
@@ -266,18 +248,9 @@
     transform: scale(1);
   }
   
-  
 
-  
-  
-  /*------------------------------------------------------------------
-  [ Button ]*/
   .container-register-form-btn {
     width: 100%;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 8px;
@@ -291,11 +264,7 @@
     font-size: 16px;
     color: #fff;
     line-height: 1.2;
-  
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -303,40 +272,27 @@
     padding-right:50%;
 
     min-width: 150px;
-    height: 40px;
+    height: 50px;
     background-color: #881c1c;
     border-radius: 10px;
     text-shadow: 1px 1px #1e1e1f;
 
-
   }
+
 
   [logo] {
     max-height: 90px;
     max-width: 290px;
-    margin: 10px 11px 5px 8px;
     align-items: center;
     align-content: center;
-    margin-left: 450px;
-    
+    margin-left: 50px;
+    display: block;
+    margin-right: auto;
   }
   
-  [moto] {
-    font-weight: 200;
-    color: #333333;
-    align-items: center;
-    vertical-align: middle;
-    line-height: 25px;
-    font-size: 22px;
-     margin-left: 100px;
-    display: flex;
-    padding-left: 320px;
-    white-space: nowrap;
-    position: relative;
-  }
 
 
-  .error {
+.error {
     background-color:#881c1c;
     border: 1px solid;
     padding: 3px;
@@ -355,3 +311,24 @@
   text-align: left;
   display: block;
 }
+
+
+   .container-email-form-btn {
+    display:inline-block;
+    margin-right:5px;
+    margin-bottom: 15px;
+    margin-top: 25px;
+    }
+  
+  .email-form-btn {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    padding: 10PX;
+    background-color: #881c1c;
+    border-radius: 10px;
+    text-shadow: 1px 1px #1e1e1f;
+    display:inline-block;
+  }
