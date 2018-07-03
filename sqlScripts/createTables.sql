@@ -1,4 +1,4 @@
-use sw;
+use studentworks;
 /*
 ALTER TABLE USERS
     drop FOREIGN KEY USERS_ibfk_1;
@@ -21,6 +21,7 @@ CREATE TABLE USERS (
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
     registrationCode CHAR(65),
+    imagePath CHAR(50),
     PRIMARY KEY (userID))
 engine=innodb;
 
