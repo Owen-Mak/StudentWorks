@@ -43,7 +43,7 @@ if (process.env.HOSTNAME === 'studentworks'){
       })        
 }
 
-var upload = multer({ storage: storage });
+var uploadProfile = multer({ storage: storage });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -79,7 +79,7 @@ const mediaForProject = multer.diskStorage({
         callback(null, file.originalname);
     }
 });
-var uploadProfile = multer({ storage: mediaForProject });
+var upload = multer({ storage: mediaForProject });
 
 app.post("/upload-project", upload.array("media", 2),(req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
@@ -583,15 +583,15 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     const formFile = req.file;
     console.log ("server.js => formFile", JSON.stringify(req.file));
    // console.log ("server.js => imagePath: ", imagePath);
-    console.log("req.body", req.body);
+    //console.log("req.body", req.body);
     
     var user = {
-        userName : req.body.username,
+        userName : req.body.username,        
         firstName:  req.body.fname,
         lastName : req.body.lname,
         email    : req.body.email,    
         program  : req.body.program,
-        imagePath: `/userPhotos/${req.file.filename}`
+        imagePath: (req.file == null) ? "../images/empty.png" : `/userPhotos/${req.file.filename}`
     }
     dbconnect.connect();
     dbconnect.updateUserProfile(user, function(err, data) {
@@ -599,6 +599,7 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
             res.send (err);
             throw err;
         } else{
+            console.log ("inside updateUserProfile:", user);
             // tells the ajax that request was successful
             res.send("success");
         }
