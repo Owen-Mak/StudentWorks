@@ -4,6 +4,7 @@ const app=express();
 const auth = require('./auth');
 const dbconnect = require ('./db_connect');
 const path = require("path");
+const multer = require('multer');
 const exphbs = require('express-handlebars');
 
 var bodyParser = require('body-parser');
@@ -44,6 +45,40 @@ app.use(session({   secret: "keyboard warriors",
 app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file extensions will be processed using handlebars engine
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
+
+// PROJECT UPLOAD page
+const mediaForProject = multer.diskStorage({
+    destination: "project/temp/",
+    filename: (req, file, callback) => {
+        callback(null, file.originalname);
+    }
+});
+
+const upload = multer({ storage: mediaForProject });
+
+app.post("/upload-project", upload.array("media", 2),(req, res) => {
+    // FRONT-END guarantees that all values are present, escept 'category' which is optional;
+    // Project image and video is in /project/temp folder and of proper format
+    let userID      = req.body.userID;
+    let title       = req.body.title;
+    let language    = req.body.language;
+    let framework   = req.body.framework;
+    let platform    = req.body.platform;
+    let category    = req.body.category;
+    let developers  = req.body.developers;
+    let description = req.body.desc;
+    let picName     = req.body.photo;
+    let videoName   = req.body.video;
+
+    // Server side validation
+    // TODO
+
+    // Updating DB
+    // TODO
+
+    res.status(200).send('Your project is uploaded successfully! Thank you.')
+    //res.status(404).send('Sorry! Try again, later.');
+});
 
 //MAIN Page
 app.get("/", (req,res) =>{
@@ -381,7 +416,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    res.status(200).redirect('/check-email');
                                     resolve();
                             }
                         });
@@ -416,6 +451,10 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
         res.status(401).redirect('/login');
     });   
       
+});
+
+app.get("/check-email", (req, res) => {
+    res.render('email');
 });
 
 app.get("/forgotpass/complete", (req, res) => {
