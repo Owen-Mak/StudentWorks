@@ -445,7 +445,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    res.status(200).sendFile(path.join(__dirname, 'public/views/email.html'));
                                     resolve();
                             }
                         });
