@@ -3,20 +3,20 @@ let prjUrl = "http://localhost:3000/api/getAllProjectsAdmin";
 let userUrl = "http://localhost:3000/api/getAllUsers";
 let aprUrl = "http://localhost:3000/api/approveProject/";
 let dwnUrl = "http://localhost:3000/api/takedownProject/";
+let serAdm = "http://localhost:3000/api/serverAdmin";
 
 // PRODUCTION
 //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjectsAdmin";
 //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllUsers";
 
 // DATA
-let allProjects;
+let allProjects = "";
 let allUsers;
 
 $(document).ready(() => {
-    let userType = $("#userType").text();
-    if (userType != "Admin") {
+    if ($("#userType").text() != "Admin") {
         //alert("Opps, how did we get here?");  // SET IN PRODUCTION
-        //window.location.replace("/");
+        //window.location.replace("/"); // Extra security check
     }
 
     renderUserMenu(); // defined in usermenu.js
@@ -24,7 +24,10 @@ $(document).ready(() => {
     // Title
     $("#pageTitleID").html("Administration");
 
-    // Left menu
+    // MENU ##
+    renderLeft();
+
+    // BODY ##
     $.getJSON(prjUrl, (data) => {
         allProjects = data;
         live();
@@ -34,21 +37,19 @@ $(document).ready(() => {
         allUsers = data;
     });
 
-    // Left menu
-    renderLeft();
-
-    // Right menu
+    // STATS ##
     renderRight();
 
 });
 
+// MENU ---------------------------
 function renderLeft() {
     let linksHtml = "" +
         "<div class='btn-group'>" +
         "  <a class='btn text-right'id='aprPrj'>Live Projects</a><br/>" +
         "  <a class='btn text-right'id='penPrj'>Pending Approval</a><br/>" +
         "  <a class='btn text-right'id='allUsr'>Contributors</a><br/>" +
-        "  <a class='btn text-right'id='netw'>Network</a><br/>" +
+        "  <a class='btn text-right'id='netw'>Traffic</a><br/>" +
         "</div>";
 
     $("#div1").html(linksHtml);
@@ -71,9 +72,11 @@ function renderLeft() {
 
     $("#netw").click(() => {
         $("#div2").empty();
+        traffic();
     });
 }
 
+// BODY ---------------------------
 function live() {
     let tableHtml = "<div id='TT'>List of all projects on display</div>" +
         "<table class='table'>" +
@@ -172,19 +175,7 @@ function users() {
     return;
 }
 
-function renderRight() {
-}
-
-function _getDateApr(dt) {
-    let date = new Date(dt);
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return date.getDate() + " " + months[date.getMonth()];
-}
-
-function _getDate(dt) {
-    let date = new Date(dt);
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return months[date.getMonth()] + " " + date.getFullYear();
+function traffic() {
 }
 
 function approvePrj(id) {
@@ -216,3 +207,43 @@ function takedownPrj(id) {
     });
     return false;
 }
+
+// STATS --------------------------
+function renderRight() {
+    $.get(serAdm, (data) => {
+
+        let size = data.substring(0, 4);
+        console.log(allProjects);
+
+        let prjNum = allProjects.length;
+        console.log(prjNum);
+
+        let statHtml = "" +
+            "<div class='panel panel-primary'>" +
+            "  <div class='panel-body'>" + size +
+            "    <span class='glyphicon glyphicon-hdd' id='storage'></span>" +
+            "  </div>" +
+            "</div>" +
+            "<div class='panel panel-primary'>" +
+            "  <div class='panel-body'>Projects: " + prjNum +
+            "  </div>" +
+            "</div>";
+
+        $("#div3").html(statHtml);
+    });
+}
+
+// HELPERS -----------------------
+function _getDateApr(dt) {
+    let date = new Date(dt);
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return date.getDate() + " " + months[date.getMonth()];
+}
+
+function _getDate(dt) {
+    let date = new Date(dt);
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    return months[date.getMonth()] + " " + date.getFullYear();
+}
+
+

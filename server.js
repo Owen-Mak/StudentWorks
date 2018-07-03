@@ -700,6 +700,18 @@ app.get('/api/takedownProject/:prjID', function(req, res){
     }
 });
 
+app.get('/api/serverAdmin', function(req,res){
+    const { exec } = require('child_process');
+    exec("du -sh project", (err, stdout, stderr) => {
+        if(err){
+            res.status(400).send('N/A');
+            console.log("output err: " + stderr);
+        }else{
+            res.status(200).send(stdout);
+        }
+    });
+});
+
 //logout route - 
 app.get('/logout', function (req, res) {
     req.session.destroy();
