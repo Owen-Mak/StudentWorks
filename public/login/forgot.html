@@ -18,13 +18,13 @@
 			<div class="row">
 				<div class="app">
 					<div class="content-wrapper">
-				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()" name="forgot" method="post" id ="forgot" action="/login/forgotpassword">
-					<a href="../main/main.html">
+				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()" name="forgot" method="post" action="/login/forgotpassword">
+					<a href="/">
 						<img logo alt="logo" src="../images/logo_graybg.png">
 					</a>
-					<span style="color:#dadada" class="title">
+					<span style="color:#b60909" class="title">
 					- Forgot Password -
-                        <span style="color:#cecece" class="txt3" style="text-align: center;" > Please enter your username. We will send out an e-mail! </span>
+                        <span style="color:#b60909" class="txt3" style="text-align: center;" >Please enter your username, and we will send out an e-mail!</span>
                     </span>
 
                     <span class="txt1" style="font-weight: bold">
@@ -33,13 +33,13 @@
     
     
                         <div class="input-wrapper validate-input">
-                            <input class="input" type="text" name="username1" id="username1"  onchange="validUser()" autofocus="autofocus">
+                            <input class="input" type="text" name="username1" id="username1"  onchange="validUser()">
                             <span class="focus-input"></span>
                         </div>                        					
 				                
 					<div class="container-login-form-btn">
                             <button type="submit" onclick="validateForm()" class="login-form-btn">
-                                SUBMIT
+                                Send E-Mail
                             </button>
 					</div>				
 				</form>
