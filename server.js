@@ -454,11 +454,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-<<<<<<< HEAD
-                                    res.status(200).sendFile(path.join(__dirname, 'public/views/email.html'));
-=======
                                     res.status(200).redirect('/check-email');
->>>>>>> master
                                     resolve();
                             }
                         });
