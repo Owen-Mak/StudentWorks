@@ -72,6 +72,15 @@ app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file e
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
+/* Sets header to not cache the pages
+   This disables the behaviour where user has access to restricted pages after logout 
+   MUST be applied before the other routes*/
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
+
 // PROJECT UPLOAD page
 const mediaForProject = multer.diskStorage({
     destination: "project/temp/",
@@ -633,8 +642,9 @@ app.get('/api/getAllUsers', function(req, res){
     dbconnect.end();    
 });
 
-app.get('/api/getUserByID', function(req, res) {
-    var userID = req.query.id;
+//app.get('/api/getUserByID', function(req, res) {
+    app.get('/api/getUserByID/id/:id', function(req, res) {
+    var userID = req.params.id;
     if (req.query.id && !isNaN(req.query.id)){
         dbconnect.connect();
         var results = dbconnect.getOneUserByID(userID, function(err, data){
@@ -687,8 +697,8 @@ app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
     }
 });
 
-app.get('/api/getOneProject', function(req, res){
-    var projectID = req.query.id;
+app.get('/api/getOneProject/id/:id', function(req, res){
+    var projectID = req.params.id;
     if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
