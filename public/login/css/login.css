@@ -1,8 +1,4 @@
 .flex-sb {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
 	display: flex;
   	justify-content: space-between;
  	-webkit-flex-wrap: wrap;
@@ -13,10 +9,6 @@
 }
 
 .flex-sb-m {
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -moz-box;
-	display: -ms-flexbox;
 	display: flex;
 	justify-content: space-between;
 	-ms-align-items: center;
@@ -88,6 +80,7 @@
     padding-bottom: 5px;
     padding-top: 5px;
     text-align: left;
+    padding-right: 80px;
 
   }
   
@@ -103,7 +96,6 @@
   .txt3 {
     font-family: 'Catamaran', serif;
     font-size: 13px;
-    color: #D22822;
     text-shadow: 1px 1px #111111;
     display: inline-block;
 
@@ -179,7 +171,6 @@
   }
   
   
-  /*---------------------------------------------*/
   .input {
     font-family: 'Roboto', serif;
     color: #e4e4e4;
@@ -190,6 +181,8 @@
     background: transparent;
     height: 40px;
     padding: 0 25px 0 25px;
+    width: 370px;
+
   }
   
   .focus-input {
@@ -220,8 +213,6 @@
 
   }
   
-  
-
   .container-login-form-btn {
     width: 100%;
     display: flex;
@@ -249,8 +240,6 @@
     background-color: #881c1c;
     border-radius: 10px;
     text-shadow: 1px 1px #1e1e1f;
-
-
   }
 
   .error {
@@ -265,21 +254,9 @@
 [logo] {
   max-height: 90px;
   max-width: 290px;
-  margin: 10px 11px 5px 8px;
   align-items: center;
   align-content: center;
-  margin-left: 250px;
-}
-
-[moto] {
-  font-weight: 200;
-  color: #333333;
-  align-items: center;
-  vertical-align: middle;
-  line-height: 25px;
-  font-size: 22px;
-   margin-left: 100px;
-  display: flex;
-  padding-left: 140px;
-  white-space: nowrap;
+  margin-left: 50px;
+  display: block;
+  margin-right: auto;
 }

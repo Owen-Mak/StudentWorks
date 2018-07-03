@@ -1,11 +1,12 @@
-var userCheck = true; //for first name
-var emailCheck = true; //for last name
-console.log(document.register.email.value.trim());
+var userCheck = true; //for username
+var passCheck = true; //fr password
+var emailCheck = true; //for email
+
 
 function validateForm() {
 
-   if(userCheck && emailCheck){
-	   //alert("true");
+	if(validUser(userCheck) && validPass(passCheck) && validEmail(emailCheck)){
+		//alert("true");
        return true;
    }else{
 	   //alert("false");
@@ -19,22 +20,47 @@ function validUser() {
 	var name = document.register.name.value.trim();
 
 	if(name == "") {
-		document.querySelector("#errorMsg").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg1").innerHTML = '- This field is required';
 		userCheck = false;
 
 	} else if (name.length > 12) {
-		document.querySelector("#errorMsg").innerHTML = '- Cannot exceed 12 characters';
+		document.querySelector("#errorMsg1").innerHTML = '- Cannot exceed 12 characters';
 		userCheck = false;
 
 	}else if(!name.match(pattern)){
-		document.querySelector("#errorMsg").innerHTML = '- Cannot contain special characters';
+		document.querySelector("#errorMsg1").innerHTML = '- Cannot contain special characters';
         userCheck = false;
 
 	}else{
-		document.querySelector("#errorMsg").innerHTML = "";
+		document.querySelector("#errorMsg1").innerHTML = "";
         userCheck = true;
 	}
 	return userCheck;
+}
+
+
+function validPass() {
+	var pass = document.register.password1.value.trim();
+	var pattern = /^(?=.*\d)[0-9a-zA-Z]{8,}$/;
+
+	//console.log(pass);
+	if(pass == "") {
+		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
+		passCheck = false;
+
+	} else if (pass.length < 8) {
+		document.querySelector("#errorMsg2").innerHTML = '- Must be at least 8 characters long';
+		passCheck = false;
+
+	}else if(!pass.match(pattern)){
+		document.querySelector("#errorMsg2").innerHTML = '- Must contain at least 1 number';
+			passCheck = false;
+
+	}else{
+		document.querySelector("#errorMsg2").innerHTML = "";
+			passCheck = true;
+	}
+	return passCheck;
 }
 
 
@@ -44,40 +70,16 @@ function validEmail() {
 	var email = document.register.email.value.trim();
 
 	if(email == "") {
-		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg3").innerHTML = '- This field is required';
 		emailCheck = false;
 
 	}else if(!email.match(pattern)){
-		document.querySelector("#errorMsg2").innerHTML = '- Enter a valid email address';
+		document.querySelector("#errorMsg3").innerHTML = '- Enter a valid email address';
         emailCheck = false;
 
 	}else{
-		document.querySelector("#errorMsg2").innerHTML = "";
+		document.querySelector("#errorMsg3").innerHTML = "";
         emailCheck = true;
 	}
 	return emailCheck;
-}
-
-function validPass() {
-	var pass = document.complete.password1.value.trim();
-	var pattern = /^(?=.*\d)[0-9a-zA-Z]{8,}$/;
-
-	//console.log(pass);
-	if(pass == "") {
-		document.querySelector("#errorMsg").innerHTML = '- This field is required';
-		passCheck = false;
-
-	} else if (pass.length < 8) {
-		document.querySelector("#errorMsg").innerHTML = '- Must be at least 8 characters long';
-		passCheck = false;
-
-	}else if(!pass.match(pattern)){
-		document.querySelector("#errorMsg").innerHTML = '- Must contain at least 1 number';
-			passCheck = false;
-
-	}else{
-		document.querySelector("#errorMsg").innerHTML = "";
-			passCheck = true;
-	}
-	return passCheck;
 }
