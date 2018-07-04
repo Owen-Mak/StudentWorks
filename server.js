@@ -649,7 +649,7 @@ app.get('/api/getAllUsers', function(req, res){
 //app.get('/api/getUserByID', function(req, res) {
     app.get('/api/getUserByID/id/:id', function(req, res) {
     var userID = req.params.id;
-    if (req.query.id && !isNaN(req.query.id)){
+    if (req.params.id && !isNaN(req.params.id)){
         dbconnect.connect();
         var results = dbconnect.getOneUserByID(userID, function(err, data){
             if (err){

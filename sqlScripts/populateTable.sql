@@ -32,20 +32,20 @@ VALUES
     */
 
 
-INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode, imagePath)
+INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode, imagePath, userDescription)
 VALUES
-    ('Fred', 'Smith', 'PassWrd', 'fs@myseneca.ca', 'fred_s', 'Contributor', 'BSD', TRUE, now(), '123', null),
-    ('Charlotte', 'Baptist', 'MyNameIsCB12','cbaptist@myseneca.ca', 'cbaptist', 'Contributor', 'DDA', TRUE, now(), '234', null),
-    ('Huda', 'Al Dallal', 'myPassw0rd4', 'hal-dallal@myseneca.ca', 'huda_a', 'Admin', 'CPA', TRUE, now(), '345', null),
-    ('John','Smith', 'pass1234', 'johnsmith12@myseneca.ca', 'johns', 'Contributor', 'CPD', FALSE, '2017-12-25', '456', null),
-    ('Owen', 'Mak', '123', 'omak@myseneca.ca', 'omak', 'Admin', 'CPA', TRUE, now(), '567', null),
-    ('Jon', 'Snow', 'Winterfell', 'john@gmail.com', 'jsnow', 'Contributor', null, FALSE, '2016-01-01', '678', null),
-    ('John', 'Doe', 'm1ss1ng', 'unknown@nowhere.com', 'jDoe', 'Contributor', null, FALSE, '2013-06-06', '789', null),
-    ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890', null),
-    ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901', null),
-    ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234', null),
-    ('yuriy', 'yuriy', 'yuriy', 'y.kartuzov@gmail.com', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null),
-    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null);
+    ('Fred', 'Smith', 'PassWrd', 'fs@myseneca.ca', 'fred_s', 'Contributor', 'BSD', TRUE, now(), '123', null, null),
+    ('Charlotte', 'Baptist', 'MyNameIsCB12','cbaptist@myseneca.ca', 'cbaptist', 'Contributor', 'DDA', TRUE, now(), '234', null, null),
+    ('Huda', 'Al Dallal', 'myPassw0rd4', 'hal-dallal@myseneca.ca', 'huda_a', 'Admin', 'CPA', TRUE, now(), '345', null, null),
+    ('John','Smith', 'pass1234', 'johnsmith12@myseneca.ca', 'johns', 'Contributor', 'CPD', FALSE, '2017-12-25', '456', null, null),
+    ('Owen', 'Mak', '123', 'omak@myseneca.ca', 'omak', 'Admin', 'CPA', TRUE, now(), '567', null, null),
+    ('Jon', 'Snow', 'Winterfell', 'john@gmail.com', 'jsnow', 'Contributor', null, FALSE, '2016-01-01', '678', null, null),
+    ('John', 'Doe', 'm1ss1ng', 'unknown@nowhere.com', 'jDoe', 'Contributor', null, FALSE, '2013-06-06', '789', null, null),
+    ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890', null, null),
+    ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901', null, null),
+    ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234', null, null),
+    ('yuriy', 'yuriy', 'yuriy', 'y.kartuzov@gmail.com', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
+    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null);
 
 
 /* Associate users to projects:

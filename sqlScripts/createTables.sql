@@ -22,6 +22,7 @@ CREATE TABLE USERS (
     registrationDate DATE NOT NULL,
     registrationCode CHAR(65),
     imagePath CHAR(50),
+    userDescription TEXT,
     PRIMARY KEY (userID))
 engine=innodb;
 
