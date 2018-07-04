@@ -160,6 +160,7 @@ module.exports.updateUserProfile = function (user, callback) {
                     program = '${user.program}',
                     imagePath = '${user.imagePath}'
                 WHERE userName = '${user.userName}'; `;
+    console.log ("uUP: ",sql);
     runQuery(sql, callback);
 }
 

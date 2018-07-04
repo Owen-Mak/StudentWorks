@@ -30,7 +30,7 @@
     "multer-sftp-linux": "^0.93.0",
     "mysql": "^2.15.0",
     "nev": "0.0.0",
-    "nodemailer": "^4.6.4",
+    "nodemailer": "^4.6.7",
     "nodemon": "^1.17.5",
     "path": "^0.12.7"
   }

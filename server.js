@@ -43,7 +43,7 @@ if (process.env.HOSTNAME === 'studentworks'){
       })        
 }
 
-var upload = multer({ storage: storage });
+var uploadProfile = multer({ storage: storage });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -72,6 +72,15 @@ app.engine('.hbs', exphbs({ extname: '.hbs' })); // tells server that hbs file e
 app.set('view engine', '.hbs');
 /*------------------Routing Started ------------------------*/
 
+/* Sets header to not cache the pages
+   This disables the behaviour where user has access to restricted pages after logout 
+   MUST be applied before the other routes*/
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+});
+
 // PROJECT UPLOAD page
 const mediaForProject = multer.diskStorage({
     destination: "project/temp/",
@@ -79,7 +88,7 @@ const mediaForProject = multer.diskStorage({
         callback(null, file.originalname);
     }
 });
-var uploadProfile = multer({ storage: mediaForProject });
+var upload = multer({ storage: mediaForProject });
 
 app.post("/upload-project", upload.array("media", 2),(req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
@@ -121,9 +130,13 @@ app.get('/projectPage', (req,res) => {
 
 //PROFILE page
 app.get('/profile', (req,res) => {
+    if (req.session.authenticate){
     res.status(200).render('profile', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
                                             userType     :  req.session.userType});
+    } else {
+        res.status(200).redirect("/login");
+    }
 });
 
 //PROJECT UPLOAD page
@@ -441,7 +454,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                                 res.end("error");
                                 reject();
                             } else {
-                                    res.send("<h1> Please check your email for your new password </h1>");
+                                    res.status(200).redirect('/check-email');
                                     resolve();
                             }
                         });
@@ -476,6 +489,10 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
         res.status(401).redirect('/login');
     });   
       
+});
+
+app.get("/check-email", (req, res) => {
+    res.render('email');
 });
 
 app.get("/forgotpass/complete", (req, res) => {
@@ -585,15 +602,15 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     const formFile = req.file;
     console.log ("server.js => formFile", JSON.stringify(req.file));
    // console.log ("server.js => imagePath: ", imagePath);
-    console.log("req.body", req.body);
+    //console.log("req.body", req.body);
     
     var user = {
-        userName : req.body.username,
+        userName : req.body.username,        
         firstName:  req.body.fname,
         lastName : req.body.lname,
         email    : req.body.email,    
         program  : req.body.program,
-        imagePath: `/userPhotos/${req.file.filename}`
+        imagePath: (req.file == null) ? "../images/empty.png" : `/userPhotos/${req.file.filename}`
     }
     dbconnect.connect();
     dbconnect.updateUserProfile(user, function(err, data) {
@@ -601,6 +618,7 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
             res.send (err);
             throw err;
         } else{
+            console.log ("inside updateUserProfile:", user);
             // tells the ajax that request was successful
             res.send("success");
         }
@@ -631,9 +649,10 @@ app.get('/api/getAllUsers', function(req, res){
     dbconnect.end();    
 });
 
-app.get('/api/getUserByID', function(req, res) {
-    var userID = req.query.id;
-    if (req.query.id && !isNaN(req.query.id)){
+//app.get('/api/getUserByID', function(req, res) {
+    app.get('/api/getUserByID/id/:id', function(req, res) {
+    var userID = req.params.id;
+    if (req.params.id && !isNaN(req.params.id)){
         dbconnect.connect();
         var results = dbconnect.getOneUserByID(userID, function(err, data){
             if (err){
@@ -685,8 +704,8 @@ app.get('/api/getProjectsByUser/userID/:userID', function(req, res){
     }
 });
 
-app.get('/api/getOneProject', function(req, res){
-    var projectID = req.query.id;
+app.get('/api/getOneProject/id/:id', function(req, res){
+    var projectID = req.params.id;
     if (projectID != null && !isNaN(projectID)){
         dbconnect.connect();
         var results = dbconnect.getOneProject(projectID, function(err,data){
