@@ -121,7 +121,7 @@ function renderUserDetails(jsData) {
   let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "First Name";
   let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "Last Name";
   let email = jsData[0].email ? jsData[0].email : "sample@email.com";
-  let program = jsData[0].program ? jsData[0].program : "Program of study";
+  let program = jsData[0].program != "NULL" ? jsData[0].program : "Program of study";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
   let description = jsData[0].userDescription ? jsData[0].userDescription : "Description";
   let host = "http://myvmlab.senecacollege.ca:6193";
