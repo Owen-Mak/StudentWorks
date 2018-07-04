@@ -590,9 +590,6 @@ app.post('/complete', urlencodedParser, function(req,res){
     
 });
 
-<<<<<<< HEAD
-
-=======
 app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     if (!req.body){
         return res.sendStatus(400).redirect('/profile');
@@ -625,7 +622,6 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     });
     dbconnect.end();    
 })
->>>>>>> profileBackend
 /*------------------Routing End ------------------------*/
 
 /* Returns information about all users in database */
