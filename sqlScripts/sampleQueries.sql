@@ -40,7 +40,7 @@ SET userType = 'Contributor'
 WHERE userID > 10;
 
 SELECT * FROM USERS WHERE userID = 1;
-*/
+
 UPDATE USERS
 SET firstName = 'Owen2',
     lastName = 'Mak2',
@@ -48,3 +48,7 @@ SET firstName = 'Owen2',
     program = 'CPA',
     imagePath = '/userPhotos/temp.jpg'
 WHERE userName = 'johns'; 
+*/
+UPDATE PROJECTS
+set status = 'approved'
+WHERE projectID = 1;
