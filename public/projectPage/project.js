@@ -2,10 +2,10 @@ $(document).ready(() => {
     let id = getQueryStr('id');
 
     // LOCAL
-    let url = "http://localhost:3000/api/getOneProject?id="+id;
+    let url = "http://localhost:3000/api/getOneProject/id/" + id;
 
     // PRODUCTION
-    //let url = "http://myvmlab.senecacollege.ca:6193/api/getOneProject?id="+id;
+    //let url = "http://myvmlab.senecacollege.ca:6193/api/getOneProject/id/"+id;
 
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";

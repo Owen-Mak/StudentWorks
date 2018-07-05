@@ -128,7 +128,7 @@ function renderHeader(data) {
     $("#frmList").append(frameworkList);
     $("#yearList").append(yearList);
 
-    renderUserMenu(); // function declaration is in username.js
+    renderUserMenu(); // function declaration is in /header/username.js
 }
 
 function renderSixProjectTiles(jsData) {

@@ -778,15 +778,28 @@ app.get('/api/takedownProject/:prjID', function(req, res){
 });
 
 app.get('/api/serverAdmin', function(req,res){
+    let reply;
     const { exec } = require('child_process');
+
+    
     exec("du -sh project", (err, stdout, stderr) => {
         if(err){
             res.status(400).send('N/A');
             console.log("output err: " + stderr);
         }else{
-            res.status(200).send(stdout);
+            reply = stdout;
+
+            exec("git status | head -1", (err2, stdout2, stderr2)=>{
+                if(err2){
+                    res.status(400).send('N/A');
+                    console.log("output err: " + stderr);
+                } else {
+                    reply += stdout2;
+                    res.status(200).send(reply);
+                }
+            });
         }
-    });
+    }); 
 });
 
 //logout route - 
@@ -804,98 +817,4 @@ app.use(function(req, res){
 
 app.listen(3000,function(){
     console.log("Express Started on Port 3000");
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* NOT USED sends a list of 6 projects for rendering
-   additional projects can be sent by changing the page number */
-   app.get('/api/getAllProjects/:page', function(req, res) {
-    dbconnect.connect();
-    var page = req.params.page;
-    if (isNaN(page)){
-        res.send("Invalid page number");
-    }else {
-        var results = dbconnect.getAllProjects(function(err, data){
-            if (err) {
-                console.log ("ERROR: ", err);
-                throw err;			
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                var parsedData = new Array();
-                for (var i=(6*page); i < (page*6+6); i++){
-                    parsedData.push(data[i]);
-                }
-                res.end(JSON.stringify(parsedData));
-            }
-        });	
-    }
-});
-
-app.get('/api/getAllProjects/language/:language', function (req, res) {
-    var language = req.params.language;
-    if (language === null) {
-        res.send ('No language provided');
-    } else {
-        dbconnect.connect();
-        var results = dbconnect.getAllProjectsFilterByLanguage(language, function (err, data) {
-            if (err) {
-                console.log ("ERROR", err);
-                throw err;
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                res.end(JSON.stringify(data));
-            }
-        });
-        dbconnect.end();
-    }
-});
-
-app.get('/api/getAllProjects/framework/:framework', function (req, res) {
-    var framework = req.params.framework;
-    if (framework === null) {
-        res.send ('No framework provided');
-    } else {
-        dbconnect.connect();
-        var results = dbconnect.getAllProjectsFilterByFramework(framework, function (err, data) {
-            if (err) {
-                console.log ("ERROR", err);
-                throw err;
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                res.end(JSON.stringify(data));
-            }
-        });
-        dbconnect.end();
-    }
-});
-
-app.get('/api/getAllProjects/year/:year', function (req, res) {
-    var year = req.params.year;
-    if (year === null || isNaN(year)) {
-        res.send ('Invalid year provided');
-    } else { 
-        dbconnect.connect();
-        var results = dbconnect.getAllProjectsFilterByYear(year, function (err, data) {
-            if (err) {
-                console.log ("ERROR", err);
-                throw err;
-            } else {
-                res.writeHead(200, {"Content-type":"application/json"});
-                res.end(JSON.stringify(data));
-            }
-        });
-        dbconnect.end();
-    }
 });

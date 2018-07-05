@@ -30,6 +30,7 @@ $(document).ready(() => {
     // BODY ##
     $.getJSON(prjUrl, (data) => {
         allProjects = data;
+        renderRight();
         live();
     });
 
@@ -37,8 +38,6 @@ $(document).ready(() => {
         allUsers = data;
     });
 
-    // STATS ##
-    renderRight();
 
 });
 
@@ -50,6 +49,7 @@ function renderLeft() {
         "  <a class='btn text-right'id='penPrj'>Pending Approval</a><br/>" +
         "  <a class='btn text-right'id='allUsr'>Contributors</a><br/>" +
         "  <a class='btn text-right'id='netw'>Traffic</a><br/>" +
+        "  <a class='btn text-right'id='logs'>Logs</a><br/>" +
         "</div>";
 
     $("#div1").html(linksHtml);
@@ -58,6 +58,7 @@ function renderLeft() {
     $("#aprPrj").click(() => {
         $("#div2").empty();
         live();
+        setactiveLink("#aprPrj");
     });
 
     $("#penPrj").click(() => {
@@ -74,6 +75,16 @@ function renderLeft() {
         $("#div2").empty();
         traffic();
     });
+
+    $("#logs").click(() => {
+        $("#div2").empty();
+        logs();
+    });
+}
+
+function setactiveLink(tag) {
+    var tags = ["#aprPrj", "#penPrj", "allUsr", "netw", "logs"];
+
 }
 
 // BODY ---------------------------
@@ -110,7 +121,7 @@ function live() {
 }
 
 function pending() {
-    let tableHtml = "<div id='penPrjTitle'>List of projects waiting approval</div>" +
+    let tableHtml = "<div id='penPrjTitle'>List of projects waiting for approval</div>" +
         "<table class='table'>" +
         "  <thead class='thead-light'><tr>" +
         "    <th scope='col'></th>" +
@@ -178,6 +189,10 @@ function users() {
 function traffic() {
 }
 
+function logs() {
+
+}
+
 function approvePrj(id) {
     $.get(aprUrl + id, (data) => {
         if (data == "changed") {
@@ -212,24 +227,49 @@ function takedownPrj(id) {
 function renderRight() {
     $.get(serAdm, (data) => {
 
-        let size = data.substring(0, 4);
-        console.log(allProjects);
-
+        let size = data.match(/[0-9]{1,}/g);
+        let git = data.split('\n')[1];
         let prjNum = allProjects.length;
-        console.log(prjNum);
+        let usrNum = allUsers.length;
 
         let statHtml = "" +
-            "<div class='panel panel-primary'>" +
-            "  <div class='panel-body'>" + size +
+            "<div class='panel panel-primary'>" + // Storage space Pane
+            "  <div class='panel-body'>" + size + " MB" +
             "    <span class='glyphicon glyphicon-hdd' id='storage'></span>" +
             "  </div>" +
             "</div>" +
-            "<div class='panel panel-primary'>" +
-            "  <div class='panel-body'>Projects: " + prjNum +
+            "<div class='panel panel-primary'>" + // Projects and User pages
+            "  <div class='panel-body'>" +
+            "     <div style='float:left;'><span  class='glyphicon glyphicon-folder-open'></span>" + " " + prjNum + "</div>" +
+            "     <div style='float:right;'><span  class='glyphicon glyphicon-user'></span>" + " " + usrNum + "</div>" +
             "  </div>" +
-            "</div>";
+            "</div>" +
+            "<div class='panel panel-primary'>" + // Git branch
+            "  <div class='panel-body' id='gitBody'>" +
+            "     <div style='float:left;'><img id='gitIm' src='/images/git.png' /></div>" +
+            "     <div style='float: right; width:55%;'>" + git + "</div>" +
+            "  </div>" +
+            "</div>" +
+            "<canvas id='myChart' width='400' height='400'></canvas>";
 
         $("#div3").html(statHtml);
+
+        // Adding a chart - TO debug
+        /*var ctx = document.getElementById('myChart').getContext('2d');
+        var myBarChart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: languages,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        }); */
+        
     });
 }
 
@@ -246,4 +286,14 @@ function _getDate(dt) {
     return months[date.getMonth()] + " " + date.getFullYear();
 }
 
-
+function languages() {
+    langArr = [];
+    $.each(allProjects, (key, value) => {
+        if (value.language) {
+            if (!langArr.includes(value.language)) {
+                langArr.push(value.language);
+            }
+        }
+    });
+    return langArr;
+}
