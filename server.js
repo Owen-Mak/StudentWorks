@@ -597,17 +597,17 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
     
     const formData = req.body;
     const formFile = req.file;
-    console.log ("server.js => formFile", JSON.stringify(req.file));
-   // console.log ("server.js => imagePath: ", imagePath);
-    //console.log("req.body", req.body);
-    
+    //console.log ("server.js => formFile", JSON.stringify(req.file));
+    //console.log ("description:", req.body.description);
     var user = {
         userName : req.body.username,        
         firstName:  req.body.fname,
         lastName : req.body.lname,
         email    : req.body.email,    
         program  : req.body.program,
-        imagePath: (req.file == null) ? "../images/empty.png" : `/userPhotos/${req.file.filename}`
+        description: req.body.description,
+        //imagePath: (req.file == null) ? "../images/empty.png" : `/userPhotos/${req.file.filename}`
+        imagePath: (req.file == null) ? null : `/userPhotos/${req.file.filename}`
     }
     dbconnect.connect();
     dbconnect.updateUserProfile(user, function(err, data) {
@@ -615,7 +615,7 @@ app.post ('/profile', uploadProfile.single("img-input"), function (req,res){
             res.send (err);
             throw err;
         } else{
-            console.log ("inside updateUserProfile:", user);
+            // console.log ("inside updateUserProfile:", user);
             // tells the ajax that request was successful
             res.send("success");
         }
@@ -645,7 +645,6 @@ app.get('/api/getAllUsers', function(req, res){
     dbconnect.end();    
 });
 
-//app.get('/api/getUserByID', function(req, res) {
     app.get('/api/getUserByID/id/:id', function(req, res) {
     var userID = req.params.id;
     if (req.params.id && !isNaN(req.params.id)){
