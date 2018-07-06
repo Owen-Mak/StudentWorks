@@ -24,10 +24,6 @@
   width: 100%;
 }
 
-
-/****************** TAGS ******************/
-
-  
   * {
       margin: 0px; 
       padding: 0px; 
@@ -41,22 +37,18 @@
 
   }
   
- 
   
   a:hover {
       text-decoration: underline;
   }
   
   
-  /*---------------------------------------------*/
   input {
       outline: none;
       border: none;
   }
   
   
-  
-  /*---------------------------------------------*/
   button {
       outline: none !important;
       border: none;
@@ -70,9 +62,6 @@
     }
   
 
-  
-  /*//////////////////////////////////////////////////////////////////
-  [ Utility ]*/
   .txt1 {
     text-shadow: 1px 1px #1e1e1f;
     font-family: 'Roboto', serif;
@@ -82,7 +71,24 @@
     line-height: 1.4;
     padding-bottom: 10px;
     padding-top: 15px;
-    text-align: left;
+    text-align: center;
+    display: block;
+
+  }
+
+  .txtE {
+    text-shadow: 1px 1px #1e1e1f;
+    font-family: 'Roboto', serif;
+    letter-spacing: 1.6px;
+    font-size: 13px;
+    color: #c9c9c9;
+    line-height: 1.4;
+    padding-bottom: 10px;
+    padding-top: 15px;
+    text-align: center;
+    display: block;
+    padding-right: 555px;
+
   }
   
   .txt2 {
@@ -103,12 +109,10 @@
     padding-bottom:  20px;
     text-shadow: 1px 1px #111111;
     padding-bottom: 20px;
+    display:block;  
 
   }
-  
-  
-  /*//////////////////////////////////////////////////////////////////
-  [ login ]*/
+
   
   .app {
     width: 100%;
@@ -129,8 +133,6 @@
   padding-top: 13px;
   width:808px; margin:0 auto;
 }
-
-
   
   .content-wrapper {
     background:#363941;
@@ -175,7 +177,6 @@
   }
   
   
-  
   .input-wrapper {
     width: 100%;
     position: relative;
@@ -185,8 +186,6 @@
   }
   
   
-  
-  /*---------------------------------------------*/
   .input {
     font-family: 'Roboto', serif;
     color: #e4e4e4;
@@ -197,9 +196,10 @@
     background: transparent;
     height: 40px;
     padding: 0 25px 0 25px;
+    width: 370px;
+
   }
-  /*------------------------------------------------------------------
-  [ Focus Input ]*/
+
   
   .focus-input {
     position: absolute;
@@ -249,18 +249,9 @@
     transform: scale(1);
   }
   
-  
 
-  
-  
-  /*------------------------------------------------------------------
-  [ Button ]*/
   .container-register-form-btn {
     width: 100%;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 8px;
@@ -274,11 +265,7 @@
     font-size: 16px;
     color: #fff;
     line-height: 1.2;
-  
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-box;
-    display: -ms-flexbox;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -286,34 +273,63 @@
     padding-right:50%;
 
     min-width: 150px;
-    height: 40px;
+    height: 50px;
     background-color: #881c1c;
     border-radius: 10px;
     text-shadow: 1px 1px #1e1e1f;
 
-
   }
+
 
   [logo] {
     max-height: 90px;
     max-width: 290px;
-    margin: 10px 11px 5px 8px;
     align-items: center;
     align-content: center;
-    margin-left: 450px;
-    
+    margin-left: 50px;
+    display: block;
+    margin-right: auto;
   }
   
-  [moto] {
-    font-weight: 200;
-    color: #333333;
-    align-items: center;
-    vertical-align: middle;
-    line-height: 25px;
-    font-size: 22px;
-     margin-left: 100px;
-    display: flex;
-    padding-left: 320px;
-    white-space: nowrap;
-    position: relative;
+
+
+.error {
+    background-color:#881c1c;
+    border: 1px solid;
+    padding: 3px;
+
+}
+
+.txt {
+  text-shadow: 1px 1px #1e1e1f;
+  font-family: 'Roboto', serif;
+  letter-spacing: 1.6px;
+  font-size: 13px;
+  color: #c9c9c9;
+  line-height: 1.4;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  text-align: left;
+  display: block;
+}
+
+
+   .container-email-form-btn {
+    display:inline-block;
+    margin-right:5px;
+    margin-bottom: 15px;
+    margin-top: 25px;
+    }
+  
+  .email-form-btn {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    text-align: center;
+    padding: 10PX;
+    background-color: #881c1c;
+    border-radius: 10px;
+    text-shadow: 1px 1px #1e1e1f;
+    display:inline-block;
   }

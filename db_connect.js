@@ -5,7 +5,7 @@ var connectInfo = {
     host : null,
     user : null,
     password : null,
-    database : "sw",
+    database : "studentworks",
     port : null
 };
 
@@ -35,6 +35,7 @@ module.exports.connect = function(err) {
       console.log("Connected!");  
 };
 
+//-------USERS----------------
 module.exports.getAllUsers = function (callback) {
     var sql =  'SELECT * FROM USERS';
     //performs query to get all users   
@@ -48,7 +49,7 @@ module.exports.getAllUsers = function (callback) {
 module.exports.createUser = function (user) {
     console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode) \
-    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', FALSE, now(), ${user.registrationCode})`;   
+    VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', ${user.registrationStatus}, now(), ${user.registrationCode})`;   
     connection.query(sql, (err, result) => {
         if (err) {
             console.log ("Failed SQL:", sql);
@@ -59,16 +60,23 @@ module.exports.createUser = function (user) {
     });
 };
 
-module.exports.getAllProjects = function (callback) {
-	var sql = 'SELECT * FROM PROJECTS';
-    runQuery(sql, callback);
-};
-
 module.exports.getOneUser = function (username, callback){
     var sql = `SELECT * FROM USERS WHERE userName = '${username}';`;       
     runQuery (sql, callback);
 };
 
+module.exports.getOneUserByID = function (userID, callback) {
+    var sql = `SELECT * FROM USERS WHERE userID = ${userID}`;
+    runQuery (sql, callback);
+}
+//returns 1 if username is found in database, otherwise, returns 0
+module.exports.getUserExist = function (userName, callback){
+    var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE userName = '${userName}') AS userExist 
+                FROM USERS LIMIT 1;`
+    runQuery(sql, callback);
+}
+
+//-----------PROJECTS -------------------
 module.exports.getOneProject = function (projectID, callback){
     var sql =   `SELECT proj.*, JSON_ARRAYAGG(JSON_OBJECT('firstName', u.firstName, 'lastName', u.lastName, 'userName',u.userName)) AS user
     FROM PROJECTS proj
@@ -78,19 +86,10 @@ module.exports.getOneProject = function (projectID, callback){
     runQuery (sql, callback);
 };
 
-module.exports.validateRegistration = function (registrationCode) {
-    var sql = ` UPDATE USERS
-                SET registrationStatus = TRUE
-                WHERE registrationCode = ${registrationCode};`
-    connection.query(sql, (err, result) => {
-        if (err) {
-            console.log ("Failed SQL:", sql);
-            throw err;
-        } else {
-            console.log (`registration code ${registrationCode} is updated to database`);
-        }
-    });
-}
+module.exports.getAllProjects = function (callback) {
+	var sql = `SELECT * FROM PROJECTS WHERE status = 'approved';`;
+    runQuery(sql, callback);
+};
 
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
@@ -113,17 +112,58 @@ module.exports.getAllProjectsFilterByYear = function (year, callback){
     runQuery (sql, callback);
 }
 
-module.exports.getUserExist = function (userName, callback){
-    var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE userName = '${userName}') AS userExist 
-                FROM USERS LIMIT 1;`
-    runQuery(sql, callback);
-}
-
+//returns all projects performed by given user
 module.exports.getProjectsByUser = function (userID, callback){
     var sql = ` SELECT proj.* FROM PROJECTS proj
                     JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
                     JOIN USERS u on b.userID = u.userID
-                WHERE u.userID = 1;`;
+                WHERE u.userID = ${userID};`;
+    runQuery(sql, callback);
+}
+
+//--------- REGISTRATION --------------
+module.exports.validateRegistration = function (registrationCode) {
+    var sql = ` UPDATE USERS
+                SET registrationStatus = TRUE
+                WHERE registrationCode = ${registrationCode};`
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log ("Failed SQL:", sql);
+            throw err;
+        } else {
+            console.log (`registration code ${registrationCode} is updated to database`);
+        }
+    });
+}
+
+//updates the password field of the given username
+module.exports.updatePasswordByUsername = function (userName, password, callback) {
+    var sql = ` UPDATE USERS
+                SET password = '${password}'
+                WHERE userName = '${userName}';`;
+    runQuery(sql, callback);
+}
+
+//returns 0 if registration code does not exist in database, and 1 if it is found
+module.exports.getRegCodeExist = function (registrationCode, callback) {
+    var sql = `SELECT EXISTS(SELECT * FROM USERS WHERE registrationCode = ${registrationCode}) AS regCodeExist 
+                FROM USERS LIMIT 1;`;
+    runQuery(sql, callback);
+}
+
+//------------ Profile -------------------
+module.exports.updateUserProfile = function (user, callback) {
+    var sql =   `UPDATE USERS
+                SET firstName = '${user.firstName}',
+                    lastName = '${user.lastName}',
+                    email = '${user.email}',
+                    program = '${user.program}',\n`;
+    if (user.imagePath != null) {
+        sql += `    imagePath = '${user.imagePath}',`;
+    }                
+        sql+=`      userDescription = '${user.description}'                    
+                WHERE userName = '${user.userName}'; `;
+    //console.log ("uUP: ",sql);
     runQuery(sql, callback);
 }
 
@@ -143,4 +183,3 @@ module.exports.end = function (){
     console.log ("Disconnect!");
     connection.end();
 };
-

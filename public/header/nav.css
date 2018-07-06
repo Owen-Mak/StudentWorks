@@ -59,6 +59,25 @@ body {
     border-right: 1px solid #272727;
 }
 
-#homeIconID {
-    color:rgb(106, 201, 91);    
+
+
+
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+  #pageTitleID {
+    display:inline-block;
+  font-size: 24px;
+  color : #ddd;
+  padding-top: 9px;
+  width: 900px;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin-left:50px;
+}
+
+
+#userMenuModal {
+    width:200px; 
+    padding-top:110px;  
+    position: relative;
+    left: 510px;
 }
