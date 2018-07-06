@@ -110,6 +110,20 @@ module.exports.takedownProject = function(projectID, callback) {
     runQuery (sql, callback);
 }
 
+module.exports.setAdmin = function(userID, callback) {
+    var sql = `UPDATE USERS 
+                SET userType='Admin'
+                WHERE userID = ${userID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.unsetAdmin = function(userID, callback) {
+    var sql = `UPDATE USERS 
+                SET userType='Contributor'
+                WHERE userID = ${userID}`;
+    runQuery (sql, callback);
+}
+
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
                 FROM PROJECTS proj

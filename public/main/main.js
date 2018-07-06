@@ -11,10 +11,10 @@ var allProjects;
 // Entry point
 $(document).ready(() => {
     // LOCAL
-    //let prjUrl = "http://localhost:3000/api/getAllProjects";
+    let prjUrl = "http://localhost:3000/api/getAllProjects";
 
     // PRODUCTION
-    let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
+    //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
 
     $.getJSON(prjUrl, (data) => {
         allProjects = data;
@@ -92,38 +92,51 @@ function renderHeader(data) {
     filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Year<b class='caret'></b></a>";
     filterOpt += "  <ul class='dropdown-menu yearList' id='yearList' role='menu'></ul>";
     filterOpt += "</li>";
-    filterOpt += "<a href='#'><span class='glyphicon glyphicon-search srchIcon'></span></a>";
+    //filterOpt += "<a href='#'><span class='glyphicon glyphicon-search srchIcon'></span></a>";
 
     $("#optHeader").html(filterOpt);
 
     // Building HTLM for Filtering lists: Framework, Language, Year
     $.each(data, (key, value) => {
         if (value.language) {
-            if (!languageArr.includes(value.language)) {
+            if (!languageArr.includes(value.language))
                 languageArr.push(value.language);
-                languageList += "<li> <a href='#' onclick='filterProjectsBy(\"language\" ,\"" + value.language + "\")'>";
-                languageList += value.language + "</a></li>";
-            }
         }
 
         if (value.framework) {
-            if (!frameworkArr.includes(value.framework)) {
+            if (!frameworkArr.includes(value.framework))
                 frameworkArr.push(value.framework);
-                frameworkList += "<li> <a href='#' onclick='filterProjectsBy(\"framework\" ,\"" + value.framework + "\")'>";
-                frameworkList += value.framework + "</a></li>";
-            }
         }
 
         if (value.creationDate) {
             var year = value.creationDate.substring(0, 4);
             if (!yearArr.includes(year)) {
                 yearArr.push(year);
-                yearList += "<li> <a href='#' onclick='filterProjectsBy(\"year\" ,\"" + year + "\")'>";
-                yearList += year + "</a></li>";
             }
         }
     });
 
+    languageArr.sort();
+    $.each(languageArr, (k, v)=>{
+        languageList += "<li> <a href='#' onclick='filterProjectsBy(\"language\" ,\"" + v + "\")'>";
+        languageList += v + "</a></li>";
+    });
+
+    frameworkArr.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
+    $.each(frameworkArr, (k, v)=>{
+        frameworkList += "<li> <a href='#' onclick='filterProjectsBy(\"framework\" ,\"" + v + "\")'>";
+        frameworkList += v + "</a></li>";
+    });
+
+    yearArr.sort();
+    yearArr.reverse();
+    $.each(yearArr, (k, v)=>{
+        yearList += "<li> <a href='#' onclick='filterProjectsBy(\"year\" ,\"" + v + "\")'>";
+        yearList += v + "</a></li>";
+    });
+    
     $("#lngList").append(languageList);
     $("#frmList").append(frameworkList);
     $("#yearList").append(yearList);

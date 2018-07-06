@@ -14,7 +14,7 @@ $(document).ready(()=>{
 
     $('#footerHTMLid').html(html);
 
-    renderUserMenu();
+    renderUserMenu(); // function declaration is in /header/username.js
 });
 
 // Happy coding man :)

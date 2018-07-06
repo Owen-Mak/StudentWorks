@@ -1,9 +1,12 @@
 // LOCAL
-let prjUrl = "http://localhost:3000/api/getAllProjectsAdmin";
-let userUrl = "http://localhost:3000/api/getAllUsers";
-let aprUrl = "http://localhost:3000/api/approveProject/";
-let dwnUrl = "http://localhost:3000/api/takedownProject/";
-let serAdm = "http://localhost:3000/api/serverAdmin";
+let prjUrl = "/api/getAllProjectsAdmin";
+let userUrl = "/api/getAllUsers";
+let aprUrl = "/api/approveProject/";
+let dwnUrl = "/api/takedownProject/";
+let serverAdm = "/api/serverAdmin";
+let setAdmin = "/api/setAdmin/";
+let unsetAdmin = "/api/unsetAdmin/";
+let currentUserName = "";
 
 // PRODUCTION
 //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjectsAdmin";
@@ -11,7 +14,7 @@ let serAdm = "http://localhost:3000/api/serverAdmin";
 
 // DATA
 let allProjects = "";
-let allUsers;
+let allUsers = "";
 
 $(document).ready(() => {
     if ($("#userType").text() != "Admin") {
@@ -19,7 +22,7 @@ $(document).ready(() => {
         //window.location.replace("/"); // Extra security check
     }
 
-    renderUserMenu(); // defined in usermenu.js
+    renderUserMenu(); // function declaration is in /header/username.js
 
     // Title
     $("#pageTitleID").html("Administration");
@@ -32,12 +35,24 @@ $(document).ready(() => {
         allProjects = data;
         renderRight();
         live();
+        setactiveLink("#aprPrj");
     });
 
     $.getJSON(userUrl, (data) => {
         allUsers = data;
-    });
 
+        // Getting current user name
+        if ($("#userType").text() == "Visitor") {
+            currentUserName = "Unauthenticated";
+        } else {
+
+            $.each(allUsers, (k, v) => {
+                if (v.userID == $("#userID").text()) {
+                    currentUserName = v.firstName;
+                }
+            });
+        }
+    });
 
 });
 
@@ -46,8 +61,9 @@ function renderLeft() {
     let linksHtml = "" +
         "<div class='btn-group'>" +
         "  <a class='btn text-right'id='aprPrj'>Live Projects</a><br/>" +
-        "  <a class='btn text-right'id='penPrj'>Pending Approval</a><br/>" +
+        "  <a class='btn text-right'id='penPrj'>Pending Projects</a><br/>" +
         "  <a class='btn text-right'id='allUsr'>Contributors</a><br/>" +
+        "  <a class='btn text-right'id='term'>Terminal</a><br/>" +
         "  <a class='btn text-right'id='netw'>Traffic</a><br/>" +
         "  <a class='btn text-right'id='logs'>Logs</a><br/>" +
         "</div>";
@@ -64,32 +80,49 @@ function renderLeft() {
     $("#penPrj").click(() => {
         $("#div2").empty();
         pending();
+        setactiveLink("#penPrj");
     });
 
     $("#allUsr").click(() => {
         $("div2").empty();
         users();
+        setactiveLink("#allUsr");
     });
 
     $("#netw").click(() => {
         $("#div2").empty();
         traffic();
+        setactiveLink("#netw");
     });
 
     $("#logs").click(() => {
         $("#div2").empty();
         logs();
+        setactiveLink("#logs");
+    });
+
+    $("#term").click(() => {
+        $("#div2").empty();
+        terminal();
+        setactiveLink("#term");
     });
 }
 
 function setactiveLink(tag) {
-    var tags = ["#aprPrj", "#penPrj", "allUsr", "netw", "logs"];
+    var tags = ["#aprPrj", "#penPrj", "#allUsr", "#netw", "#logs", "#term"];
 
+    $.each(tags, (k, v) => {
+        if (v == tag) {
+            $(tag).css("color", "black");
+        } else {
+            $(v).css("color", "");
+        }
+    });
 }
 
 // BODY ---------------------------
 function live() {
-    let tableHtml = "<div id='TT'>List of all projects on display</div>" +
+    let tableHtml = "<div id='TT'>List of projects on display</div>" +
         "<table class='table'>" +
         "  <thead class='thead-light'><tr>" +
         "    <th scope='col'></th>" +
@@ -170,20 +203,111 @@ function users() {
     let tableGuts = "";
     $.each(allUsers, (key, value) => {
         let date = _getDate(value.registrationDate);
+        let name = value.firstName + " " + value.lastName;
 
-        tableGuts += "<tr>" +
-            "<td>" + value.firstName + " " + value.lastName + "</td>" +
+        if (value.userType == "Admin") {
+            tableGuts += "<tr style='color:#b01212; font-weight:500;'>";
+        } else {
+            tableGuts += "<tr>";
+        }
+
+        tableGuts += "" +
+            "<td>" + name + "</td>" +
             "<td>" + value.program + "</td>" +
             "<td>" + value.email + "</td>" +
-            "<td>" + date + "</td>" +
-            "<td></td>";
-        "</tr>";
+            "<td>" + date + "</td>";
+
+        if (value.userType == "Admin") {
+            tableGuts += "<td class='crud' style='opacity:0;'>" +
+                "<a href='#' onclick='removeAdmin(\"" + value.userID + "\",\"" + name + "\")'>" +
+                "<img class='setAdmin' src='/images/remove.png'/></td>";
+        } else {
+            tableGuts += "<td class='crud' style='opacity:0;'>" +
+                "<a href='#' onclick='addAdmin(\"" + value.userID + "\",\"" + name + "\")'>" +
+                "  <img class='setAdmin' src='/images/addAdmin.png'/>" +
+                "</a></td>";
+        }
+
+        tableGuts += "</tr>";
 
     });
     tableHtml += tableGuts + "</table>";
-
     $("#div2").html(tableHtml);
+
+    $('.crud').hover(function () {
+        $(this).fadeTo(1, 1);
+    }, function () {
+        $(this).fadeTo(1, 0);
+    });
     return;
+}
+
+function addAdmin(id, name) {
+    if (confirm(`Are you sure you want to give ${name} ADMIN rights?`)) {
+        $.get(setAdmin + id, (data) => {
+            if (data == "changed") {
+                $.getJSON(userUrl, (data) => {
+                    allUsers = data;
+                    users();
+                    setactiveLink("#allUsr");
+                });
+            } else {
+                alert("Server is unable to process request at this time");
+            }
+        });
+    }
+}
+
+function removeAdmin(id, name) {
+    if (confirm(`Are you sure you want to remove ADMIN rights from ${name}?`)) {
+        $.get(unsetAdmin + id, (data) => {
+            if (data == "changed") {
+                $.getJSON(userUrl, (data) => {
+                    allUsers = data;
+                    users();
+                    setactiveLink("#allUsr");
+                });
+            } else {
+                alert("Server is unable to process request at this time");
+            }
+        });
+    }
+}
+
+function terminal() {
+    let html = "<div>";
+
+    html += "" +
+        "<form action='/term' method='GET'>" +
+        "  <label for='cmd' id='cmcLbl'>Bash:</label>" +
+        "  <input id='cmd' type='text' name='cmd' autocomplete='off'>" +
+        "  <input type='submit' hidden>" +
+        "</form>" +
+        "<div id='termRes'></div>";
+
+    html += "</div";
+    $("#div2").html(html);
+
+    $("#cmd").focus();
+    $("form").on("submit", termSubmit);
+    function termSubmit(event) {
+        event.preventDefault();
+
+        let cmd = $("#cmd").val();
+        if (cmd == "clear") {
+            $("#termRes").empty();
+            $("#cmd").val("");
+            $("#cmd").focus();
+            return;
+        }
+
+        $("#cmd").val("");
+
+        $.get("/term/" + cmd, (data) => {
+            $("#termRes").prepend("<strong>$" +currentUserName +":<span style='color:blue;'> " + cmd + "</span></strong></br>" + data + "<br>");
+            $("#cmd").focus();
+        });
+    }
 }
 
 function traffic() {
@@ -200,7 +324,7 @@ function approvePrj(id) {
                 allProjects = data;
                 $("#div2").empty();
                 pending();
-            })
+            });
         } else {
             alert("Server is unable to process request at this time");
         }
@@ -223,9 +347,11 @@ function takedownPrj(id) {
     return false;
 }
 
+
+
 // STATS --------------------------
 function renderRight() {
-    $.get(serAdm, (data) => {
+    $.get(serverAdm, (data) => {
 
         let size = data.match(/[0-9]{1,}/g);
         let git = data.split('\n')[1];
@@ -246,30 +372,13 @@ function renderRight() {
             "</div>" +
             "<div class='panel panel-primary'>" + // Git branch
             "  <div class='panel-body' id='gitBody'>" +
-            "     <div style='float:left;'><img id='gitIm' src='/images/git.png' /></div>" +
-            "     <div style='float: right; width:55%;'>" + git + "</div>" +
+            "     <div style='float:left; width:45%;'><img id='gitIm' src='/images/git.png' /></div>" +
+            "     <div style='float:right; width:55%;'>" + git + "</div>" +
             "  </div>" +
             "</div>" +
             "<canvas id='myChart' width='400' height='400'></canvas>";
 
         $("#div3").html(statHtml);
-
-        // Adding a chart - TO debug
-        /*var ctx = document.getElementById('myChart').getContext('2d');
-        var myBarChart = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: languages,
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        }); */
-        
     });
 }
 
@@ -282,18 +391,7 @@ function _getDateApr(dt) {
 
 function _getDate(dt) {
     let date = new Date(dt);
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return months[date.getMonth()] + " " + date.getFullYear();
-}
-
-function languages() {
-    langArr = [];
-    $.each(allProjects, (key, value) => {
-        if (value.language) {
-            if (!langArr.includes(value.language)) {
-                langArr.push(value.language);
-            }
-        }
-    });
-    return langArr;
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    year = date.getFullYear() + "";
+    return months[date.getMonth()] + " " + year;
 }

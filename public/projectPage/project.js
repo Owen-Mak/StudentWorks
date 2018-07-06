@@ -41,7 +41,7 @@ $(document).ready(() => {
         prjHtml += "   </div>";
         prjHtml += "</div>";
 
-        renderUserMenu();
+        renderUserMenu(); // function declaration is in /header/username.js
         $("#pageTitleID").html(title);
         $("#projectBody").html(prjHtml);
         $("#tileNav").empty();

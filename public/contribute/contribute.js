@@ -6,16 +6,14 @@ let colorCh = "#f5f5f5";
 
 $(document).ready(() => {
 
-
-    // User Menu - defined in usermenu.js
-    renderUserMenu();
+    renderUserMenu(); // function declaration is in /header/username.js
     renderColorPick();
 
     // Set the page title
     $("#pageTitleID").html("Project Upload");
 
     // PROJECT TITLE change
-    $("#titleInput").change(() => {
+    $("#titleInput").on("keyup", () => {
         let val = $("#titleInput").val();
         $(".panel-heading").html("<h4>" + val + "</h4>");
     });
