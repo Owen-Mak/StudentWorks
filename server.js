@@ -11,7 +11,9 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 //const multer = require("multer");
 var sftpStorage = require('multer-sftp-linux');
+// objects for multer storage configurations
 var storage;
+var mediaForProject;
 
 //This is for parsing json POST requests in text
 // create application/json parser
@@ -19,11 +21,18 @@ var jsonParser = bodyParser.json();
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+// setting multer storage configuration based on whether it is on vm or localhost
 if (process.env.HOSTNAME === 'studentworks'){ 
     storage = multer.diskStorage({
         destination: "public/userPhotos",
         filename: function (req, file, cb) {
             cb(null, Date.now() + path.extname(file.originalname));
+        }
+    });
+    mediaForProject = multer.diskStorage({
+        destination: "project/temp/",
+        filename: (req, file, callback) => {
+            callback(null, file.originalname);
         }
     });
 } else {    
@@ -40,7 +49,21 @@ if (process.env.HOSTNAME === 'studentworks'){
         filename: function (req, file, cb) {
           cb(null, Date.now() + path.posix.extname(file.originalname));
         } 
-      })        
+      });
+    mediaForProject = sftpStorage({
+        sftp: {
+            host: 'myvmlab.senecacollege.ca',
+            port: 6185,
+            username: 'stephen',
+            password: 'sucks'
+          },
+          destination: function (req, file, cb) {            
+              cb(null, path.posix.join ('./StudentWorks', 'project', 'temp'));          
+          },
+          filename: (req, file, callback) => {
+            callback(null, file.originalname);
+        }
+    });        
 }
 
 var uploadProfile = multer({ storage: storage });
@@ -82,12 +105,7 @@ app.use(function(req, res, next) {
 });
 
 // PROJECT UPLOAD page
-const mediaForProject = multer.diskStorage({
-    destination: "project/temp/",
-    filename: (req, file, callback) => {
-        callback(null, file.originalname);
-    }
-});
+
 var upload = multer({ storage: mediaForProject });
 
 app.post("/upload-project", upload.array("media", 2),(req, res) => {
