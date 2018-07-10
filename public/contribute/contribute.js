@@ -88,12 +88,16 @@ $(document).ready(() => {
     });
 
     // FORM SUBMISSION LOGIC
-    $("form").on("submit", submitProject);
+    //$("#uform").on("submit", submitProject);
+    document.getElementById("uForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        submitProject();  
+      });
 });
 
-function submitProject(event) {
-    event.preventDefault();
-
+function submitProject() {
+    
+    console.log("got to submitProject");
     //Validation
     
     if (gl_language == "") {
@@ -118,7 +122,7 @@ function submitProject(event) {
     for(var i = 0; i<devs.length; i++){
         developers.push(devs[i]+':'+roles[i]);
     }
-
+    
     // Image processing
     var date = new Date().getTime();
     var image = document.getElementById("photo").files[0];
@@ -145,7 +149,18 @@ function submitProject(event) {
     formData.append("media", image, photoName);
     formData.append("media", video, videoName);
 
+    var XHR = new XMLHttpRequest();
+    XHR.addEventListener("load", function(event) {
+        alert(data);
+        if (event.target.responseText == "success"){
+          window.location.replace("/profile");
+        }
+      });
+
     // Sending a form
+    XHR.open("POST", "/upload-project");
+    XHR.send(formData);
+    /*
     $.ajax({
         url: '/upload-project',
         data: formData,
@@ -157,7 +172,7 @@ function submitProject(event) {
             window.location.replace("/profile");
         }
     });
-
+*/
 }
 
 function renderEmptyTile() {

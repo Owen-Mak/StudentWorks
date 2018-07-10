@@ -121,14 +121,14 @@ app.post("/upload-project", upload.array("media", 2),(req, res) => {
     let description = req.body.desc;
     let picName     = req.body.photo;
     let videoName   = req.body.video;
-
+    console.log ("got to post /upload-project");
     // Server side validation
     // TODO
 
     // Updating DB
     // TODO
 
-    res.status(200).send('Your project is uploaded successfully! Thank you.')
+    res.status(200).send('success');
     //res.status(404).send('Sorry! Try again, later.');
 });
 
@@ -149,19 +149,23 @@ app.get('/projectPage', (req,res) => {
 //PROFILE page
 app.get('/profile', (req,res) => {
     if (req.session.authenticate){
-    res.status(200).render('profile', {    authenticate :  req.session.authenticate,
-                                            userID       :  req.session.userID,
-                                            userType     :  req.session.userType});
-    } else {
-        res.status(200).redirect("/login");
-    }
+        res.status(200).render('profile', {    authenticate :  req.session.authenticate,
+                                                userID       :  req.session.userID,
+                                                userType     :  req.session.userType});
+        } else {
+            res.status(200).redirect("/login");
+        }
 });
 
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    res.status(200).render('contribute', {    authenticate :  req.session.authenticate,
-                                            userID       :  req.session.userID,
-                                            userType     :  req.session.userType});
+    if (req.session.authenticate){
+        res.status(200).render('contribute', {    authenticate :  req.session.authenticate,
+                                                userID       :  req.session.userID,
+                                                userType     :  req.session.userType});
+    } else {
+        res.status(200).redirect("/login");
+    }
 });
 
 //RECORDING page
