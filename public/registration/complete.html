@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     
 	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
-
 	<link rel="stylesheet" type="text/css" href="/registration/css/register.css">
-	<script src="/registration/js/complete.js"></script>
 </head>
 <body>
 	
@@ -20,34 +18,33 @@
 						<img logo alt="logo" src="../images/logo_graybg.png">
 					</a>
 					<span style="color:#b60909" class="title">
-					- COMPLETE REGISTRATION -
-                        <span class="txt2" >Good to see you, </span>
-                        <span style="color:#b60909" class="txt3" style="text-align: center;" >Please enter your current password, and your new one.</span>
+					- CHANGE PASSWORD -
+                        <span style="color:#dbdbdb" class="txt3" style="text-align: center;" >Please enter your current password, and your new one.</span>
 					</span>
 					
 
 					<span class="txt1" style="font-weight: bold">
-							USERNAME <span id="errorMsg" style="color:#D22822"></span>
+							USERNAME <span id="errorMsg1" style="color:#D22822"></span>
 						</span> 
 
 						<div class="input-wrapper validate-input">
-								<input class="input" type="text" name="username" id="username" required>
+								<input class="input" type="text" name="username" id="username" onchange="validUser()">
 								<span class="focus-input"></span>
 							</div>
 
 					<span class="txt1" style="font-weight: bold">
-							CURRENT PASSWORD <span id="errorMsg" style="color:#D22822"></span>
+							CURRENT PASSWORD <span id="errorMsg2" style="color:#D22822"></span>
 						</span> 
 					
 						<div class="input-wrapper validate-input">
-								<input class="input" type="password" name="oldpassword" id="oldpassword" onchange="validPass()">
+								<input class="input" type="password" name="oldpassword" id="oldpassword" onchange="validCurPass()">
 								<span class="focus-input"></span>
 							</div>
 
 						
 
 					<span class="txt1" style="font-weight: bold">
-						NEW PASSWORD <span id="errorMsg" style="color:#D22822"></span>
+						NEW PASSWORD <span id="errorMsg3" style="color:#D22822"></span>
 					</span> 
 
 
@@ -57,7 +54,7 @@
 					</div>
 					
                     <span class="txt1" style="font-weight: bold">
-						RE-TYPE PASSWORD <span id="errorMsg2" style="color:#D22822"></span>
+						RE-TYPE PASSWORD <span id="errorMsg4" style="color:#D22822"></span>
 					</span> 
 
 
@@ -77,8 +74,8 @@
 		</div>
 		</div>
 	</div>
-	
-
+	<!-- <script src="/registration/js/complete.js"></script> -->
+	<script src="/registration/js/complete.js"></script>
 	<div id="dropDownSelect1"></div>
 
 </body>
