@@ -57,7 +57,6 @@ var smtpTransport = nodemailer.createTransport({
 });
 /*------------------SMTP Over-----------------------------*/
 
-
 //File usage
 app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public'));
@@ -174,6 +173,24 @@ app.get('/adminPage', (req, res) => {
         userID: req.session.userID,
         userType: req.session.userType
     });
+});
+
+//LOGGER
+app.get('/logger/:log', (req, res) => {
+    if (req.params.log != "") {
+        let log = "./logger '" + req.params.log + "'";
+
+        const { exec } = require('child_process');
+        exec(log, (err, stdout, stderr) => {
+            if (err) {
+                res.send(stderr);
+            } else {
+                res.send(stdout);
+            }
+        });
+    } else {
+        console.log("empty string was passed");
+    }
 });
 
 //Registration page
@@ -413,7 +430,6 @@ app.get('/verify', function (req, res) {
         res.send("<h1>Request is from unknown source</h1>");
     }
 });   //email verification end
-
 
 //Forgot password
 app.get("/login/forgotpass", (req, res) => {
@@ -828,6 +844,8 @@ app.get('/api/serverAdmin', function (req, res) {
     let reply;
     const { exec } = require('child_process');
 
+    // Way to get ip address of a request
+    //console.log("remote address: " + req.connection.remoteAddress);
 
     exec("du -sh project", (err, stdout, stderr) => {
         if (err) {
@@ -851,7 +869,7 @@ app.get('/api/serverAdmin', function (req, res) {
 
 app.get('/term/:cmd', (req, res) => {
     var cmd = req.params.cmd;
-    String.prototype.replaceAll = function(search, replacement) {
+    String.prototype.replaceAll = function (search, replacement) {
         var target = this;
         return target.replace(new RegExp(search, 'g'), replacement);
     };
@@ -862,16 +880,26 @@ app.get('/term/:cmd', (req, res) => {
             if (err) {
                 res.send(stderr + "<br>");
             } else {
+                stdout = stdout.replaceAll(" ", '&nbsp;');
                 stdout = stdout.replaceAll("\n", "<br>");
-                stdout = stdout.replaceAll("\t", '    ');
                 res.send(stdout);
             }
         });
-        
+
     } else {
         console.log("empty string was passed");
     }
 })
+
+//GET ADMIN LOG
+app.get('/api/getAdminLog', (req, res)=>{
+    const { exec } = require('child_process');
+    exec("./logger read", (err, stdout, stderr)=> {
+        res.setHeader('Content-Type', 'application/json');
+        res.status(200).send(stdout.split("\n"));
+    });
+});
+
 //logout route - 
 app.get('/logout', function (req, res) {
     req.session.destroy();

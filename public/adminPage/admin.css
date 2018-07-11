@@ -15,7 +15,7 @@ div.divInl {
 .btn-group {
     margin-top:98px;
 }
-#aprPrj, #penPrj, #allUsr, #netw, #logs, #term{
+#aprPrj, #penPrj, #allUsr, #logs, #term{
     margin-top:5px;
     font-size: 22px;
     height:60px;
@@ -24,16 +24,11 @@ div.divInl {
     text-align: right;
 }
 
-#TT, #penPrjTitle, #usrTitle {  /* Table Title */
+#TT, #penPrjTitle, #usrTitle, #logTitle {  /* Table Title */
     margin-top: 40px;
     font-weight: 200;
     font-size: 22px;
 }
-
-#netw, #logs {
-    opacity: 0.5;
-}
-
 
 #div2 {
     width:60%;
@@ -61,7 +56,6 @@ table {
     padding-bottom: 2px;
 }
 
-
 #pageTitleID {
     color: rgb(242, 232, 232);
     font-weight: 500;
@@ -78,9 +72,34 @@ table {
 
 .setAdmin {
     width:20px;
+    height: inherit;
 }
 
-/* DIV 3 - STATS*/
+form {
+    margin-top:35px;
+    width:300px;
+    border-bottom: 1px double;
+    border-color: #aeabab;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 18px;
+}
+
+input {
+    border: none;
+    background-color: #6a6a6a;
+    background-color: rgb(250, 250, 250);
+}
+
+#termText {
+    font-family: Courier New, Courier, Lucida Sans Typewriter, Lucida Typewriter, monospace;
+    font-size: 13px;
+    letter-spacing: -0.05em;
+}
+
+/* DIV 3 -------------------- */
 #div3 {
     width:20%;
     margin-top: -25px;
@@ -132,7 +151,10 @@ table {
     font-size:14px;
 }
 
-#piechart_3d {
-    margin-left: -10px;
+#emptyPanel{
+    border: 3px dashed #bababa;
+    height:70px;
+    border-radius: 4px;
+    margin-right:-10px;
+    margin-left:-10px;
 }
-

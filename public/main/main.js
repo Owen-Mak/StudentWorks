@@ -11,10 +11,10 @@ var allProjects;
 // Entry point
 $(document).ready(() => {
     // LOCAL
-    let prjUrl = "http://localhost:3000/api/getAllProjects";
+    //let prjUrl = "http://localhost:3000/api/getAllProjects";
 
     // PRODUCTION
-    //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
+    let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
 
     $.getJSON(prjUrl, (data) => {
         allProjects = data;

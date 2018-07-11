@@ -1,20 +1,22 @@
 // LOCAL
-let prjUrl = "/api/getAllProjectsAdmin";
-let userUrl = "/api/getAllUsers";
-let aprUrl = "/api/approveProject/";
-let dwnUrl = "/api/takedownProject/";
-let serverAdm = "/api/serverAdmin";
-let setAdmin = "/api/setAdmin/";
-let unsetAdmin = "/api/unsetAdmin/";
-let currentUserName = "";
+let prefix = "";
 
 // PRODUCTION
-//let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjectsAdmin";
-//let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllUsers";
+//let prefix = "http://myvmlab.senecacollege.ca:6193";
+
+let prjUrl = prefix + "/api/getAllProjectsAdmin";
+let userUrl = prefix + "/api/getAllUsers";
+let aprUrl = prefix + "/api/approveProject/";
+let dwnUrl = prefix + "/api/takedownProject/";
+let serverAdm = prefix + "/api/serverAdmin";
+let setAdmin = prefix + "/api/setAdmin/";
+let unsetAdmin = prefix + "/api/unsetAdmin/";
+let adminLog = prefix + "/api/getAdminLog";
 
 // DATA
 let allProjects = "";
 let allUsers = "";
+let currentUserName = "";
 
 $(document).ready(() => {
     if ($("#userType").text() != "Admin") {
@@ -45,7 +47,6 @@ $(document).ready(() => {
         if ($("#userType").text() == "Visitor") {
             currentUserName = "Unauthenticated";
         } else {
-
             $.each(allUsers, (k, v) => {
                 if (v.userID == $("#userID").text()) {
                     currentUserName = v.firstName;
@@ -64,7 +65,6 @@ function renderLeft() {
         "  <a class='btn text-right'id='penPrj'>Pending Projects</a><br/>" +
         "  <a class='btn text-right'id='allUsr'>Contributors</a><br/>" +
         "  <a class='btn text-right'id='term'>Terminal</a><br/>" +
-        "  <a class='btn text-right'id='netw'>Traffic</a><br/>" +
         "  <a class='btn text-right'id='logs'>Logs</a><br/>" +
         "</div>";
 
@@ -89,10 +89,10 @@ function renderLeft() {
         setactiveLink("#allUsr");
     });
 
-    $("#netw").click(() => {
+    $("#term").click(() => {
         $("#div2").empty();
-        traffic();
-        setactiveLink("#netw");
+        terminal();
+        setactiveLink("#term");
     });
 
     $("#logs").click(() => {
@@ -101,11 +101,6 @@ function renderLeft() {
         setactiveLink("#logs");
     });
 
-    $("#term").click(() => {
-        $("#div2").empty();
-        terminal();
-        setactiveLink("#term");
-    });
 }
 
 function setactiveLink(tag) {
@@ -143,8 +138,9 @@ function live() {
                 "<td><a href='/projectPage/?id=" + value.projectID + "'>" + value.title + "</a></td>" +
                 "<td>user</td>" +
                 "<td>" + date + "</td>" +
-                "<td><a href='#' onclick='takedownPrj(" + id + ")'><img id='im2' src='/images/cancel.png'/><a>";
-            "</tr>";
+                "<td><a href='#' onclick='takedownPrj(" + id + ",\"" + value.title + "\")'>" +
+                "<img id='im2' src='/images/cancel.png'/><a>" +
+                "</tr>";
         }
     });
     tableHtml += tableGuts + "</table>";
@@ -175,7 +171,7 @@ function pending() {
                 "<td><a href='/projectPage/?id=" + value.projectID + "'>" + value.title + "</a></td>" +
                 "<td>user</td>" +
                 "<td>" + date + "</td>" +
-                "<td><a href='#' onclick='approvePrj(" + id + ")'><img id='im2' src='/images/ok.png'/><a>";
+                "<td><a href='#' onclick='approvePrj(" + id + ",\"" + value.title + "\")'><img id='im2' src='/images/ok.png'/><a>";
             "</tr>";
         }
     });
@@ -206,7 +202,7 @@ function users() {
         let name = value.firstName + " " + value.lastName;
 
         if (value.userType == "Admin") {
-            tableGuts += "<tr style='color:#b01212; font-weight:500;'>";
+            tableGuts += "<tr style='color:#b01212; font-weight:600;'>";
         } else {
             tableGuts += "<tr>";
         }
@@ -243,13 +239,15 @@ function users() {
 }
 
 function addAdmin(id, name) {
-    if (confirm(`Are you sure you want to give ${name} ADMIN rights?`)) {
+    if (confirm(`Are you sure you want to give ADMIN rights to ${name} ?`)) {
         $.get(setAdmin + id, (data) => {
             if (data == "changed") {
                 $.getJSON(userUrl, (data) => {
                     allUsers = data;
                     users();
                     setactiveLink("#allUsr");
+                    var log = currentUserName + " approved \"" + name + "\"" + " as an Admin on " + _getDateApr(new Date());
+                    logMsg(log);
                 });
             } else {
                 alert("Server is unable to process request at this time");
@@ -266,6 +264,8 @@ function removeAdmin(id, name) {
                     allUsers = data;
                     users();
                     setactiveLink("#allUsr");
+                    var log = currentUserName + " removed Admin rights from \"" + name + "\"" + " on " + _getDateApr(new Date());
+                    logMsg(log);
                 });
             } else {
                 alert("Server is unable to process request at this time");
@@ -288,13 +288,14 @@ function terminal() {
     html += "</div";
     $("#div2").html(html);
 
+
     $("#cmd").focus();
-    $("form").on("submit", termSubmit);
-    function termSubmit(event) {
+    $("form").on("submit", terminalSubmit);
+    function terminalSubmit(event) {
         event.preventDefault();
 
         let cmd = $("#cmd").val();
-        if (cmd == "clear") {
+        if (cmd == "clear" || cmd == 'cl') {
             $("#termRes").empty();
             $("#cmd").val("");
             $("#cmd").focus();
@@ -304,26 +305,59 @@ function terminal() {
         $("#cmd").val("");
 
         $.get("/term/" + cmd, (data) => {
-            $("#termRes").prepend("<strong>$" +currentUserName +":<span style='color:blue;'> " + cmd + "</span></strong></br>" + data + "<br>");
+            let html = "<strong>$" + currentUserName + ":<span style='color:green;'> " + cmd + "</span></strong></br><span id='termText'>" + data + "</span><br>";
+            $("#termRes").prepend(html);
             $("#cmd").focus();
         });
     }
 }
 
-function traffic() {
-}
-
 function logs() {
+    $.getJSON(adminLog, (data) => {
+        let logHtml = "" +
+            "<div id='logTitle'>Admin logs</div>" +
+            "<table class='table'>" +
+            "  <thead class='thead-light'><tr>" +
+            "    <th scope='col'>Record</th>" +
+            "    <th scope='col'>Hash</th>" +
+            "</tr></thead>";
 
+        let tableGuts = "";
+
+        $.each(data, (k, v) => {
+            //skipping first and last record
+
+            if(k == 0 || k == (data.length-1))
+                return true;
+
+            record = v.split(":");
+            tableGuts += "<tr>" +
+                "<td>" + record[0] + "</td>" +
+                "<td>" + record[1] + "</td>" +
+                "</tr>";
+        });
+
+        logHtml += tableGuts + "</table>";
+        $("#div2").html(logHtml);
+    });
 }
 
-function approvePrj(id) {
+function logMsg(event) {
+    $.get("/logger/" + event, (data) => {
+        if (data == "fail")
+            console.log("Admin log message could not be created");
+    });
+}
+
+function approvePrj(id, name) {
     $.get(aprUrl + id, (data) => {
         if (data == "changed") {
             $.get(prjUrl, (data) => {
                 allProjects = data;
                 $("#div2").empty();
                 pending();
+                var log = currentUserName + " approved \"" + name + "\"" + " on " + _getDateApr(new Date());
+                logMsg(log);
             });
         } else {
             alert("Server is unable to process request at this time");
@@ -332,13 +366,15 @@ function approvePrj(id) {
     return false;
 }
 
-function takedownPrj(id) {
+function takedownPrj(id, name) {
     $.get(dwnUrl + id, (data) => {
         if (data == "changed") {
             $.get(prjUrl, (data) => {
                 allProjects = data;
                 $("#div2").empty();
                 live();
+                var log = currentUserName + " took down \"" + name + "\"" + " on " + _getDateApr(new Date());
+                logMsg(log);
             })
         } else {
             alert("Server is unable to process request at this time");
@@ -346,8 +382,6 @@ function takedownPrj(id) {
     });
     return false;
 }
-
-
 
 // STATS --------------------------
 function renderRight() {
@@ -376,6 +410,9 @@ function renderRight() {
             "     <div style='float:right; width:55%;'>" + git + "</div>" +
             "  </div>" +
             "</div>" +
+            "<div class='panel panel-primary'>" + // Blank
+            "  <div class='panel-body' id='emptyPanel'></div>" +
+            "</div>" +
             "<canvas id='myChart' width='400' height='400'></canvas>";
 
         $("#div3").html(statHtml);
@@ -385,7 +422,7 @@ function renderRight() {
 // HELPERS -----------------------
 function _getDateApr(dt) {
     let date = new Date(dt);
-    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return date.getDate() + " " + months[date.getMonth()];
 }
 
