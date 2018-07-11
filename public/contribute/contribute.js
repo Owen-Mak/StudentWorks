@@ -96,8 +96,6 @@ $(document).ready(() => {
 });
 
 function submitProject() {
-    
-    console.log("got to submitProject");
     //Validation
     
     if (gl_language == "") {
@@ -126,13 +124,9 @@ function submitProject() {
     // Image processing
     var date = new Date().getTime();
     var image = document.getElementById("photo").files[0];
-    var imExt = image.type.split('/')[1];
-    var photoName = date + "." + imExt;
 
     // Video processing
     var video = document.getElementById("video").files[0];
-    var vidExt = video.type.split('/')[1];
-    var videoName = date + "." + vidExt;
    
     // Creating a processed form
     var formData = new FormData();
@@ -144,10 +138,9 @@ function submitProject() {
     formData.append("category", gl_category);
     formData.append("desc", $("#desc").val());
     formData.append("developers", developers);
-    formData.append("photo", photoName);
-    formData.append("video", videoName);
-    formData.append("media", image, photoName);
-    formData.append("media", video, videoName);
+
+    formData.append("media", image);
+    formData.append("media", video);
 
     var XHR = new XMLHttpRequest();
     XHR.addEventListener("load", function(event) {
