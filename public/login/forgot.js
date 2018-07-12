@@ -22,6 +22,3 @@ function validUser(str) {
 	}
 	return userCheck;
 }
-
-
-
