@@ -1,4 +1,3 @@
-'use strict';
 const express=require('express');
 const nodemailer = require("nodemailer");
 const app=express();
@@ -44,14 +43,14 @@ if (process.env.HOSTNAME === 'studentworks'){
             cb(null, path.posix.join ('./StudentWorks', 'public', 'userPhotos'));          
         },
         filename: function (req, file, cb) {
-          cb(null, Date.now() + path.posix.extname(file.originalname));
+          cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.posix.extname(file.originalname));
         } 
       });   
 }
 var mediaForProject = multer.diskStorage({
-    destination: "public/uploads",
+    destination: "public/project/temp",
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
+        cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname));
     }
 });
 
@@ -98,38 +97,37 @@ app.use(function(req, res, next) {
 app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1}, {name: "video", maxCount: 1}]), (req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
     // Project image and video is in /project/temp folder and of proper format
-    
-    let userID      = req.body.userID;
-    let title       = req.body.title;
-    let language    = req.body.language;
-    let framework   = req.body.framework;
-    let platform    = req.body.platform;
-    let category    = req.body.category;
-    let developers  = req.body.developers;
-    let description = req.body.desc;
-    var photo       = req.files['image'];
-    var video       = req.files['videos'];
-
-    console.log ("req.files:", req.files);
+    var project = {
+        userID      : req.body.userID,
+        title       : req.body.title,
+        language    : req.body.language,
+        framework   : req.body.framework,
+        platform    : req.body.platform,
+        category    : req.body.category,
+        developers  : req.body.developers,
+        description : req.body.desc,
+        photoPath   : req.files['image'][0].path,
+        videoPath   : req.files['video'][0].path
+    }
 
     //since multer-sftp does not work for multiple files, we are manually sftping the two files onto vm
     if (process.env.HOSTNAME !== 'studentworks'){
         sftp.connect({
             host: 'myvmlab.senecacollege.ca',
             port: 6185,
-            username: '',
-            password: ''
+            username: 'student',
+            privateKey:  require('fs').readFileSync('public/publicKey.txt')
+            //password: process.env.vmpassword
         }).then(() => {
             sftp.put (req.files['image'][0].path, path.posix.join ('./StudentWorks', 'project', 'temp', req.files['image'][0].filename));
             sftp.put (req.files['video'][0].path, path.posix.join ('./StudentWorks', 'project', 'temp', req.files['video'][0].filename));
         }).catch((err)=> {
-            console.log(err, 'caught error');
+            console.log(err, 'Contribute: sftp error');
         })
     }
-    //let picName     = req.body.photo;
-    //let videoName   = req.body.video;
 
-    
+
+    console.log (project);
     // Server side validation
     // TODO
 
