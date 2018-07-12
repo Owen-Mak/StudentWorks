@@ -1,11 +1,10 @@
 var userCheck = true; 
-var passCheck = true;
 
 
 function validateForm() {
    console.log(userCheck);
-   if(userCheck){
-       return true;
+   if(validUser(userCheck)){
+	return true;
    }else{
        return false;
    }
@@ -13,8 +12,8 @@ function validateForm() {
 
 
 function validUser(str) {
-	var name = str;
-	if(name == "") {
+	var name = document.forgot.username1.value.trim();
+	if(name == "" || name == null) {
 		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
 		userCheck = false;
 	}else{
@@ -23,6 +22,3 @@ function validUser(str) {
 	}
 	return userCheck;
 }
-
-
-
