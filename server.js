@@ -148,9 +148,12 @@ app.get('/contribute', (req,res) => {
 
 //RECORDING page
 app.get('/recording', (req,res) => {
+    //res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
+
     res.status(200).render('recording', {    authenticate :  req.session.authenticate,
                                             userID       :  req.session.userID,
                                             userType     :  req.session.userType});
+                                            
 });
 
 //ADMINISTRATION page
