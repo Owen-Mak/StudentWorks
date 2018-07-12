@@ -121,8 +121,13 @@ function renderUserDetails(jsData) {
   let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "First Name";
   let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "Last Name";
   let email = jsData[0].email ? jsData[0].email : "sample@email.com";
+<<<<<<< HEAD
   let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "Program of study";
+=======
+  let program = jsData[0].program != "NULL" ? jsData[0].program : "Program of study";
+>>>>>>> 5ae49cbd3b2dfc2f24b1962a1ac05de0c08019fc
   let username = jsData[0].userName ? jsData[0].userName : "Username";
+  let description = jsData[0].userDescription ? jsData[0].userDescription : "Description";
   let host = "http://myvmlab.senecacollege.ca:6193";
   let imagePath = jsData[0].imagePath ? host + jsData[0].imagePath :"../images/empty.png";
 
@@ -131,6 +136,7 @@ function renderUserDetails(jsData) {
   $("#email").attr({ "placeholder": email });
   $("#program").attr({ "placeholder": program });
   $("#username").attr({ "placeholder": username });
+  $("#description").attr({ "placeholder": description });
   $("#imgPreview").attr({ "src": imagePath });
 }
 
@@ -176,14 +182,17 @@ window.addEventListener("load", function () {
     if (username.value == ""){
       username.value = username.placeholder;
     }
+    if (description.value == ""){
+      description.value = description.placeholder;
+    }
     // rebuild form using form data object such that file will be at the end of the form in post request
     var FD = new FormData();
     FD.append("fname", fname.value);
     FD.append("lname", lname.value);
     FD.append("email", email.value);
-    FD.append("program", program.value);    
-    FD.append("password", password.value);
+    FD.append("program", program.value);        
     FD.append("username", username.value);
+    FD.append("description", description.value);
     FD.append("img-input", imgFile.files[0]);
 
     // the next course of action after successfully sending data
@@ -208,7 +217,7 @@ window.addEventListener("load", function () {
   var email = document.getElementById("email");
   var program = document.getElementById("program");
   var username = document.getElementById("username");
-  var password = document.getElementById("password");
+  var description = document.getElementById("description");
   var imgFile = document.getElementById("img-input");
 
   // intercepts submit event for profile form

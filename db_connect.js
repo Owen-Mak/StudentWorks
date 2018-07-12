@@ -157,10 +157,13 @@ module.exports.updateUserProfile = function (user, callback) {
                 SET firstName = '${user.firstName}',
                     lastName = '${user.lastName}',
                     email = '${user.email}',
-                    program = '${user.program}',
-                    imagePath = '${user.imagePath}'
+                    program = '${user.program}',\n`;
+    if (user.imagePath != null) {
+        sql += `    imagePath = '${user.imagePath}',`;
+    }                
+        sql+=`      userDescription = '${user.description}'                    
                 WHERE userName = '${user.userName}'; `;
-    console.log ("uUP: ",sql);
+    //console.log ("uUP: ",sql);
     runQuery(sql, callback);
 }
 
