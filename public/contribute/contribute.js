@@ -89,84 +89,89 @@ $(document).ready(() => {
 
     // FORM SUBMISSION LOGIC
     //$("#uform").on("submit", submitProject);
+
+});
+window.addEventListener("load", function () {
+    function submitProject() {
+        var XHR = new XMLHttpRequest();
+        //Validation
+        
+        if (gl_language == "") {
+            $("#lngList").focus();
+            return;
+        } else if (gl_framework == "") {
+            $("#frmList").focus();
+            return;
+        } else if (gl_platform == "") {
+            $("#pltList").focus();
+            return;
+        }
+
+        // Developer processing
+        var developers = [];
+        var devs = $("#devs").val().split(",");
+        var roles = $("#roles").val().split(",");
+        if(devs.length != roles.length){
+            $("#devs").focus();
+            return;
+        }
+        for(var i = 0; i<devs.length; i++){
+            developers.push(devs[i]+':'+roles[i]);
+        }
+        
+        // Image processing
+        var date = new Date().getTime();
+        //var media = [];
+        //media.push (document.getElementById("photo").files[0]);
+        //media.push (document.getElementById("video").files[0]);
+        var image = document.getElementById("photo").files[0];
+
+        // Video processing
+        var video = document.getElementById("video").files[0];
+    
+        // Creating a processed form
+        var formData = new FormData();
+        formData.append("userID", $("#userID").val());
+        formData.append("title", $("#titleInput").val());
+        formData.append("language", gl_language);
+        formData.append("framework", gl_framework);
+        formData.append("platform", gl_platform);
+        formData.append("category", gl_category);
+        formData.append("desc", $("#desc").val());
+        formData.append("developers", developers);
+
+        formData.append("image", image);
+        formData.append("video", video);
+
+        
+        XHR.addEventListener("load", function(event) {        
+            if (event.target.responseText == "success"){
+                window.location.replace("/profile");
+            }
+        });
+
+        // Sending a form
+        XHR.open("POST", "/upload-project");
+        XHR.send(formData);
+        /*
+        $.ajax({
+            url: '/upload-project',
+            data: formData,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success : (data, textStatus, jXHR)=>{
+                alert(data);
+                window.location.replace("/profile");
+            }
+        });
+    */
+    }
     document.getElementById("uForm").addEventListener("submit", function (event) {
         event.preventDefault();
         submitProject();  
-      });
-});
-
-function submitProject() {
-    //Validation
-    
-    if (gl_language == "") {
-        $("#lngList").focus();
-        return;
-    } else if (gl_framework == "") {
-        $("#frmList").focus();
-        return;
-    } else if (gl_platform == "") {
-        $("#pltList").focus();
-        return;
-    }
-
-    // Developer processing
-    var developers = [];
-    var devs = $("#devs").val().split(",");
-    var roles = $("#roles").val().split(",");
-    if(devs.length != roles.length){
-        $("#devs").focus();
-        return;
-    }
-    for(var i = 0; i<devs.length; i++){
-        developers.push(devs[i]+':'+roles[i]);
-    }
-    
-    // Image processing
-    var date = new Date().getTime();
-    var image = document.getElementById("photo").files[0];
-
-    // Video processing
-    var video = document.getElementById("video").files[0];
-   
-    // Creating a processed form
-    var formData = new FormData();
-    formData.append("userID", $("#userID").val());
-    formData.append("title", $("#titleInput").val());
-    formData.append("language", gl_language);
-    formData.append("framework", gl_framework);
-    formData.append("platform", gl_platform);
-    formData.append("category", gl_category);
-    formData.append("desc", $("#desc").val());
-    formData.append("developers", developers);
-
-    formData.append("media", image);
-    formData.append("media", video);
-
-    var XHR = new XMLHttpRequest();
-    XHR.addEventListener("load", function(event) {
-        alert(data);
-        if (event.target.responseText == "success"){
-          window.location.replace("/profile");
-        }
-      });
-
-    // Sending a form
-    XHR.open("POST", "/upload-project");
-    XHR.send(formData);
-    /*
-    $.ajax({
-        url: '/upload-project',
-        data: formData,
-        type: 'POST',
-        contentType: false,
-        processData: false,
-        success : (data, textStatus, jXHR)=>{
-            alert(data);
-            window.location.replace("/profile");
-        }
     });
-*/
-}
+});
 
 function renderEmptyTile() {
     let tileHtml = "" +
