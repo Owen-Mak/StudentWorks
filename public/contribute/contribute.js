@@ -131,7 +131,7 @@ window.addEventListener("load", function () {
     
         // Creating a processed form
         var formData = new FormData();
-        formData.append("userID", $("#userID").val());
+        formData.append("userID", $("#userIDhtml").val());
         formData.append("title", $("#titleInput").val());
         formData.append("language", gl_language);
         formData.append("framework", gl_framework);
@@ -149,7 +149,11 @@ window.addEventListener("load", function () {
                 alert ("Your project is uploaded successfully! Thank you.");
                 window.location.replace("/profile");
             } else if (event.target.responseText === "validation error"){
-                alert ("Missing field");
+                alert ("Missing text field");
+            } else if (event.target.responseText === "validation error - file") {
+                alert ("Missing file upload");
+            } else if (event.target.responseText === "validation error - field length") {
+                alert ("Invalid field length");
             }
         });
 

@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 /*
     Delete user accounts that have not been verified through email after 1 week
 DELETE FROM USERS
@@ -48,7 +48,15 @@ SET firstName = 'Owen2',
     program = 'CPA',
     imagePath = '/userPhotos/temp.jpg'
 WHERE userName = 'johns'; 
-*/
+
 UPDATE PROJECTS
 set status = 'approved'
 WHERE projectID = 1;
+*/
+UPDATE USERS
+                SET firstName = 'Owen',
+                    lastName = 'Mak',
+                    email = 'owenmak325@gmail.com',
+                    program = 'BSD/CPA.*\/SoftwareEngineering!@#!',
+      userDescription = 'Not Asdf this time'
+                WHERE userName = 'NotOwen';

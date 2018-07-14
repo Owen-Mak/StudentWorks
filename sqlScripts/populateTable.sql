@@ -1,6 +1,6 @@
-use studentworks;
+use sw;
 
-INSERT INTO PROJECTS (title, description, creationDate, language, framework, courses, category, ImageFilePath, VideoUrl, status)
+INSERT INTO PROJECTS (title, description, creationDate, language, framework, courses, category, ImageFilePath, VideoFilePath, status)
 VALUES 
     ('Conteract', 'This is a webapp to connect employees with potential employers.', now(), 'Javascript', 'jQuery', 'PRJ666', NULL,'1/img/conteractThumbnail.jpg', '1/video/Conteract.mp4', 'approved'),
     ('The Last Transmission', 'This is a game within a 2D world with point and click shooting elements. The camera is situated in a birds eye view, and the objective of the game is to find jerry cans.', now(), 'Java', 'Reactjs', 'PRJ666', NULL, '2/img/TheLastTransmissionThumbnail.jpg', '2/video/TheLastTransmission.mp4', 'approved'),
@@ -45,7 +45,8 @@ VALUES
     ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901', null, null),
     ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234', null, null),
     ('yuriy', 'yuriy', 'yuriy', 'y.kartuzov@gmail.com', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
-    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null);
+    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null),
+    ('Not Really', 'Owen', 'asdf1234', 'owenmak325@gmail.com', 'NotOwen', 'Admin', null, TRUE, now(), '12345', null, null);
 
 
 /* Associate users to projects:

@@ -47,7 +47,7 @@ module.exports.getAllUsers = function (callback) {
     registrationDate is defaulted to current time
 */
 module.exports.createUser = function (user) {
-    console.log("Inside createUser():");
+    //console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode) \
     VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', ${user.registrationStatus}, now(), ${user.registrationCode})`;   
     connection.query(sql, (err, result) => {
@@ -119,6 +119,21 @@ module.exports.getProjectsByUser = function (userID, callback){
                     JOIN USERS u on b.userID = u.userID
                 WHERE u.userID = ${userID};`;
     runQuery(sql, callback);
+}
+
+//creates a new project from fields supplied in contribute page
+module.exports.createProjectFromContribute = function (project, callback){
+    var sql = `INSERT INTO PROJECTS (title, description, creationDate, language, framework, category, ImageFilePath, VideoFilePath, status)  \
+                VALUES ('${project.title}','${project.desc}', now(),'${project.language}','${project.framework}','${project.category}','${project.imageFilePath}',\
+                '${project.videoFilePath}', 'pending')`;   
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log ("Failed SQL:", sql);
+            throw err;
+        } else {
+            console.log (`${project.title} is added to database`);
+        }
+    });
 }
 
 //--------- REGISTRATION --------------
