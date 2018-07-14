@@ -97,18 +97,7 @@ app.use(function(req, res, next) {
 app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1}, {name: "video", maxCount: 1}]), (req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
     // Project image and video is in /project/temp folder and of proper format
-    var project = {
-        userID      : req.body.userID,
-        title       : req.body.title,
-        language    : req.body.language,
-        framework   : req.body.framework,
-        platform    : req.body.platform,
-        category    : req.body.category,
-        developers  : req.body.developers,
-        description : req.body.desc,
-        photoPath   : req.files['image'][0].path,
-        videoPath   : req.files['video'][0].path
-    }
+
 
     //since multer-sftp does not work for multiple files, we are manually sftping the two files onto vm
     if (process.env.HOSTNAME !== 'studentworks'){
@@ -125,12 +114,29 @@ app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1
             console.log(err, 'Contribute: sftp error');
         })
     }
-
-
+    console.log ("req.body",req.body);
+    // Server side validation    
+    //var validateFields = true;
+    for (var key in req.body){
+        if (req.body[key] === undefined || req.body[key] == ""){
+            console.log (req.body[key]);
+            res.status(400).send("validation error");
+            return false;
+        }
+    }
+    var project = {
+        userID      : req.body.userID,
+        title       : req.body.title,
+        language    : req.body.language,
+        framework   : req.body.framework,
+        platform    : req.body.platform,
+        category    : req.body.category,
+        developers  : req.body.developers,
+        description : req.body.desc,
+        photoPath   : req.files['image'][0].path,
+        videoPath   : req.files['video'][0].path
+    }
     console.log (project);
-    // Server side validation
-    // TODO
-
     // Updating DB
     // TODO
 

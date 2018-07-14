@@ -143,29 +143,19 @@ window.addEventListener("load", function () {
         formData.append("image", image);
         formData.append("video", video);
 
-        
+        // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){
+                alert ("Your project is uploaded successfully! Thank you.");
                 window.location.replace("/profile");
+            } else if (event.target.responseText === "validation error"){
+                alert ("Missing field");
             }
         });
 
         // Sending a form
         XHR.open("POST", "/upload-project");
         XHR.send(formData);
-        /*
-        $.ajax({
-            url: '/upload-project',
-            data: formData,
-            type: 'POST',
-            contentType: false,
-            processData: false,
-            success : (data, textStatus, jXHR)=>{
-                alert(data);
-                window.location.replace("/profile");
-            }
-        });
-    */
     }
     document.getElementById("uForm").addEventListener("submit", function (event) {
         event.preventDefault();
