@@ -2,14 +2,16 @@ $(document).ready(() => {
     let id = getQueryStr('id');
 
     // LOCAL
-    let url = "http://localhost:3000/api/getOneProject/id/"+id;
+    let host =  window.location.hostname;
+    let port =  window.location.port;
+    let url = `http://${host}:${port}/api/getOneProject/id/`+id;
 
     // PRODUCTION
     //let url = "http://myvmlab.senecacollege.ca:6193/api/getOneProject/id/"+id;
 
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-        let videoLink = "../" + jsData[0].VideoUrl;
+        let videoLink = "http://myvmlab.senecacollege.ca:6193/" + jsData[0].VideoFilePath;
 
         let contributors = "<br><h4><u>Developers:</u></h4>";
         $.each(jsData[0].users, (key, value) => {
