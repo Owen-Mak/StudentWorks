@@ -191,8 +191,8 @@ app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1
         platform    : req.body.platform,
         category    : (req.body.category === undefined) ? "" : req.body.category,
         desc        : req.body.desc,        
-        imageFilePath   : `/public/project/temp/${req.files['image'][0].filename}`,
-        videoFilePath   : `/public/project/temp/${req.files['video'][0].filename}`
+        imageFilePath   : `/project/temp/${req.files['image'][0].filename}`,
+        videoFilePath   : `/project/temp/${req.files['video'][0].filename}`
     }
     //console.log ("project object", project);
 

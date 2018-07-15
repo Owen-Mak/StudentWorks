@@ -48,11 +48,11 @@ SET firstName = 'Owen2',
     program = 'CPA',
     imagePath = '/userPhotos/temp.jpg'
 WHERE userName = 'johns'; 
-
-UPDATE PROJECTS
-set status = 'approved'
-WHERE projectID = 1;
 */
+UPDATE PROJECTS
+set status = 'approved';
+
+/*
 UPDATE USERS
                 SET firstName = 'Owen',
                     lastName = 'Mak',
@@ -60,3 +60,4 @@ UPDATE USERS
                     program = 'BSD/CPA.*\/SoftwareEngineering!@#!',
       userDescription = 'Not Asdf this time'
                 WHERE userName = 'NotOwen';
+*/

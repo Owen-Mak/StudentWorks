@@ -11,7 +11,7 @@ $(document).ready(() => {
 
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-        let videoLink = "../" + jsData[0].VideoUrl;
+        let videoLink = jsData[0].VideoFilePath;
 
         let contributors = "<br><h4><u>Developers:</u></h4>";
         $.each(jsData[0].users, (key, value) => {

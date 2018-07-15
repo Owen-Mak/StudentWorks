@@ -56,7 +56,7 @@ VALUES
     John (UserID == 4)      -> no projects (NULL)
 */
 
-INSERT INTO BRIDGE_USERS_PROJECTS (userID, projectID) 
+INSERT INTO BRIDGE_USERS_PROJECTS (userID, projectID)
 VALUES
     (1, 2),
     (2, 2),
