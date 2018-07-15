@@ -87,12 +87,12 @@ $(document).ready(() => {
   let id = $("#userID").text();
 
   // LOCAL
-  let prjUrl = "http://localhost:3000/api/getProjectsByUser/UserID/" + id;
-  let usrUrl = "http://localhost:3000/api/getUserByID/id/" + id;
+  //let prjUrl = "http://localhost:3000/api/getProjectsByUser/UserID/" + id;
+  //let usrUrl = "http://localhost:3000/api/getUserByID/id/" + id;
 
   // PRODUCTION
-  //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
-  //let usrUrl = "http://myvmlab.senecacollege.ca:6193/api/getUserByID/id/" + id;
+  let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
+  let usrUrl = "http://myvmlab.senecacollege.ca:6193/api/getUserByID/id/" + id;
 
   $.getJSON(prjUrl, (jsData) => { renderProjectList(jsData); });
   $.getJSON(usrUrl, (jsData) => { renderUserDetails(jsData); });
