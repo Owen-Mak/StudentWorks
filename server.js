@@ -197,10 +197,46 @@ app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1
     //console.log ("project object", project);
 
     // Updating DB with the data in project object
-    dbconnect.connect();
-    dbconnect.createProjectFromContribute(project);
-    dbconnect.end();
+    var result;    
+    async function addProjectInDB (project){ 
+        dbconnect.connect();
+        let promise = new Promise ((resolve, reject) =>{
+            dbconnect.createProjectFromContribute(project, function (err,data){
+                if (err){
+                    reject(err);
+                    throw err;
+                }else {
+                    // returns the projectID of the newly created project
+                    resolve(data.insertId);
+                }                
+            });
+        });
+        // waits and captures the projectId
+        result = await promise; 
+        dbconnect.end();
 
+        return new Promise ( function (resolve, reject){                                                                         
+            // console.log ("projectId:", result);
+            // Note: can only return one object back to next function, which is result
+            resolve(result);                       
+        });
+    }
+
+    function assocociateUserToProjectInDB (projectId) {        
+        dbconnect.connect();
+        dbconnect.associateUserToProject(project, projectId, (err, data) =>{
+            if (err) {                
+                throw err;
+            }
+        });
+        dbconnect.end();        
+    }
+
+    addProjectInDB(project)  
+    .then(assocociateUserToProjectInDB, null)
+    .catch (function (rejectMsg){
+        // stuff
+    });
     res.status(200).send('success');
 });
 

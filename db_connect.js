@@ -125,15 +125,25 @@ module.exports.getProjectsByUser = function (userID, callback){
 module.exports.createProjectFromContribute = function (project, callback){
     var sql = `INSERT INTO PROJECTS (title, description, creationDate, language, framework, category, ImageFilePath, VideoFilePath, status)  \
                 VALUES ('${project.title}','${project.desc}', now(),'${project.language}','${project.framework}','${project.category}','${project.imageFilePath}',\
-                '${project.videoFilePath}', 'pending')`;   
+                '${project.videoFilePath}', 'pending');\
+                `;   
     connection.query(sql, (err, result) => {
         if (err) {
             console.log ("Failed SQL:", sql);
             throw err;
         } else {
+            callback(err, result);            
             console.log (`${project.title} is added to database`);
         }
     });
+}
+
+// link the user to the project
+module.exports.associateUserToProject = function (project, projectId, callback) {    
+    var sql = `INSERT INTO BRIDGE_USERS_PROJECTS (userID, projectID) \
+                VALUES (${project.userID}, ${projectId});`;
+    //console.log ("associate sql: ", sql);
+    runQuery(sql, callback);
 }
 
 //--------- REGISTRATION --------------
