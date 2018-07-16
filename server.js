@@ -25,7 +25,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 // setting multer storage configuration based on whether it is on vm or localhost
 if (process.env.HOSTNAME === 'studentworks'){ 
     storage = multer.diskStorage({
-        destination: "public/uploads",
+        destination: "public/userPhotos",
         filename: function (req, file, cb) {
             cb(null, Date.now() + path.extname(file.originalname));
         }
@@ -48,7 +48,7 @@ if (process.env.HOSTNAME === 'studentworks'){
       });   
 }
 var mediaForProject = multer.diskStorage({
-    destination: "public/project/temp",
+    destination: "/project/temp",
     filename: function (req, file, cb) {
         cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname));
     }
