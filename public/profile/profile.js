@@ -87,12 +87,14 @@ $(document).ready(() => {
   let id = $("#userID").text();
 
   // LOCAL
-  //let prjUrl = "http://localhost:3000/api/getProjectsByUser/UserID/" + id;
-  //let usrUrl = "http://localhost:3000/api/getUserByID/id/" + id;
+  let host =  window.location.hostname;
+  let port =  window.location.port;
+  let prjUrl = `http://${host}:${port}/api/getProjectsByUser/UserID/` + id;
+  let usrUrl = `http://${host}:${port}/api/getUserByID/id/` + id;
 
   // PRODUCTION
-  let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
-  let usrUrl = "http://myvmlab.senecacollege.ca:6193/api/getUserByID/id/" + id;
+  //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
+  //let usrUrl = "http://myvmlab.senecacollege.ca:6193/api/getUserByID/id/" + id;
 
   $.getJSON(prjUrl, (jsData) => { renderProjectList(jsData); });
   $.getJSON(usrUrl, (jsData) => { renderUserDetails(jsData); });
@@ -124,8 +126,8 @@ function renderUserDetails(jsData) {
   let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "Program of study";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
   let description = jsData[0].userDescription ? jsData[0].userDescription : "Description";
-  let host = "http://myvmlab.senecacollege.ca:6193";
-  let imagePath = jsData[0].imagePath ? host + jsData[0].imagePath :"../images/avatar.png";
+  let imageHost = "http://myvmlab.senecacollege.ca:6193";
+  let imagePath = jsData[0].imagePath ? imageHost + jsData[0].imagePath :"../images/avatar.png";
 
   $("#fname").attr({ "placeholder": fName });
   $("#lname").attr({ "placeholder": lName });
