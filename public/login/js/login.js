@@ -15,7 +15,7 @@ function validUser(str) {
 	var name = document.login.username1.value.trim();
 
 	if(name == "") {
-		document.querySelector("#errorMsg").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg").innerHTML = '* Username is required';
 		userCheck = false;
 	}else{
 		document.querySelector("#errorMsg").innerHTML = "";
@@ -30,7 +30,7 @@ function validPass(str) {
 	var pass = document.login.pass.value.trim();
 
 	if(pass == "") {
-		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg2").innerHTML = '* Password is required';
 		passCheck = false;
 
 	}else{
