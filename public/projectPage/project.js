@@ -12,6 +12,7 @@ $(document).ready(() => {
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
         let videoLink = "http://myvmlab.senecacollege.ca:6193/" + jsData[0].VideoFilePath;
+        let ext = jsData[0].VideoFilePath.substr(jsData[0].VideoFilePath.lastIndexOf('.') + 1);
 
         let contributors = "<br><h4><u>Developers:</u></h4>";
         $.each(jsData[0].users, (key, value) => {
@@ -31,7 +32,7 @@ $(document).ready(() => {
         prjHtml += "<div class='container'>";
         prjHtml += "   <div class='row'>";
         prjHtml += "      <div class='col-md-8' id='videoCol' >";
-        prjHtml += "            <video id='videoID' height='400' controls > <source src='" + videoLink + "' type='video/mp4'></video>";
+        prjHtml += "            <video id='videoID' height='400' controls > <source src='" + videoLink +`' type='video/${ext}'></video>`;
         prjHtml += "      </div>";
         prjHtml += "      <div class='col-md-4' id='infoCol'";
         prjHtml += contributors;
