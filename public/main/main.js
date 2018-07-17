@@ -11,7 +11,13 @@ var allProjects;
 // Entry point
 $(document).ready(() => {
     // LOCAL
+<<<<<<< HEAD
     let prjUrl = "http://localhost:3000/api/getAllProjects";
+=======
+    let host =  window.location.hostname;
+    let port =  window.location.port;
+    let prjUrl = `http://${host}:${port}/api/getAllProjects`;
+>>>>>>> master
 
     // PRODUCTION
     //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
@@ -140,7 +146,7 @@ function renderSixProjectTiles(jsData) {
 
             var title = jsData[start].title;
             var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
-            var image = jsData[start].ImageFilePath;
+            var image = "http://myvmlab.senecacollege.ca:6193/" + jsData[start].ImageFilePath;
             var language = jsData[start].language;
             var framework = jsData[start].framework;
             var id = jsData[start].projectID;
