@@ -11,13 +11,9 @@ var allProjects;
 // Entry point
 $(document).ready(() => {
     // LOCAL
-<<<<<<< HEAD
-    let prjUrl = "http://localhost:3000/api/getAllProjects";
-=======
     let host =  window.location.hostname;
     let port =  window.location.port;
     let prjUrl = `http://${host}:${port}/api/getAllProjects`;
->>>>>>> master
 
     // PRODUCTION
     //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";

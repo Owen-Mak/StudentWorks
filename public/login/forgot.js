@@ -21,8 +21,4 @@ function validUser(str) {
         userCheck = true;
 	}
 	return userCheck;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> master

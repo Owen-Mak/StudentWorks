@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>StudentWorks</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/recording/recording.js"></script>
+    <script src="/header/usermenu.js"></script>
+
+    <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script>
+
+    <!-- for Edge/FF/Chrome/Opera/etc. getUserMedia support -->
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
+
+    <!-- video element -->
+    <link href="https://cdn.webrtc-experiment.com/getHTMLMediaElement.css" rel="stylesheet">
+    <script src="https://cdn.webrtc-experiment.com/getHTMLMediaElement.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/header/nav.css">
+    <link rel="stylesheet" href="/recording/recording.css">
+</head>
+
+<body>
+    <div style="margin-top: 10px;" id="recording-player">    
+    </div>
+    <button id="btn-start-recording">Start Recording</button>
+    <button id="btn-pause-recording">Pause</button>
+
+
+<!-- Gather window paramets of user-->
+<script>
+        (function() {
+            var params = {},
+                r = /([^&=]+)=?([^&]*)/g;
+            function d(s) {
+                return decodeURIComponent(s.replace(/\+/g, ' '));
+            }
+            var match, search = window.location.search;
+            while (match = r.exec(search.substring(1))) {
+                params[d(match[1])] = d(match[2]);
+                if(d(match[2]) === 'true' || d(match[2]) === 'false') {
+                    params[d(match[1])] = d(match[2]) === 'true' ? true : false;
+                }
+            }
+            window.params = params;
+        })();
+        function addStreamStopListener(stream, callback) {
+            var streamEndedEvent = 'ended';
+            if ('oninactive' in stream) {
+                streamEndedEvent = 'inactive';
+            }
+            stream.addEventListener(streamEndedEvent, function() {
+                callback();
+                callback = function() {};
+            }, false);
+            stream.getAudioTracks().forEach(function(track) {
+                track.addEventListener(streamEndedEvent, function() {
+                    callback();
+                    callback = function() {};
+                }, false);
+            });
+            stream.getVideoTracks().forEach(function(track) {
+                track.addEventListener(streamEndedEvent, function() {
+                    callback();
+                    callback = function() {};
+                }, false);
+            });
+        }
+</script>
+<!-- Start of video recording-->
+<script>
+
+var video = document.createElement('video');
+    video.controls = false;
+
+var mediaElement = getHTMLMediaElement(video, {
+        title: 'Recording status: inactive',
+        buttons: ['full-screen'],
+        showOnMouseEnter: false,
+        width: 360,
+    });
+
+document.getElementById('recording-player').appendChild(mediaElement);
+
+    var div = document.createElement('section');
+    mediaElement.media.parentNode.appendChild(div);
+    div.appendChild(mediaElement.media);
+            
+    var recordingPlayer = mediaElement.media;
+    var recordingMedia = document.querySelector('.recording-media');
+    var mediaContainerFormat = document.querySelector('.media-container-format');
+    var mimeType = 'video/webm';
+    var fileExtension = 'webm';
+    var type = 'video';
+    var recorderType;
+    var defaultWidth;
+    var defaultHeight;
+
+    var btnStartRecording = document.querySelector('#btn-start-recording');
+    //Main recording functionality starts when user clicks the recording button
+    btnStartRecording.onclick = function(event) {
+        var button = btnStartRecording;
+        alert(button.innerHTML);
+        var button = btnStartRecording;
+
+            if(button.innerHTML === 'Stop Recording') {
+                    btnPauseRecording.style.display = 'none';
+                    button.disabled = true;
+                    button.disableStateWaiting = true;
+                    setTimeout(function() {
+                        button.disabled = false;
+                        button.disableStateWaiting = false;
+                    }, 2000);
+
+                    button.innerHTML = 'Start Recording';
+
+                    function stopStream() {
+                        if(button.stream && button.stream.stop) {
+                            button.stream.stop();
+                            button.stream = null;
+                        }
+
+                        if(button.stream instanceof Array) {
+                            button.stream.forEach(function(stream) {
+                                stream.stop();
+                            });
+                            button.stream = null;
+                        }
+
+                        videoBitsPerSecond = null;
+                        var html = 'Recording status: stopped';
+                        html += '<br>Size: ' + bytesToSize(button.recordRTC.getBlob().size);
+                        recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = html;
+                    }
+
+                    if(button.recordRTC) {
+                        if(button.recordRTC.length) {
+                            button.recordRTC[0].stopRecording(function(url) {
+                                if(!button.recordRTC[1]) {
+                                    button.recordingEndedCallback(url);
+                                    stopStream();
+
+                                    saveToDiskOrOpenNewTab(button.recordRTC[0]);
+                                    return;
+                                }
+
+                                button.recordRTC[1].stopRecording(function(url) {
+                                    button.recordingEndedCallback(url);
+                                    stopStream();
+                                });
+                            });
+                        }
+                        else {
+                            button.recordRTC.stopRecording(function(url) {
+                                if(button.blobs && button.blobs.length) {
+                                    var blob = new File(button.blobs, getFileName(fileExtension), {
+                                        type: mimeType
+                                    });
+                                    
+                                    button.recordRTC.getBlob = function() {
+                                        return blob;
+                                    };
+
+                                    url = URL.createObjectURL(blob);
+                                }
+
+                                button.recordingEndedCallback(url);
+                                saveToDiskOrOpenNewTab(button.recordRTC);
+                                stopStream();
+                            });
+                        }
+                    }
+
+                    return;
+                }
+
+            button.disabled = true;
+
+              var commonConfig = {
+                    onMediaCaptured: function(stream) {
+                        button.stream = stream;
+                        if(button.mediaCapturedCallback) {
+                            button.mediaCapturedCallback();
+                        }
+
+                        button.innerHTML = 'Stop Recording';
+                        button.disabled = false;
+                    },
+                    onMediaStopped: function() {
+                        button.innerHTML = 'Start Recording';
+
+                        if(!button.disableStateWaiting) {
+                            button.disabled = false;
+                        }
+                    },
+                    onMediaCapturingFailed: function(error) {
+                        console.error('onMediaCapturingFailed:', error);
+
+                        if(error.toString().indexOf('no audio or video tracks available') !== -1) {
+                            alert('RecordRTC failed to start because there are no audio or video tracks available.');
+                        }
+
+                        if(DetectRTC.browser.name === 'Safari') return;
+                        
+                        if(error.name === 'PermissionDeniedError' && DetectRTC.browser.name === 'Firefox') {
+                            alert('Firefox requires version >= 52. Firefox also requires HTTPs.');
+                        }
+
+                        commonConfig.onMediaStopped();
+                    }
+                };
+            
+            captureScreen(commonConfig);
+
+                    button.mediaCapturedCallback = function() {
+                        var options = {
+                            type: type,
+                            mimeType: mimeType,
+                            disableLogs: params.disableLogs || false,
+                            getNativeBlob: false, // enable it for longer recordings
+                            video: recordingPlayer
+                        };
+
+                        /*if(recorderType) {
+                            options.recorderType = recorderType;
+
+                            if(recorderType == WhammyRecorder || recorderType == GifRecorder) {
+                                options.canvas = options.video = {
+                                    width: defaultWidth || 320,
+                                    height: defaultHeight || 240
+                                };
+                            }
+                        }*/
+
+                        /*if(videoBitsPerSecond) {
+                            options.videoBitsPerSecond = videoBitsPerSecond;
+                        }*/
+
+                        options.ignoreMutedMedia = false;
+                        button.recordRTC = RecordRTC(button.stream, options);
+
+                        button.recordingEndedCallback = function(url) {
+                            setVideoURL(url);
+                        };
+
+                        button.recordRTC.startRecording();
+                        btnPauseRecording.style.display = '';
+                    };
+            
+          
+
+};//end of button click
+
+
+function captureScreen(config) {
+                // Firefox screen capturing addon is open-sourced here: https://github.com/muaz-khan/Firefox-Extensions
+                // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
+
+                window.getScreenId = function(chromeMediaSource, chromeMediaSourceId) {
+                   
+
+                    if(DetectRTC.browser.name === 'Firefox') {
+                        console.log("using firefox!");
+                        screenConstraints = {
+                            video: {
+                                mediaSource: 'window'
+                            },
+                            audio:false
+                        }
+                    }
+
+                    captureUserMedia(screenConstraints, function(screenStream) {
+                        config.onMediaCaptured(screenStream);
+
+                        addStreamStopListener(screenStream, function() {
+                            // config.onMediaStopped();
+
+                            btnStartRecording.onclick();
+                        });
+                    }, function(error) {
+                        config.onMediaCapturingFailed(error);
+
+                        if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
+                            // otherwise deploy chrome extension yourselves
+                            // https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
+                            alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
+                        }
+
+                        if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
+                            // otherwise deploy firefox addon yourself
+                            // https://github.com/muaz-khan/Firefox-Extensions
+                            alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
+                        }
+                    });
+                };
+
+                if(DetectRTC.browser.name === 'Firefox' || isLocalHost()) {
+                    window.getScreenId();
+                }
+
+                window.postMessage('get-sourceId', '*');
+            }
+            function captureUserMedia(mediaConstraints, successCallback, errorCallback) {
+                if(mediaConstraints.video == true) {
+                    mediaConstraints.video = {};
+                }
+
+                //setVideoBitrates();
+
+                //mediaConstraints = getVideoResolutions(mediaConstraints);
+                //mediaConstraints = getFrameRates(mediaConstraints);
+
+                var isBlackBerry = !!(/BB10|BlackBerry/i.test(navigator.userAgent || ''));
+                if(isBlackBerry && !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
+                    return;
+                }
+
+                navigator.mediaDevices.getUserMedia(mediaConstraints).then(function(stream) {
+                    successCallback(stream);
+
+                    setVideoURL(stream, true);
+                }).catch(function(error) {
+                    if(error && (error.name === 'ConstraintNotSatisfiedError' || error.name === 'OverconstrainedError')) {
+                        alert('Your camera or browser does NOT supports selected resolutions or frame-rates. \n\nPlease select "default" resolutions.');
+                    }
+                    else if(error && error.message) {
+                        alert(error.message);
+                    }
+                    else {
+                        alert('Unable to make getUserMedia request. Please check browser console logs.');
+                    }
+
+                    errorCallback(error);
+                });
+            }
+
+            //Set the video's URL (This url can only be seen on the local brower)
+            //Fill the VIDEO div with content
+            function setVideoURL(arg, forceNonImage) {
+                var url = getURL(arg);
+                var parentNode = recordingPlayer.parentNode;
+                parentNode.removeChild(recordingPlayer);
+                parentNode.innerHTML = '';
+                var elem = 'video';
+                if(type == 'gif' && !forceNonImage) {
+                    elem = 'img';
+                }
+                if(type == 'audio') {
+                    elem = 'audio';
+                }
+                recordingPlayer = document.createElement(elem);
+                
+                if(arg instanceof MediaStream) {
+                    recordingPlayer.muted = true;
+                }
+                recordingPlayer.addEventListener('loadedmetadata', function() {
+                    if(navigator.userAgent.toLowerCase().indexOf('android') == -1) return;
+                    // android
+                    setTimeout(function() {
+                        if(typeof recordingPlayer.play === 'function') {
+                            recordingPlayer.play();
+                        }
+                    }, 2000);
+                }, false);
+                recordingPlayer.poster = '';
+                if(arg instanceof MediaStream) {
+                    recordingPlayer.srcObject = arg;
+                }
+                else {
+                    recordingPlayer.src = url;
+                }
+                if(typeof recordingPlayer.play === 'function') {
+                    recordingPlayer.play();
+                }
+                recordingPlayer.addEventListener('ended', function() {
+                    url = getURL(arg);
+                    
+                    if(arg instanceof MediaStream) {
+                        recordingPlayer.srcObject = arg;
+                    }
+                    else {
+                        recordingPlayer.src = url;
+                    }
+                });
+                parentNode.appendChild(recordingPlayer);
+            }
+
+            //Get a URL based on a RecordRTC blob
+            function getURL(arg) {
+                var url = arg;
+                if(arg instanceof Blob || arg instanceof File) {
+                    url = URL.createObjectURL(arg);
+                }
+                if(arg instanceof RecordRTC || arg.getBlob) {
+                    url = URL.createObjectURL(arg.getBlob());
+                }
+                if(arg instanceof MediaStream || arg.getTracks || arg.getVideoTracks || arg.getAudioTracks) {
+                    // url = URL.createObjectURL(arg);
+                }
+                return url;
+            }
+</script>
+<!-- Pause button-->
+<script>
+        var btnPauseRecording = document.querySelector('#btn-pause-recording');
+        btnPauseRecording.onclick = function() {
+            if(!btnStartRecording.recordRTC) {
+                btnPauseRecording.style.display = 'none';
+                return;
+            }
+
+            btnPauseRecording.disabled = true;
+            if(btnPauseRecording.innerHTML === 'Pause') {
+                btnStartRecording.disabled = true;
+                btnStartRecording.style.fontSize = '15px';
+                btnStartRecording.recordRTC.pauseRecording();
+                recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = 'Recording status: paused';
+                recordingPlayer.pause();
+
+                btnPauseRecording.style.fontSize = 'inherit';
+                setTimeout(function() {
+                    btnPauseRecording.innerHTML = 'Resume Recording';
+                    btnPauseRecording.disabled = false;
+                }, 2000);
+            }
+
+            if(btnPauseRecording.innerHTML === 'Resume Recording') {
+                btnStartRecording.disabled = false;
+                btnStartRecording.style.fontSize = 'inherit';
+                btnStartRecording.recordRTC.resumeRecording();
+                recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = '<img src="https://cdn.webrtc-experiment.com/images/progress.gif">';
+                recordingPlayer.play();
+
+                btnPauseRecording.style.fontSize = '15px';
+                btnPauseRecording.innerHTML = 'Pause';
+                setTimeout(function() {
+                    btnPauseRecording.disabled = false;
+                }, 2000);
+            }
+        };
+    </script>
+</body>
