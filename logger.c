@@ -13,8 +13,7 @@ typedef int bool;
 int main(int argc, char **argv)
 {
     char *log = argv[1];
-    //printf("Hash code of %s is %lu \n", log, hashCode(log));
-    //return 0;
+
     if (strcmp(log, "read") == 0)
         printLog();
     else
@@ -53,7 +52,7 @@ void writeToLog(char *log)
     FILE *file = fopen("admin.log", "r+");
     char lastLine[255];
 
-    // This loop is needed to get to the last list and grab its hash code
+    // Sets lasLine variable to last line of the file
     while (fgets(lastLine, sizeof(lastLine), file))
     {
         ;
@@ -75,6 +74,7 @@ void writeToLog(char *log)
     }
     clearChainedLogMessage[count]='\0';
 
+    // Writing to FILE
     fprintf(file, "%s:%lu\n", log, hashCode(clearChainedLogMessage));
 
     fclose(file);
@@ -112,13 +112,14 @@ int integrityCheck()
         // Get a hash code associated with the current message
         strcpy(var2, strtok(NULL, ":"));
 
+        // Removes newline '\n' characters
         for(int i=0; var2[i] != '\0'; i++){
             if(var2[i] != '\n')
                 hash[idx++] = var2[i];
         }
         hash[idx]='\0';
 
-        // skip first record and record the hash code
+        // skip first record and records seed hash code
         if (count == 0)
         {
             strcpy(prevHash, hash);
@@ -126,28 +127,22 @@ int integrityCheck()
             continue;
         }
               
-        //puts(log); // current log message
-        //puts(hash); // current hash
-        //puts(prevHash); // previous hash
-
         // Adds previous record's hashcode to the current log messages
         sprintf(chainedLogMessage,"%s%s",log, prevHash);
 
+        // Hashesh the string above
         sprintf(testHashCode, "%lu", hashCode(chainedLogMessage));
-        //puts(testHashCode);
 
+        // prepares for next line
         strcpy(prevHash, hash);
 
-        // Test if there is a match 0 return is equal
+        // Testing for Match, strcmp() returns 0 if euqal
         if (strcmp(hash, testHashCode))
         {
-            //puts("MISMATCH");
             valid = FALSE;
             break;
         }
-
     }
-
     return valid;
 }
 

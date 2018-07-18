@@ -279,7 +279,7 @@ function terminal() {
 
     html += "" +
         "<form action='/term' method='GET'>" +
-        "  <label for='cmd' id='cmcLbl'>Bash:</label>" +
+        "  <label for='cmd' id='cmcLbl'>Shell:</label>" +
         "  <input id='cmd' type='text' name='cmd' autocomplete='off'>" +
         "  <input type='submit' hidden>" +
         "</form>" +
@@ -325,8 +325,9 @@ function logs() {
         let tableGuts = "";
 
         $.each(data, (k, v) => {
-            //skipping first and last record
-
+            
+            //skipping first records(StudentWorks) 
+            //and last record which is newline '\n'
             if(k == 0 || k == (data.length-1))
                 return true;
 
