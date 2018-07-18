@@ -5,7 +5,7 @@ var connectInfo = {
     host : null,
     user : null,
     password : null,
-    database : "studentworks",
+    database : "sw",
     port : null
 };
 
@@ -47,7 +47,7 @@ module.exports.getAllUsers = function (callback) {
     registrationDate is defaulted to current time
 */
 module.exports.createUser = function (user) {
-    console.log("Inside createUser():");
+    //console.log("Inside createUser():");
     var sql = `INSERT INTO USERS (firstName, lastName, password, email, userName, userType, program, registrationStatus, registrationDate, registrationCode) \
     VALUES ('${user.firstName}', '${user.lastName}', '${user.password}', '${user.email}', '${user.username}', '${user.userType}', '${user.program}', ${user.registrationStatus}, now(), ${user.registrationCode})`;   
     connection.query(sql, (err, result) => {
@@ -151,6 +151,31 @@ module.exports.getProjectsByUser = function (userID, callback){
                     JOIN BRIDGE_USERS_PROJECTS b on proj.projectID = b.projectID
                     JOIN USERS u on b.userID = u.userID
                 WHERE u.userID = ${userID};`;
+    runQuery(sql, callback);
+}
+
+//creates a new project from fields supplied in contribute page
+module.exports.createProjectFromContribute = function (project, callback){
+    var sql = `INSERT INTO PROJECTS (title, description, creationDate, language, framework, category, ImageFilePath, VideoFilePath, status)  \
+                VALUES ('${project.title}','${project.desc}', now(),'${project.language}','${project.framework}','${project.category}','${project.imageFilePath}',\
+                '${project.videoFilePath}', 'pending');\
+                `;   
+    connection.query(sql, (err, result) => {
+        if (err) {
+            console.log ("Failed SQL:", sql);
+            throw err;
+        } else {
+            callback(err, result);            
+            console.log (`${project.title} is added to database`);
+        }
+    });
+}
+
+// link the user to the project
+module.exports.associateUserToProject = function (project, projectId, callback) {    
+    var sql = `INSERT INTO BRIDGE_USERS_PROJECTS (userID, projectID) \
+                VALUES (${project.userID}, ${projectId});`;
+    //console.log ("associate sql: ", sql);
     runQuery(sql, callback);
 }
 

@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 /*
     Delete user accounts that have not been verified through email after 1 week
 DELETE FROM USERS
@@ -50,5 +50,14 @@ SET firstName = 'Owen2',
 WHERE userName = 'johns'; 
 */
 UPDATE PROJECTS
-set status = 'approved'
-WHERE projectID = 1;
+set status = 'approved';
+
+/*
+UPDATE USERS
+                SET firstName = 'Owen',
+                    lastName = 'Mak',
+                    email = 'owenmak325@gmail.com',
+                    program = 'BSD/CPA.*\/SoftwareEngineering!@#!',
+      userDescription = 'Not Asdf this time'
+                WHERE userName = 'NotOwen';
+*/

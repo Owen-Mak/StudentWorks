@@ -32,6 +32,7 @@
     "nev": "0.0.0",
     "nodemailer": "^4.6.7",
     "nodemon": "^1.17.5",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "ssh2-sftp-client": "^2.3.1"
   }
 }

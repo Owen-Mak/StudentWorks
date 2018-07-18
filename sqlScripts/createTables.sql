@@ -1,4 +1,4 @@
-use studentworks;
+use sw;
 /*
 ALTER TABLE USERS
     drop FOREIGN KEY USERS_ibfk_1;
@@ -14,14 +14,14 @@ CREATE TABLE USERS (
     firstName   VARCHAR(30) NULL,
     lastName    VARCHAR(30) NULL,
     password    CHAR(50)  NOT NULL,
-    email	    VARCHAR(50) NOT NULL,    
-    userName    VARCHAR(20) NOT NULL UNIQUE,    
+    email	    VARCHAR(100) NOT NULL,    
+    userName    VARCHAR(30) NOT NULL UNIQUE,    
     userType    ENUM ('Visitor', 'Contributor', 'Admin'),
-    program     VARCHAR(25) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
+    program     VARCHAR(255) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
     registrationCode CHAR(65),
-    imagePath CHAR(50),
+    imagePath CHAR(255),
     userDescription TEXT,
     PRIMARY KEY (userID))
 engine=innodb;
@@ -35,8 +35,8 @@ CREATE TABLE PROJECTS (
     framework   VARCHAR(30),
     courses     VARCHAR(20),
     category    VARCHAR(20), 
-    ImageFilePath CHAR(50),
-    VideoUrl    CHAR(50),
+    ImageFilePath CHAR(255),
+    VideoFilePath CHAR(255),
     status      ENUM('approved', 'pending'),
     PRIMARY KEY (projectID))
 engine=innodb;

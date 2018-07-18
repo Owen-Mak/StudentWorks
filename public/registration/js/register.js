@@ -20,15 +20,15 @@ function validUser() {
 	var name = document.register.name.value.trim();
 
 	if(name == "") {
-		document.querySelector("#errorMsg1").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg1").innerHTML = '* Username field is required';
 		userCheck = false;
 
 	} else if (name.length > 12) {
-		document.querySelector("#errorMsg1").innerHTML = '- Cannot exceed 12 characters';
+		document.querySelector("#errorMsg1").innerHTML = '* Username cannot exceed 12 characters';
 		userCheck = false;
 
 	}else if(!name.match(pattern)){
-		document.querySelector("#errorMsg1").innerHTML = '- Cannot contain special characters';
+		document.querySelector("#errorMsg1").innerHTML = '* Username cannot contain special characters';
         userCheck = false;
 
 	}else{
@@ -41,19 +41,23 @@ function validUser() {
 
 function validPass() {
 	var pass = document.register.password1.value.trim();
-	var pattern = /^(?=.*\d)[0-9a-zA-Z]{8,}$/;
-
+	var pattern = /^(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{8,}$/;
+	var patternNum = /^(?=.*[0-9]+.*)/;
 	//console.log(pass);
 	if(pass == "") {
-		document.querySelector("#errorMsg2").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg2").innerHTML = '* Password is required';
 		passCheck = false;
 
 	} else if (pass.length < 8) {
-		document.querySelector("#errorMsg2").innerHTML = '- Must be at least 8 characters long';
+		document.querySelector("#errorMsg2").innerHTML = '* Password must be at least 8 characters long';
 		passCheck = false;
 
 	}else if(!pass.match(pattern)){
-		document.querySelector("#errorMsg2").innerHTML = '- Must contain at least 1 number';
+		document.querySelector("#errorMsg2").innerHTML = '* Password must contain at least 1 letter';
+			passCheck = false;
+
+	}else if(!pass.match(patternNum)){
+		document.querySelector("#errorMsg2").innerHTML = '* Password must contain at least 1 number';
 			passCheck = false;
 
 	}else{
@@ -70,11 +74,11 @@ function validEmail() {
 	var email = document.register.email.value.trim();
 
 	if(email == "") {
-		document.querySelector("#errorMsg3").innerHTML = '- This field is required';
+		document.querySelector("#errorMsg3").innerHTML = '* Email is field is required';
 		emailCheck = false;
 
 	}else if(!email.match(pattern)){
-		document.querySelector("#errorMsg3").innerHTML = '- Enter a valid email address';
+		document.querySelector("#errorMsg3").innerHTML = '* Enter a valid email address';
         emailCheck = false;
 
 	}else{

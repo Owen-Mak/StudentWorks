@@ -17,25 +17,20 @@
         <div class="container">
 			<div class="row">
 				<div class="app">
-					<div class="content-wrapper">
+					<div class="content-wrapper" style="padding-bottom: 10px;background: linear-gradient(to bottom, #dbdbdb 100%, #f3f3f3 0%);">
 				<form class="register-form validate-form flex-sb" onsubmit="return validateForm()" name="forgot" method="post" action="/login/forgotpassword">
 					<a href="/">
 						<img logo alt="logo" src="../images/logo_graybg.png">
 					</a>
-					<span style="color:#b60909" class="title">
-					- Forgot Password -
-                        <p style="color:#dadada" class="txt3" style="text-align: center;" >Please enter your username, and we will send out an e-mail!</p>
-                    </span>
+					<span style="border-bottom: 2px solid #c9c9c9; padding-top: 10px; padding-bottom: 3px;"class="title" >Forgot Password
+						<p style="color:#D22822" class="txt3" style="text-align: center; padding: 10px; font: 15px;" >Enter your username, and we will send out an e-mail!</p>
+					</span>
+					<span id="errorMsg2" style="color:#D22822; font-size: 16px;"></span>
 
-                    <span class="txt1" style="font-weight: bold">
-                            USERNAME <span id="errorMsg2" style="color:#D22822"></span>
-                        </span> 
-    
-    
-                        <div class="input-wrapper validate-input">
-                            <input class="input" type="text" name="username1" id="username1"  onchange="validUser()">
-                            <span class="focus-input"></span>
-                        </div>                        					
+						<div class="input-wrapper" style="margin-top: 18px;">
+							<input class="input" type="text" name="username1" id="username1" onchange="validUser()" autofocus="autofocus"  placeholder="Username" class="input">
+						</span><span class="focus-input"></span>
+						</div>                    					
 				                
 					<div class="container-login-form-btn">
                             <button type="submit" onclick="validateForm()" class="login-form-btn">
