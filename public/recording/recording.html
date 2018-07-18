@@ -65,8 +65,13 @@
                                                 </button>
                                                 <h4 class="modal-title" id="myModalLabel" style="text-align:center;">User menu</h4>
                                             </div>
-                                            <!-- populated by usermenu.js -->
+                                            <!-- Hard coded this because user's cant even view this page unless logged in. -->
                                             <div class="modal-body" id="userMenu"></div>
+                                                <ul>
+                                                    <li><a href="/profile">Profile</a></li>
+                                                    <li><a href="/contribute">Contribute</a></li>
+                                                    <li><a href="/logout">Logout</a></li>
+                                                </ul>
                                             <div class="modal-footer" ></div>
                                         </div>
                                     </div>
@@ -140,7 +145,7 @@ var mediaElement = getHTMLMediaElement(video, {
         title: 'Recording status: inactive',
         buttons: ['full-screen'],
         showOnMouseEnter: false,
-        width: 360,
+        width: 720,
     });
 
 document.getElementById('recording-player').appendChild(mediaElement);
@@ -326,6 +331,7 @@ function captureScreen(config) {
                         console.log("using firefox!");
                         screenConstraints = {
                             video: {
+                                //ask firefox to select a window from user's desktop
                                 mediaSource: 'window'
                             },
                             audio:false
@@ -407,12 +413,7 @@ function captureScreen(config) {
                 parentNode.removeChild(recordingPlayer);
                 parentNode.innerHTML = '';
                 var elem = 'video';
-                if(type == 'gif' && !forceNonImage) {
-                    elem = 'img';
-                }
-                if(type == 'audio') {
-                    elem = 'audio';
-                }
+              
                 recordingPlayer = document.createElement(elem);
                 
                 if(arg instanceof MediaStream) {
