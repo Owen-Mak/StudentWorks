@@ -48,7 +48,7 @@ if (process.env.HOSTNAME === 'studentworks'){
       });   
 }
 var mediaForProject = multer.diskStorage({
-    destination: "/project/temp",
+    destination: "project/temp",
     filename: function (req, file, cb) {
         cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname));
     }
@@ -92,6 +92,16 @@ app.use(function(req, res, next) {
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
     next();
 });
+
+
+//function call to make sure user is logged in ** USED for recording page**.
+function ensureLogin(req, res, next) {
+    if (!req.session.authenticate) {
+      res.redirect("/login");
+    } else {
+      next();
+    }
+  };
 
 // PROJECT UPLOAD page
 app.post("/upload-project", uploadContribute.fields([{name: "image", maxCount: 1}, {name: "video", maxCount: 1}]), (req, res) => {
@@ -277,10 +287,13 @@ app.get('/contribute', (req,res) => {
 });
 
 //RECORDING page
-app.get('/recording', (req,res) => {
-    res.status(200).render('recording', {    authenticate :  req.session.authenticate,
-                                            userID       :  req.session.userID,
-                                            userType     :  req.session.userType});
+app.get('/recording', ensureLogin, (req,res) => {
+    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
+
+    //res.status(200).render('recording', {    authenticate :  req.session.authenticate,
+    //                                        userID       :  req.session.userID,
+    //                                        userType     :  req.session.userType});
+                                            
 });
 
 //ADMINISTRATION page
@@ -570,7 +583,7 @@ app.post("/login/forgotpassword", urlencodedParser,(req, res) => {
                         var newMailOptions = {
                             to : user[0].email,
                             subject : "StudentWorks Password Recovery",
-                            html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
+                            html: "Hello, " + user[0].userName + "<br> A request has been made to change your password. <br> Your temporary password is: "+tempPass+"<br><a href=" + passlink + ">Click here to change your password</a>"
                         }
                         smtpTransport.sendMail(newMailOptions, function(error, response){
                             console.log('got into /sendMail');
@@ -626,7 +639,6 @@ app.get("/forgotpass/complete", (req, res) => {
 
 //Finish the password resetting (can be used apart from 'Forgetting a password')
 app.post('/complete', urlencodedParser, function(req,res){
-    console.log('got to /complete');
     dbconnect.connect();
     var password;
     function checkUser() {

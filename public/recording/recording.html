@@ -16,6 +16,7 @@
     <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script>
 
     <!-- video element -->
+    <link href="https://cdn.webrtc-experiment.com/getHTMLMediaElement.css" rel="stylesheet">
     <script src="https://cdn.webrtc-experiment.com/getHTMLMediaElement.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -24,91 +25,77 @@
 </head>
 
 <body>
-    {{#if authenticate}}
-    <div hidden id="auth">{{authenticate}}</div>
-    <div hidden id="userID">{{userID}}</div>
-    <div hidden id="userType">{{userType}}</div>
-    {{else}}
-    <div hidden id="userType">Visitor</div>
-    {{/if}}
-    <div class="container">
-        <div class="row hidden-xs">
-            <div class="col-xs-7 col-sm-7">
-                <a href="/">
-                    <img class="swLogo" alt="logo" src="/images/logo.png">
-                </a>
-            </div>
-            <div class="text-right">
-                <p class="swMoto">"By the students, for the students"</p>
-            </div>
-        </div>
-        <div class="row">
-            <nav class="navbar navbar-inverse" role="navigation">
-                <div class="container">
-                    <div class="collapse navbar-collapse navbar-ex1-collapse">
-                        <ul class="nav navbar-nav js-nav-add-active-class">
-                            <li class="">
-                                <a href="/" >
-                                    <space class="glyphicon glyphicon-home"></space>
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- for main page -->
-                        <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
-                        <!-- PAGE TITLE -->
-                        <div id="pageTitleID"></div>      
-                        <a href="#">
-                            <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
+        <div class="container">
+                <div class="row hidden-xs">
+                    <div class="col-xs-7 col-sm-7">
+                        <a href="/">
+                            <img class="swLogo" alt="logo" src="/images/logo.png">
                         </a>
-
-                        <!-- USER MENU .....................................................................................-->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog" role="document" id="userMenuModal">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <h4 class="modal-title" id="myModalLabel" style="text-align:center;">User menu</h4>
-                                    </div>
-                                    <!-- populated by usermenu.js -->
-                                    <div class="modal-body" id="userMenu"></div>
-                                    <div class="modal-footer" ></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END of USER MENU.............................................................................-->
-
+                    </div>
+                    <div class="text-right">
+                        <p class="swMoto">"By the students, for the students"</p>
                     </div>
                 </div>
-            </nav>
-        </div>
+                <div class="row">
+                    <nav class="navbar navbar-inverse" role="navigation">
+                        <div class="container">
+                            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                                <ul class="nav navbar-nav js-nav-add-active-class">
+                                    <li class="">
+                                        <a href="/" >
+                                            <space class="glyphicon glyphicon-home"></space>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- for main page -->
+                                <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
+                                <!-- PAGE TITLE -->
+                                <div id="pageTitleID"></div>      
+                                <a href="#">
+                                    <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
+                                </a>
+        
+                                <!-- USER MENU .....................................................................................-->
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                    <div class="modal-dialog" role="document" id="userMenuModal">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title" id="myModalLabel" style="text-align:center;">User menu</h4>
+                                            </div>
+                                            <!-- Hard coded this because user's cant even view this page unless logged in. -->
+                                            <div class="modal-body" id="userMenu"></div>
+                                                <ul>
+                                                    <li><a href="/profile">Profile</a></li>
+                                                    <li><a href="/contribute">Contribute</a></li>
+                                                    <li><a href="/logout">Logout</a></li>
+                                                </ul>
+                                            <div class="modal-footer" ></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- END of USER MENU.............................................................................-->
+        
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+
+
+
+    <div style="margin-top: 10px;" id="recording-player">    
+    </div>
+    <div id="btn-container">
+    <button id="btn-start-recording">Start Recording</button>
+    <button id="btn-pause-recording">Pause</button>
     </div>
 
-    <!-- BODY...................................................................... -->
-    <div class="container">
-        <div class="row" id="mainBody">
-            <!--Recording portion -->
-             <div style="margin-top: 10px;" id="recording-player"></div>
-            <button id="btn-start-recording">Start Recording</button>
-            <button id="btn-pause-recording">Pause</button>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row center" id="tileNav"></div>
-    </div>
-    <!-- End of BODY.............................................................. -->
-    <hr class="clearfix w-100 d-md-none pb-3">
-   <div class="container">
-        <div class="row center" id="footerHTMLid"></div>
-    </div>
-</body>
 
-</html>
-
-<!-- These scripts are part of RecordRTC, which is open sourced and available for anyone to use -->
-
-<!-- Gather window parameters of user, through doing this, the web page can recieve only applications with valid URI's (POSSIBLE BUG HERE) -->
+<!-- Gather window paramets of user-->
 <script>
         (function() {
             var params = {},
@@ -148,22 +135,7 @@
             });
         }
 </script>
-
-
 <!-- Start of video recording-->
-<!-- 1. Create a video element on the webpage -->
-<!-- 2. When the button is clicked, proceed with recording functionality. -->
-<!-- 3. Create a video element on the webpage -->
-<!-- 4. The brute functionality of this recording comes from the API call 'getUserMedia' on the 'mediaDevices' object which has only recently been implemented in Februray 2018 -->
-<!--     documentation can be read here: https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mediaDevices -->
-<!-- 5. RecordRTC api creates a blob of a stream (this stream is the chosen user's mediadevice) -->
-<!-- 6. Create a local URL of the blob after the stream is finished (through a callback) -->
-<!-- 7. So far, the local user can right click to download this stream to save to their computer -->
-
-<!-- TO DO: -->
-<!-- Have the blob upload to StudentWorks db -->
-<!-- Create a separate stream for audio, since firefox DOES NOT SUPPORT THIS FEATURE, GAH. -->
-
 <script>
 
 var video = document.createElement('video');
@@ -173,7 +145,7 @@ var mediaElement = getHTMLMediaElement(video, {
         title: 'Recording status: inactive',
         buttons: ['full-screen'],
         showOnMouseEnter: false,
-        width: 360,
+        width: 720,
     });
 
 document.getElementById('recording-player').appendChild(mediaElement);
@@ -334,8 +306,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
 
                         options.ignoreMutedMedia = false;
                         button.recordRTC = RecordRTC(button.stream, options);
-                        //Once recording has ended, we need to make the recording accessible to the user through a URL blob. 
-                        //Right click on the video after recording completion -> view video link to see this URL. 
+
                         button.recordingEndedCallback = function(url) {
                             setVideoURL(url);
                         };
@@ -354,12 +325,13 @@ function captureScreen(config) {
                 // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
 
                 window.getScreenId = function(chromeMediaSource, chromeMediaSourceId) {
-                    // do nothing with the two passed params, as they are for WebRTC which handles things differently in Chrome than in Firefox. 
-                    //This code is set to ONLY work for Firefox browsers at the moment. 
+                   
+
                     if(DetectRTC.browser.name === 'Firefox') {
                         console.log("using firefox!");
                         screenConstraints = {
                             video: {
+                                //ask firefox to select a window from user's desktop
                                 mediaSource: 'window'
                             },
                             audio:false
@@ -374,7 +346,6 @@ function captureScreen(config) {
 
                             btnStartRecording.onclick();
                         });
-                    // If errors are passed to the user, notify them of potential fixes on the spot. 
                     }, function(error) {
                         config.onMediaCapturingFailed(error);
 
@@ -403,13 +374,17 @@ function captureScreen(config) {
                     mediaConstraints.video = {};
                 }
 
-                /* These functions can be used at a later date if we wish to restrict our recorded video's to specific size, frame rate and resolution.
+                //setVideoBitrates();
 
-                setVideoBitrates();
-                mediaConstraints = getVideoResolutions(mediaConstraints);
-                mediaConstraints = getFrameRates(mediaConstraints);
+                //mediaConstraints = getVideoResolutions(mediaConstraints);
+                //mediaConstraints = getFrameRates(mediaConstraints);
 
-                */
+                var isBlackBerry = !!(/BB10|BlackBerry/i.test(navigator.userAgent || ''));
+                if(isBlackBerry && !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
+                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
+                    return;
+                }
 
                 navigator.mediaDevices.getUserMedia(mediaConstraints).then(function(stream) {
                     successCallback(stream);
@@ -438,12 +413,7 @@ function captureScreen(config) {
                 parentNode.removeChild(recordingPlayer);
                 parentNode.innerHTML = '';
                 var elem = 'video';
-                if(type == 'gif' && !forceNonImage) {
-                    elem = 'img';
-                }
-                if(type == 'audio') {
-                    elem = 'audio';
-                }
+              
                 recordingPlayer = document.createElement(elem);
                 
                 if(arg instanceof MediaStream) {
@@ -496,7 +466,6 @@ function captureScreen(config) {
                 return url;
             }
 </script>
-
 <!-- Pause button-->
 <script>
         var btnPauseRecording = document.querySelector('#btn-pause-recording');
@@ -536,3 +505,4 @@ function captureScreen(config) {
             }
         };
     </script>
+</body>
