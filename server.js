@@ -992,7 +992,7 @@ app.get('/term/:cmd', (req, res) => {
         return target.replace(new RegExp(search, 'g'), replacement);
     };
 
-    // let safeCommands = ["git", "cat", "less" "ls", "echo", "w", "tar", "mv" ]
+    // let safeCommands = ["git", "npm", "cat", "less" "ls", "echo", "w", "ipconfig", "traceroute", "ping"]
 
     if (cmd != "") {
         const { exec } = require('child_process');

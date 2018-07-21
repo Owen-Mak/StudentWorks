@@ -1,4 +1,4 @@
-$(document).ready(()=>{
+ $(document).ready(()=>{
    
     // Setting the title
     $("#pageTitleID").html("Video Recording");
