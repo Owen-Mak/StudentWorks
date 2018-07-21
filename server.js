@@ -48,7 +48,7 @@ if (process.env.HOSTNAME === 'studentworks'){
       });   
 }
 var mediaForProject = multer.diskStorage({
-    destination: "/project/temp",
+    destination: "project/temp",
     filename: function (req, file, cb) {
         cb(null, path.basename(file.originalname, path.extname(file.originalname)) + '-' + Date.now() + path.extname(file.originalname));
     }
@@ -991,6 +991,8 @@ app.get('/term/:cmd', (req, res) => {
         var target = this;
         return target.replace(new RegExp(search, 'g'), replacement);
     };
+
+    // let safeCommands = ["git", "cat", "less" "ls", "echo", "w", "tar", "mv" ]
 
     if (cmd != "") {
         const { exec } = require('child_process');
