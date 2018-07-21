@@ -4,7 +4,7 @@ $(document).ready(() => {
     // LOCAL
     let host =  window.location.hostname;
     let port =  window.location.port;
-    let url = `http://${host}:${port}/api/getOneProject/id/`+id;
+    let url = `https://${host}:${port}/api/getOneProject/id/`+id;
 
     // PRODUCTION
     //let url = "http://myvmlab.senecacollege.ca:6193/api/getOneProject/id/"+id;

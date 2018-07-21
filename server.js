@@ -9,6 +9,15 @@ const exphbs = require('express-handlebars');
 let Client = require ('ssh2-sftp-client');
 let sftp = new Client();
 
+//SSL
+const https = require('https');
+const fs = require('fs');
+
+var sslOptions = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+}
+
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var sftpStorage = require('multer-sftp-linux');
@@ -409,7 +418,7 @@ app.post('/send', urlencodedParser, function(req,res){
    function sendMail(){
         rand=Math.floor((Math.random() * 100000) + 54);
         host=req.get('host');
-        link="http://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
+        link="https://"+req.get('host')+"/verify?id="+rand+"&name="+req.body.name;;
         mailOptions = {
             to : req.body.email,
             subject : "Please confirm your Email account",
@@ -965,6 +974,9 @@ app.use(function(req, res){
 
 /*--------------------Routing Over----------------------------*/
 
-app.listen(3000,function(){
-    console.log("Express Started on Port 3000");
+
+//Get a proper port
+var port = process.env.PORT || 3000;
+const server = https.createServer(sslOptions, app).listen(port, () => {
+    console.log("Express Listening on port: " + port);
 });
