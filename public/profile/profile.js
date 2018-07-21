@@ -89,8 +89,8 @@ $(document).ready(() => {
   // LOCAL
   let host =  window.location.hostname;
   let port =  window.location.port;
-  let prjUrl = `http://${host}:${port}/api/getProjectsByUser/UserID/` + id;
-  let usrUrl = `http://${host}:${port}/api/getUserByID/id/` + id;
+  let prjUrl = `https://${host}:${port}/api/getProjectsByUser/UserID/` + id;
+  let usrUrl = `https://${host}:${port}/api/getUserByID/id/` + id;
 
   // PRODUCTION
   //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getProjectsByUser/UserID/" + id;
