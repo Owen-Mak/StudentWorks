@@ -954,7 +954,7 @@ app.use(function(req, res){
 });
 
 /*--------------------Routing Over----------------------------*/
-
-app.listen(3000,function(){
+var port = process.env.PORT;
+app.listen(port,function(){
     console.log("Express Started on Port 3000");
 });
