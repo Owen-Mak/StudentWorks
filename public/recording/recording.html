@@ -92,6 +92,8 @@
     <div id="btn-container">
     <button id="btn-start-recording">Start Recording</button>
     <button id="btn-pause-recording">Pause</button>
+    <button id="btn-save">Save to Computer</button>
+    <button id="btn-upload">Upload to StudentWorks</button>
     </div>
 
 
@@ -233,7 +235,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                                 }
 
                                 button.recordingEndedCallback(url);
-                                saveToDiskOrOpenNewTab(button.recordRTC);
+                                saveToDiskOrUpload(button.recordRTC);
                                 stopStream();
                             });
                         }
@@ -379,13 +381,6 @@ function captureScreen(config) {
                 //mediaConstraints = getVideoResolutions(mediaConstraints);
                 //mediaConstraints = getFrameRates(mediaConstraints);
 
-                var isBlackBerry = !!(/BB10|BlackBerry/i.test(navigator.userAgent || ''));
-                if(isBlackBerry && !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia)) {
-                    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                    navigator.getUserMedia(mediaConstraints, successCallback, errorCallback);
-                    return;
-                }
-
                 navigator.mediaDevices.getUserMedia(mediaConstraints).then(function(stream) {
                     successCallback(stream);
 
@@ -494,7 +489,7 @@ function captureScreen(config) {
                 btnStartRecording.disabled = false;
                 btnStartRecording.style.fontSize = 'inherit';
                 btnStartRecording.recordRTC.resumeRecording();
-                recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = '<img src="https://cdn.webrtc-experiment.com/images/progress.gif">';
+                //recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = '<img src="https://cdn.webrtc-experiment.com/images/progress.gif">';
                 recordingPlayer.play();
 
                 btnPauseRecording.style.fontSize = '15px';
@@ -504,5 +499,70 @@ function captureScreen(config) {
                 }, 2000);
             }
         };
+    </script>
+
+    <!-- Save to disk-->
+    <script>
+        function getFileName(fileExtension){
+            return "studentworks." + fileExtension;
+        }
+
+
+        function saveToDiskOrUpload(recordRTC) {
+                if(!recordRTC.getBlob().size) {
+                    var info = getFailureReport();
+                    console.log('blob', recordRTC.getBlob());
+                    console.log('recordrtc instance', recordRTC);
+                    console.log('report', info);
+
+                    if(mediaContainerFormat.value !== 'default') {
+                        alert('RecordRTC seems failed recording using ' + mediaContainerFormat.value + '. Please choose "default" option from the drop down and record again.');
+                    }
+                    else {
+                        alert('RecordRTC seems failed. Unexpected issue. You can read the email in your console log. \n\nPlease report using disqus chat below.');
+                    }
+
+                    if(mediaContainerFormat.value !== 'vp9' && DetectRTC.browser.name === 'Chrome') {
+                        alert('Please record using VP9 encoder. (select from the dropdown)');
+                    }
+                }
+
+                var fileName = getFileName(fileExtension);
+                
+                //save to disk
+                document.querySelector('#btn-save').parentNode.style.display = 'block';
+                document.querySelector('#btn-save').onclick = function() {
+                    if(!recordRTC) return alert('No recording found.');
+
+                    var file = new File([recordRTC.getBlob()], fileName, {
+                        type: mimeType
+                    });
+
+                    invokeSaveAsDialog(file, file.name);
+                };
+                //upload to server
+                document.querySelector('#btn-upload').onclick = function () {
+                    if(!recordRTC) return alert('No recording found.');
+
+                      var blob = recordRTC instanceof Blob ? recordRTC : recordRTC.getBlob();
+                
+                     blob = new File([blob], getFileName(fileExtension), {
+                         type: mimeType
+                    });
+
+                    // create FormDataXHR
+                    var formData = new FormData();
+                    formData.append('video-filename', fileName);
+                    formData.append('video-blob', blob);
+                    
+                    //make a post call to 
+                    var XHR = new XMLHttpRequest();
+                    XHR.open("POST", "/upload-video");
+                    XHR.send(formData);
+                }
+                
+
+               
+            }
     </script>
 </body>

@@ -65,6 +65,7 @@ var mediaForProject = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 var uploadContribute = multer({ storage: mediaForProject });
+var uploadVideo = multer({ storage: mediaForProject });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -295,14 +296,19 @@ app.get('/contribute', (req,res) => {
     }
 });
 
-//RECORDING page
-app.get('/recording', ensureLogin, (req,res) => {
+//RECORDING page + Upload Video
+app.get('/recording', (req,res) => {
     res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
 
     //res.status(200).render('recording', {    authenticate :  req.session.authenticate,
     //                                        userID       :  req.session.userID,
     //                                        userType     :  req.session.userType});
                                             
+});
+
+app.post('/upload-video', uploadVideo.single('video-blob'), (req, res) => {
+    console.log("made it into post for video");
+    console.log(req.file);
 });
 
 //ADMINISTRATION page
