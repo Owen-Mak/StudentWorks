@@ -114,6 +114,7 @@
             }
             window.params = params;
         })();
+
         function addStreamStopListener(stream, callback) {
             var streamEndedEvent = 'ended';
             if ('oninactive' in stream) {
@@ -168,9 +169,16 @@ document.getElementById('recording-player').appendChild(mediaElement);
 
     var btnStartRecording = document.querySelector('#btn-start-recording');
     //Main recording functionality starts when user clicks the recording button
+
+    window.onbeforeunload = function() {
+                console.log("unloading");
+                btnStartRecording.disabled = false;
+                recordingMedia.disabled = false;
+                mediaContainerFormat.disabled = false;
+            };
+
     btnStartRecording.onclick = function(event) {
         var button = btnStartRecording;
-        alert(button.innerHTML);
         var button = btnStartRecording;
 
             if(button.innerHTML === 'Stop Recording') {
@@ -185,6 +193,9 @@ document.getElementById('recording-player').appendChild(mediaElement);
                     button.innerHTML = 'Start Recording';
 
                     function stopStream() {
+                        console.log("got in stop stream");
+                        console.log(button);
+                        console.log(button.stream);
                         if(button.stream && button.stream.stop) {
                             button.stream.stop();
                             button.stream = null;
@@ -233,7 +244,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
 
                                     url = URL.createObjectURL(blob);
                                 }
-
+                                console.log("starting callback for stop stream");
                                 button.recordingEndedCallback(url);
                                 saveToDiskOrUpload(button.recordRTC);
                                 stopStream();
@@ -243,6 +254,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
 
                     return;
                 }
+                if (!event) return;
 
             button.disabled = true;
 
