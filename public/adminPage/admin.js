@@ -201,7 +201,7 @@ function users() {
     let tableGuts = "";
     $.each(allUsers, (key, value) => {
         let date = _getDate(value.registrationDate);
-        let name = value.firstName ? " " : value.firstName + " " + value.lastName ? " " : value.lastName ;
+        let name = (value.firstName ?value.firstName: " " );
 
         if (value.userType == "Admin") {
             tableGuts += "<tr style='font-weight:900;'>";
@@ -218,18 +218,18 @@ function users() {
 
         if (value.userType == "Admin") {
             tableGuts += "<td class='crud' style='opacity:0;'>" +
-                "<a href='#' onclick='removeAdmin(\"" + value.userID + "\",\"" + name + "\")'>" +
+                "<a href='#' onclick='removeAdmin(\"" + value.userID + "\",\"" + value.userName + "\")'>" +
                 "<img class='setAdmin' src='/images/remove.png'/></td>";
         } else {
             tableGuts += "<td class='crud' style='opacity:0;'>" +
-                "<a href='#' onclick='addAdmin(\"" + value.userID + "\",\"" + name + "\")'>" +
+                "<a href='#' onclick='addAdmin(\"" + value.userID + "\",\"" + value.userName + "\")'>" +
                 "  <img class='setAdmin' src='/images/addAdmin.png'/>" +
                 "</a></td>";
         }
 
 
         tableGuts += "<td class='crud' style='opacity:0;'>" +
-            "<a href='#' onclick='deleteUser(\"" + value.userID + "\",\"" + name + "\")'>" +
+            "<a href='#' onclick='deleteUser(\"" + value.userID + "\",\"" + value.userName + "\")'>" +
             "  <img class='deleteUser' src='/images/delete.png'/>" +
             "</a></td>";
 
@@ -284,7 +284,7 @@ function removeAdmin(id, name) {
 }
 
 function deleteUser(id, name) {
-    if (confirm(`Are you sure you want to delete "${name}?" user. This action cannot be undone!`)) {
+    if (confirm(`Are you sure you want to delete "${name}" user? This action cannot be undone!`)) {
         $.get(delUser + id, (data) => {
             if (data == "changed") {
                 $.getJSON(userUrl, (data) => {
