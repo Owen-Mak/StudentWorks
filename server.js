@@ -1027,7 +1027,7 @@ app.get('/term/:cmd', (req, res) => {
     // SAFE Commands that are allowed to be run on Admin page
     let safeCommands = ["git", "npm", "cat", "less", "ls", "ps", "echo", "w", "ipconfig", "traceroute", "ping"];
     let command = cmd.split(" ")[0];
-    console.log(command);
+
     if (safeCommands.indexOf(command) == -1) {
         res.send("Command is not in the list of allowed ones<br/>");
         return;

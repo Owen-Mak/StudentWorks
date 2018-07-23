@@ -202,6 +202,10 @@ function users() {
     $.each(allUsers, (key, value) => {
         let date = _getDate(value.registrationDate);
         let name = value.firstName;
+        let program = value.program ? value.program : " ";
+
+        if(program == "NULL")
+            program = "";
 
         if(name == "NULL")
             name = "";
@@ -216,7 +220,7 @@ function users() {
             "<td>" + name + "</td>" +
             "<td>" + value.userName + "</td>" +
             "<td>" + value.email + "</td>" +
-            "<td>" + (value.program ? " " : value.program)  + "</td>" +
+            "<td>" + program  + "</td>" +
             "<td>" + date + "</td>";
 
         if (value.userType == "Admin") {
