@@ -104,7 +104,7 @@ function renderLeft() {
 }
 
 function setactiveLink(tag) {
-    var tags = ["#aprPrj", "#penPrj", "#allUsr", "#netw", "#logs", "#term", "#sql"];
+    var tags = ["#aprPrj", "#penPrj", "#allUsr", "#netw", "#logs", "#term"];
 
     $.each(tags, (k, v) => {
         if (v == tag) {

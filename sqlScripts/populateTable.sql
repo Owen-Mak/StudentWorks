@@ -44,7 +44,7 @@ VALUES
     ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890', null, null),
     ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901', null, null),
     ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234', null, null),
-    ('Yuriy', 'Kartuzov', 'yuriyA', 'kyuriy@myseneca.ca', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
+    ('Yuriy', 'Kartuzov', 'yuriy', 'kyuriy@myseneca.ca', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
     ('Yuriy', 'Kartuzov', 'yuriyA', 'kyuriy@myseneca.ca', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null),
     ('Not Really', 'Owen', 'asdf1234', 'owenmak325@gmail.com', 'NotOwen', 'Admin', null, TRUE, now(), '12345', null, null);
 
