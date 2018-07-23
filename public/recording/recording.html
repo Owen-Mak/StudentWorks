@@ -208,7 +208,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                             button.stream = null;
                         }
 
-                        videoBitsPerSecond = null;
+                       
                         var html = 'Recording status: stopped';
                         html += '<br>Size: ' + bytesToSize(button.recordRTC.getBlob().size);
                         recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = html;
@@ -292,8 +292,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                     }
                 };
             
-            captureScreen(commonConfig);
-
+           /* captureScreen(commonConfig);
                     button.mediaCapturedCallback = function() {
                         var options = {
                             type: type,
@@ -302,21 +301,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
                             getNativeBlob: false, // enable it for longer recordings
                             video: recordingPlayer
                         };
-
-                        /*if(recorderType) {
-                            options.recorderType = recorderType;
-
-                            if(recorderType == WhammyRecorder || recorderType == GifRecorder) {
-                                options.canvas = options.video = {
-                                    width: defaultWidth || 320,
-                                    height: defaultHeight || 240
-                                };
-                            }
-                        }*/
-
-                        /*if(videoBitsPerSecond) {
-                            options.videoBitsPerSecond = videoBitsPerSecond;
-                        }*/
 
                         options.ignoreMutedMedia = false;
                         button.recordRTC = RecordRTC(button.stream, options);
@@ -328,13 +312,115 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         button.recordRTC.startRecording();
                         btnPauseRecording.style.display = '';
                     };
-            
-          
+          */  
+        
+        captureAudioPlusScreen(commonConfig);
 
+        button.mediaCapturedCallback = function() {
+            var options = {
+                type: type,
+                mimeType: mimeType,
+                disableLogs: params.disableLogs || false,
+                getNativeBlob: false, // enable it for longer recordings
+                video: recordingPlayer
+            };
+
+            if(recorderType) {
+                options.recorderType = recorderType;
+
+                if(recorderType == WhammyRecorder || recorderType == GifRecorder) {
+                    options.canvas = options.video = {
+                        width: defaultWidth || 320,
+                        height: defaultHeight || 240
+                    };
+                }
+            }
+
+
+            options.ignoreMutedMedia = false;
+            button.recordRTC = RecordRTC(button.stream, options);
+
+            button.recordingEndedCallback = function(url) {
+                setVideoURL(url);
+            };
+
+            button.recordRTC.startRecording();
+            btnPauseRecording.style.display = '';
+        };
+
+                
 };//end of button click
 
+       function captureAudioPlusScreen(config) {
+                // Firefox screen capturing addon is open-sourced here: https://github.com/muaz-khan/Firefox-Extensions
+                // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
 
-function captureScreen(config) {
+                window.getScreenId = function(chromeMediaSource, chromeMediaSourceId) {
+                   /* var screenConstraints = {
+                        audio: false,
+                        video: {
+                            mandatory: {
+                                chromeMediaSourceId: chromeMediaSourceId,
+                                chromeMediaSource: isLocalHost() ? 'screen' : chromeMediaSource
+                            }
+                        }
+                    }; */ 
+
+                    if(DetectRTC.browser.name === 'Firefox') {
+                        screenConstraints = {
+                            video: {
+                                mediaSource: 'window'
+                            },
+                            audio: false
+                        }
+                    }
+
+                    captureUserMedia(screenConstraints, function(screenStream) {
+                        captureUserMedia({audio: true}, function(audioStream) {
+                            var newStream = new MediaStream();
+
+                            // merge audio and video tracks in a single stream
+                            audioStream.getAudioTracks().forEach(function(track) {
+                                newStream.addTrack(track);
+                            });
+
+                            screenStream.getVideoTracks().forEach(function(track) {
+                                newStream.addTrack(track);
+                            });
+
+                            config.onMediaCaptured(newStream);
+
+                            addStreamStopListener(newStream, function() {
+                                config.onMediaStopped();
+                            });
+                        }, function(error) {
+                            config.onMediaCapturingFailed(error);
+                        });
+                    }, function(error) {
+                        config.onMediaCapturingFailed(error);
+
+                        if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
+                            // otherwise deploy chrome extension yourselves
+                            // https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
+                            alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
+                        }
+
+                        if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
+                            // otherwise deploy firefox addon yourself
+                            // https://github.com/muaz-khan/Firefox-Extensions
+                            alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
+                        }
+                    });
+                };
+
+                if(DetectRTC.browser.name === 'Firefox' || isLocalHost()) {
+                    window.getScreenId();
+                }
+
+                window.postMessage('get-sourceId', '*');
+            }
+
+    function captureScreen(config) {
                 // Firefox screen capturing addon is open-sourced here: https://github.com/muaz-khan/Firefox-Extensions
                 // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
 
@@ -382,8 +468,10 @@ function captureScreen(config) {
                 }
 
                 window.postMessage('get-sourceId', '*');
-            }
-            function captureUserMedia(mediaConstraints, successCallback, errorCallback) {
+        }
+
+
+        function captureUserMedia(mediaConstraints, successCallback, errorCallback) {
                 if(mediaConstraints.video == true) {
                     mediaConstraints.video = {};
                 }
