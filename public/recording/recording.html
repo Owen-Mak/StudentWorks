@@ -396,8 +396,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
             }
 
     function captureScreen(config) {
-                // Firefox screen capturing addon is open-sourced here: https://github.com/muaz-khan/Firefox-Extensions
-                // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
+                
 
                 window.getScreenId = function(chromeMediaSource, chromeMediaSourceId) {
                    
@@ -425,14 +424,10 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         config.onMediaCapturingFailed(error);
 
                         if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
-                            // otherwise deploy chrome extension yourselves
-                            // https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
                             alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
                         }
 
                         if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
-                            // otherwise deploy firefox addon yourself
-                            // https://github.com/muaz-khan/Firefox-Extensions
                             alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
                         }
                     });
@@ -564,7 +559,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
                 btnStartRecording.disabled = false;
                 btnStartRecording.style.fontSize = 'inherit';
                 btnStartRecording.recordRTC.resumeRecording();
-                //recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = '<img src="https://cdn.webrtc-experiment.com/images/progress.gif">';
                 recordingPlayer.play();
 
                 btnPauseRecording.style.fontSize = '15px';
