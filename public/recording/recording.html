@@ -170,6 +170,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
     var btnStartRecording = document.querySelector('#btn-start-recording');
     //Main recording functionality starts when user clicks the recording button
 
+    //reset the page after the recording finishes.
     window.onbeforeunload = function() {
                 console.log("unloading");
                 btnStartRecording.disabled = false;
@@ -177,10 +178,12 @@ document.getElementById('recording-player').appendChild(mediaElement);
                 mediaContainerFormat.disabled = false;
             };
 
+    /* main functionality of <recording:
+            1. this button will toggle between starting the stream, and stopping the stream. It's html will change if successful video recording occurs (i.e. the user allows it)
+            2. 
+    */
     btnStartRecording.onclick = function(event) {
         var button = btnStartRecording;
-        var button = btnStartRecording;
-
             if(button.innerHTML === 'Stop Recording') {
                     btnPauseRecording.style.display = 'none';
                     button.disabled = true;
@@ -256,7 +259,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                 }
                 if (!event) return;
 
-            button.disabled = true;
+                button.disabled = true;
 
               var commonConfig = {
                     onMediaCaptured: function(stream) {
@@ -281,8 +284,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         if(error.toString().indexOf('no audio or video tracks available') !== -1) {
                             alert('RecordRTC failed to start because there are no audio or video tracks available.');
                         }
-
-                        if(DetectRTC.browser.name === 'Safari') return;
                         
                         if(error.name === 'PermissionDeniedError' && DetectRTC.browser.name === 'Firefox') {
                             alert('Firefox requires version >= 52. Firefox also requires HTTPs.');
@@ -291,7 +292,8 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         commonConfig.onMediaStopped();
                     }
                 };
-            
+
+            //used only for screen without audio...
            /* captureScreen(commonConfig);
                     button.mediaCapturedCallback = function() {
                         var options = {
@@ -325,19 +327,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
                 video: recordingPlayer
             };
 
-            if(recorderType) {
-                options.recorderType = recorderType;
-
-                if(recorderType == WhammyRecorder || recorderType == GifRecorder) {
-                    options.canvas = options.video = {
-                        width: defaultWidth || 320,
-                        height: defaultHeight || 240
-                    };
-                }
-            }
-
-
-            options.ignoreMutedMedia = false;
             button.recordRTC = RecordRTC(button.stream, options);
 
             button.recordingEndedCallback = function(url) {
@@ -352,20 +341,8 @@ document.getElementById('recording-player').appendChild(mediaElement);
 };//end of button click
 
        function captureAudioPlusScreen(config) {
-                // Firefox screen capturing addon is open-sourced here: https://github.com/muaz-khan/Firefox-Extensions
-                // Google Chrome screen capturing extension is open-sourced here: https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
 
                 window.getScreenId = function(chromeMediaSource, chromeMediaSourceId) {
-                   /* var screenConstraints = {
-                        audio: false,
-                        video: {
-                            mandatory: {
-                                chromeMediaSourceId: chromeMediaSourceId,
-                                chromeMediaSource: isLocalHost() ? 'screen' : chromeMediaSource
-                            }
-                        }
-                    }; */ 
-
                     if(DetectRTC.browser.name === 'Firefox') {
                         screenConstraints = {
                             video: {
@@ -400,14 +377,12 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         config.onMediaCapturingFailed(error);
 
                         if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
-                            // otherwise deploy chrome extension yourselves
-                            // https://github.com/muaz-khan/Chrome-Extensions/tree/master/desktopCapture
+                    
                             alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
                         }
 
                         if(isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
-                            // otherwise deploy firefox addon yourself
-                            // https://github.com/muaz-khan/Firefox-Extensions
+                          
                             alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
                         }
                     });
