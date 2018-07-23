@@ -2,14 +2,29 @@ var fNameCheck = true;
 var lNameCheck = true;
 var emailCheck = true; //for email
 
-
+/*
 function validateForm() {
 
-	if(validfName(fNameCheck) && validlName(lNameCheck) && validEmail(emailCheck)){
+	if(validfName(fNameCheck) || validlName(lNameCheck) || validEmail(emailCheck)){
        return true;
    }else{
        return false;
    }
+}*/
+
+
+function validateForm() {
+  var valid = true;
+  if (!validfName(fNameCheck)){
+    valid = false;
+  }
+  if (!validlName(lNameCheck)){
+    valid = false;
+  }
+  if (!validEmail(emailCheck)){
+    valid = false;
+  }
+  return valid;
 }
 
 
@@ -17,12 +32,12 @@ function validfName() {
   var pattern = /^[a-zA-Z\s-]+$/;
 	var name = document.profile.fname.value.trim();
 
-	if(name == "") {
-		document.querySelector("#errorMsg1").innerHTML = '- This field is required';
+	if(name == "" || name == "NULL") {
+		document.querySelector("#errorMsg1").innerHTML = '  * This field is required';
 		fNameCheck = false;
 
 	}else if(!name.match(pattern)){
-		document.querySelector("#errorMsg1").innerHTML = '- Cannot contain special characters';
+		document.querySelector("#errorMsg1").innerHTML = '  * Cannot contain special characters';
     fNameCheck = false;
 
 	}else{
@@ -37,12 +52,12 @@ function validlName() {
   var pattern = /^[a-zA-Z\s-]+$/;
   var name = document.profile.lname.value.trim();
 
-  if (name == "") {
-    document.querySelector("#errorMsg2").innerHTML = '- This field is required';
+  if (name == "" || name == "NULL") {
+    document.querySelector("#errorMsg2").innerHTML = '  * This field is required';
     lNameCheck = false;
 
   } else if (!name.match(pattern)) {
-    document.querySelector("#errorMsg2").innerHTML = '- Cannot contain special characters';
+    document.querySelector("#errorMsg2").innerHTML = '  * Cannot contain special characters';
     lNameCheck = false;
 
   } else {
@@ -58,12 +73,12 @@ function validEmail() {
     var pattern =  /^(?:[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&amp;'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
 	var email = document.profile.email.value.trim();
 
-	if(email == "") {
-		document.querySelector("#errorMsg3").innerHTML = '- This field is required';
+	if(email == ""|| email == "NULL") {
+		document.querySelector("#errorMsg3").innerHTML = '  * This field is required';
 		emailCheck = false;
 
 	}else if(!email.match(pattern)){
-		document.querySelector("#errorMsg3").innerHTML = '- Enter a valid email address';
+		document.querySelector("#errorMsg3").innerHTML = '  * Enter a valid email address';
         emailCheck = false;
 
 	}else{
@@ -115,21 +130,22 @@ function renderProjectList(jsData) {
 }
 
 function renderUserDetails(jsData) {
-  let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "First Name";
-  let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "Last Name";
-  let email = jsData[0].email ? jsData[0].email : "sample@email.com";
-  let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "Program of study";
+  //let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "First Name";
+  let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "";
+  let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "";
+  let email = jsData[0].email ? jsData[0].email : "";
+  let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
-  let description = jsData[0].userDescription ? jsData[0].userDescription : "Description";
+  let description = (jsData[0].userDescription && jsData[0].description != "NULL") ? jsData[0].userDescription : "";
   let imageHost = "http://myvmlab.senecacollege.ca:6193";
   let imagePath = jsData[0].imagePath ? imageHost + jsData[0].imagePath :"../images/avatar.png";
 
-  $("#fname").attr({ "placeholder": fName });
-  $("#lname").attr({ "placeholder": lName });
-  $("#email").attr({ "placeholder": email });
-  $("#program").attr({ "placeholder": program });
-  $("#username").attr({ "placeholder": username });
-  $("#description").attr({ "placeholder": description });
+  $("#fname").attr({ "value": fName });
+  $("#lname").attr({ "value": lName });
+  $("#email").attr({ "value": email });
+  $("#program").attr({ "value": program });
+  $("#username").attr({ "value": username });
+  $("#description").attr({ "value": description });
   $("#imgPreview").attr({ "src": imagePath });
 }
 
