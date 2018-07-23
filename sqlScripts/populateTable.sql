@@ -44,8 +44,8 @@ VALUES
     ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890', null, null),
     ('Vaselisa', 'Pizdaivanovna', 'vp456', 'vPizdaivanovna@gmail.com', 'vPizdaivanovna','Contributor', null, TRUE, '2018-01-01', '901', null, null),
     ('Johnny', 'Waters', 'jw789', 'jWaters@gmail.com', 'jWaters', 'Contributor', null, TRUE, '2018-01-01', '1234', null, null),
-    ('yuriy', 'yuriy', 'yuriy', 'y.kartuzov@gmail.com', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
-    ('yuriy', 'yuriy', 'yuriyA', 'y.kartuzov@gmail.com', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null),
+    ('Yuriy', 'Kartuzov', 'yuriyA', 'kyuriy@myseneca.ca', 'yuriy', 'Contributor', null, TRUE, now(), '12345', null, null),
+    ('Yuriy', 'Kartuzov', 'yuriyA', 'kyuriy@myseneca.ca', 'yuriyA', 'Admin', null, TRUE, now(), '12345', null, null),
     ('Not Really', 'Owen', 'asdf1234', 'owenmak325@gmail.com', 'NotOwen', 'Admin', null, TRUE, now(), '12345', null, null);
 
 
@@ -72,6 +72,7 @@ VALUES
 
 INSERT INTO COMMENTS (userID, commentContent, date)
 VALUES
+/* I'm pretty sure you need to know which project this belongs to */
     (1, 'Hey, what library did you use for this?', now()),
     (2, 'Wow, great job! Can I pm you for some questions', now()),
     (1, 'Yes, go ahead', now()),

@@ -43,12 +43,13 @@ void printLog()
 
 void writeToLog(char *log)
 {
-
+    // Checks the integrity of the file
     int result = integrityCheck();
     if( result == 0 ){
         return;
     }
-    
+
+    // Opening file to writing
     FILE *file = fopen("admin.log", "r+");
     char lastLine[255];
 
@@ -83,6 +84,12 @@ void writeToLog(char *log)
 int integrityCheck()
 {
     FILE *file = fopen("admin.log", "r");
+    if(file == NULL){
+        puts("logger: New Admin.log has been created");
+        file = fopen("admin.log", "w");
+        fprintf(file, "%s:%lu\n", "StudentWorks", hashCode("StudentWorks"));
+    }
+
     int count = 0;
     
     char line[256];
@@ -117,6 +124,7 @@ int integrityCheck()
             if(var2[i] != '\n')
                 hash[idx++] = var2[i];
         }
+        
         hash[idx]='\0';
 
         // skip first record and records seed hash code

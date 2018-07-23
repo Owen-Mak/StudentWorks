@@ -124,6 +124,12 @@ module.exports.unsetAdmin = function(userID, callback) {
     runQuery (sql, callback);
 }
 
+module.exports.deleteUser = function(userID, callback){
+    var sql = `DELETE FROM USERS
+                WHERE userID = ${userID}`;
+    runQuery(sql, callback);
+}
+
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
                 FROM PROJECTS proj
@@ -232,12 +238,10 @@ function runQuery(sql, callback){
 			throw err;
 		} else {
 			callback (null, result);
-			//console.log ("Query success: ", sql);
 		}
 	});
 }
 
 module.exports.end = function (){
-    //console.log ("Disconnect!");
     connection.end();
 };

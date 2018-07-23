@@ -70,7 +70,7 @@ table {
     vertical-align: bottom;
 }
 
-.setAdmin {
+.setAdmin, .deleteUser {
     width:20px;
     height: inherit;
 }

@@ -17,7 +17,7 @@ CREATE TABLE USERS (
     email	    VARCHAR(100) NOT NULL,    
     userName    VARCHAR(30) NOT NULL UNIQUE,    
     userType    ENUM ('Visitor', 'Contributor', 'Admin'),
-    program     VARCHAR(255) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'OTHER')),
+    program     VARCHAR(255) CHECK (program IN ('CPA', 'CPD', 'BSD', 'DDA', 'CTY', 'OTHER')),
     registrationStatus BOOLEAN,
     registrationDate DATE NOT NULL,
     registrationCode CHAR(65),

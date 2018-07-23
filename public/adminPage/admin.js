@@ -1,17 +1,17 @@
-// LOCAL
-let prefix = "";
 
-// PRODUCTION
-//let prefix = "http://myvmlab.senecacollege.ca:6193";
+let host = window.location.hostname;
+let port = window.location.port;
 
-let prjUrl = prefix + "/api/getAllProjectsAdmin";
-let userUrl = prefix + "/api/getAllUsers";
-let aprUrl = prefix + "/api/approveProject/";
-let dwnUrl = prefix + "/api/takedownProject/";
-let serverAdm = prefix + "/api/serverAdmin";
-let setAdmin = prefix + "/api/setAdmin/";
-let unsetAdmin = prefix + "/api/unsetAdmin/";
-let adminLog = prefix + "/api/getAdminLog";
+let prjUrl = `http://${host}:${port}/api/getAllProjectsAdmin`;
+let userUrl = `http://${host}:${port}/api/getAllUsers`;
+let aprUrl = `http://${host}:${port}/api/approveProject/`;
+let dwnUrl = `http://${host}:${port}/api/takedownProject/`;
+let serverInfo = `http://${host}:${port}/api/serverInfo`;
+let setAdmin = `http://${host}:${port}/api/setAdmin/`;
+let unsetAdmin = `http://${host}:${port}/api/unsetAdmin/`;
+let delUser = `http://${host}:${port}/api/deleteUser/`;
+let adminLog = `http://${host}:${port}/api/getAdminLog`;
+
 
 // DATA
 let allProjects = "";
@@ -104,7 +104,7 @@ function renderLeft() {
 }
 
 function setactiveLink(tag) {
-    var tags = ["#aprPrj", "#penPrj", "#allUsr", "#netw", "#logs", "#term"];
+    var tags = ["#aprPrj", "#penPrj", "#allUsr", "#netw", "#logs", "#term", "#sql"];
 
     $.each(tags, (k, v) => {
         if (v == tag) {
@@ -190,27 +190,30 @@ function users() {
         "<table class='table'>" +
         "  <thead class='thead-light'><tr>" +
         "    <th scope='col'>Name</th>" +
-        "    <th scope='col'>Program</th>" +
+        "    <th scope='col'>Username</th>" +
         "    <th scope='col'>Email</th>" +
+        "    <th scope='col'>Program</th>" +
         "    <th scope='col'>Since</th>" +
+        "    <th scope='col'></th>" +
         "    <th scope='col'></th>" +
         "</tr></thead>";
 
     let tableGuts = "";
     $.each(allUsers, (key, value) => {
         let date = _getDate(value.registrationDate);
-        let name = value.firstName + " " + value.lastName;
+        let name = value.firstName ? " " : value.firstName + " " + value.lastName ? " " : value.lastName ;
 
         if (value.userType == "Admin") {
-            tableGuts += "<tr style='color:#b01212; font-weight:600;'>";
+            tableGuts += "<tr style='font-weight:900;'>";
         } else {
             tableGuts += "<tr>";
         }
 
         tableGuts += "" +
             "<td>" + name + "</td>" +
-            "<td>" + value.program + "</td>" +
+            "<td>" + value.userName + "</td>" +
             "<td>" + value.email + "</td>" +
+            "<td>" + (value.program ? " " : value.program)  + "</td>" +
             "<td>" + date + "</td>";
 
         if (value.userType == "Admin") {
@@ -223,6 +226,12 @@ function users() {
                 "  <img class='setAdmin' src='/images/addAdmin.png'/>" +
                 "</a></td>";
         }
+
+
+        tableGuts += "<td class='crud' style='opacity:0;'>" +
+            "<a href='#' onclick='deleteUser(\"" + value.userID + "\",\"" + name + "\")'>" +
+            "  <img class='deleteUser' src='/images/delete.png'/>" +
+            "</a></td>";
 
         tableGuts += "</tr>";
 
@@ -246,7 +255,7 @@ function addAdmin(id, name) {
                     allUsers = data;
                     users();
                     setactiveLink("#allUsr");
-                    var log = currentUserName + " approved \"" + name + "\"" + " as an Admin on " + _getDateApr(new Date());
+                    var log = _getDateApr(new Date()) + "|" + currentUserName + "|Admin rights given to \"" + name + "\"";
                     logMsg(log);
                 });
             } else {
@@ -264,7 +273,25 @@ function removeAdmin(id, name) {
                     allUsers = data;
                     users();
                     setactiveLink("#allUsr");
-                    var log = currentUserName + " removed Admin rights from \"" + name + "\"" + " on " + _getDateApr(new Date());
+                    var log = _getDateApr(new Date()) + "|" + currentUserName + "|Admin rights removed from \"" + name + "\"";
+                    logMsg(log);
+                });
+            } else {
+                alert("Server is unable to process request at this time");
+            }
+        });
+    }
+}
+
+function deleteUser(id, name) {
+    if (confirm(`Are you sure you want to delete "${name}?" user. This action cannot be undone!`)) {
+        $.get(delUser + id, (data) => {
+            if (data == "changed") {
+                $.getJSON(userUrl, (data) => {
+                    allUsers = data;
+                    users();
+                    setactiveLink("#allUsr");
+                    var log = _getDateApr(new Date()) + "|" + currentUserName + "|User \"" + name + "\" deleted";
                     logMsg(log);
                 });
             } else {
@@ -318,23 +345,25 @@ function logs() {
             "<div id='logTitle'>Admin logs</div>" +
             "<table class='table'>" +
             "  <thead class='thead-light'><tr>" +
-            "    <th scope='col'>Record</th>" +
-            "    <th scope='col'>Hash</th>" +
+            "    <th scope='col'>Date</th>" +
+            "    <th scope='col'>Log</th>" +
+            "    <th scope='col'>Admin</th>" +
             "</tr></thead>";
 
         let tableGuts = "";
 
         $.each(data, (k, v) => {
-            
+
             //skipping first records(StudentWorks) 
             //and last record which is newline '\n'
-            if(k == 0 || k == (data.length-1))
+            if (k == 0 || k == (data.length - 1))
                 return true;
 
             record = v.split(":");
             tableGuts += "<tr>" +
-                "<td>" + record[0] + "</td>" +
-                "<td>" + record[1] + "</td>" +
+                "<td>" + record[0].split("|")[0] + "</td>" +
+                "<td><strong>" + record[0].split("|")[2] + "</strong></td>" +
+                "<td>" + record[0].split("|")[1] + "</td>" +
                 "</tr>";
         });
 
@@ -357,7 +386,8 @@ function approvePrj(id, name) {
                 allProjects = data;
                 $("#div2").empty();
                 pending();
-                var log = currentUserName + " approved \"" + name + "\"" + " on " + _getDateApr(new Date());
+                //var log = currentUserName + " approved \"" + name + "\"" + " on " + _getDateApr(new Date());
+                var log = _getDateApr(new Date()) + "|" + currentUserName + "|Project \"" + name + "\" approved";
                 logMsg(log);
             });
         } else {
@@ -374,7 +404,8 @@ function takedownPrj(id, name) {
                 allProjects = data;
                 $("#div2").empty();
                 live();
-                var log = currentUserName + " took down \"" + name + "\"" + " on " + _getDateApr(new Date());
+                //var log = currentUserName + " took down \"" + name + "\"" + " on " + _getDateApr(new Date());
+                var log = _getDateApr(new Date()) + "|" + currentUserName + "|Project \"" + name + "\" taken down";
                 logMsg(log);
             })
         } else {
@@ -386,8 +417,7 @@ function takedownPrj(id, name) {
 
 // STATS --------------------------
 function renderRight() {
-    $.get(serverAdm, (data) => {
-
+    $.get(serverInfo, (data) => {
         let size = data.match(/[0-9]{1,}/g);
         let git = data.split('\n')[1];
         let prjNum = allProjects.length;
@@ -424,7 +454,7 @@ function renderRight() {
 function _getDateApr(dt) {
     let date = new Date(dt);
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    return date.getDate() + " " + months[date.getMonth()];
+    return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 }
 
 function _getDate(dt) {
