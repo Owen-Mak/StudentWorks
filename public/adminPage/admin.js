@@ -201,7 +201,10 @@ function users() {
     let tableGuts = "";
     $.each(allUsers, (key, value) => {
         let date = _getDate(value.registrationDate);
-        let name = (value.firstName ?value.firstName: " " );
+        let name = value.firstName;
+
+        if(name == "NULL")
+            name = "";
 
         if (value.userType == "Admin") {
             tableGuts += "<tr style='font-weight:900;'>";
