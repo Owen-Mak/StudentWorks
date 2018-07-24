@@ -86,16 +86,22 @@
 
 
 
-
-    <div style="margin-top: 10px;" id="recording-player">    
-    </div>
+    <div id="intro-paragraph">
+        <p>This is StudentWorks' Recording Page.</p>
+        <p>For best results, have the window of your application open on your computer <i>and do not minimize it.</i></p>
+        <p>You must have a microphone to record the video.</p>
+        <p>Currently you may choose to download the video after you have finished recording, and then use it for your project submission form.</p>
+        <p>Alternatively, you may upload it to our server.</p>
+    </div>  
+      
+    <div style="margin-top: 10px;" id="recording-player"></div>
     <div id="btn-container">
-    <button id="btn-start-recording">Start Recording</button>
-    <button id="btn-pause-recording">Pause</button>
-    <button id="btn-save">Save to Computer</button>
-    <button id="btn-upload">Upload to StudentWorks</button>
+        <button id="btn-start-recording">Start Recording</button>
+        <button id="btn-pause-recording">Pause</button>
+        <button id="btn-save">Save to Computer</button>
+        <button id="btn-upload">Upload to StudentWorks</button>
     </div>
-
+     
 
 <!-- Gather window paramets of user-->
 <script>
@@ -145,7 +151,7 @@ var video = document.createElement('video');
     video.controls = false;
 
 var mediaElement = getHTMLMediaElement(video, {
-        title: 'Recording status: inactive',
+        title: 'Not Recording',
         buttons: ['full-screen'],
         showOnMouseEnter: false,
         width: 720,
@@ -158,7 +164,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
     div.appendChild(mediaElement.media);
             
     var recordingPlayer = mediaElement.media;
-    var recordingMedia = document.querySelector('.recording-media');
     var mediaContainerFormat = document.querySelector('.media-container-format');
     var mimeType = 'video/webm';
     var fileExtension = 'webm';
@@ -174,8 +179,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
     window.onbeforeunload = function() {
                 console.log("unloading");
                 btnStartRecording.disabled = false;
-                recordingMedia.disabled = false;
-                mediaContainerFormat.disabled = false;
+                //mediaContainerFormat.disabled = false;
             };
 
     /* main functionality of <recording:
@@ -212,7 +216,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                         }
 
                        
-                        var html = 'Recording status: stopped';
+                        var html = 'Stopped Recording';
                         html += '<br>Size: ' + bytesToSize(button.recordRTC.getBlob().size);
                         recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = html;
                     }
@@ -270,6 +274,10 @@ document.getElementById('recording-player').appendChild(mediaElement);
 
                         button.innerHTML = 'Stop Recording';
                         button.disabled = false;
+
+                        //change the value of "Not recording, to Recording"
+                        let html1 = '<img src="https://cdn.webrtc-experiment.com/images/progress.gif"> Recording';;
+                        recordingPlayer.parentNode.parentNode.querySelector('h2').innerHTML = html1;
                     },
                     onMediaStopped: function() {
                         button.innerHTML = 'Start Recording';
@@ -570,7 +578,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
         };
     </script>
 
-    <!-- Save to disk-->
+    <!-- Save to disk or to Server-->
     <script>
         function getFileName(fileExtension){
             return "studentworks." + fileExtension;
@@ -618,20 +626,32 @@ document.getElementById('recording-player').appendChild(mediaElement);
                      blob = new File([blob], getFileName(fileExtension), {
                          type: mimeType
                     });
+                    
+                    
+                    
 
-                    // create FormDataXHR
+                    // create FormData
                     var formData = new FormData();
                     formData.append('video-filename', fileName);
                     formData.append('video-blob', blob);
-                    
-                    //make a post call to 
+                    //make a post call to the server
                     var XHR = new XMLHttpRequest();
-                    XHR.open("POST", "/upload-video");
-                    XHR.send(formData);
-                }
+                    XHR.addEventListener("load", function(event){
+                        if (XHR.status == 200){
+                        window.location.assign("/contribute?video=" + event.target.responseText);
+                        }
+                        else {
+                            alert("Not uploaded properly.");
+                        }
+                    });
                 
-
-               
+                    XHR.open("POST", "/upload-video");
+                    XHR.onprogress = function (event) {
+                        console.log('LOADING', XHR.status);
+                        };
+                    XHR.send(formData);  
+                    
+                }
             }
     </script>
 </body>

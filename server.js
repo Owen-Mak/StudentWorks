@@ -287,10 +287,12 @@ app.get('/profile', (req,res) => {
 
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    if (req.session.authenticate){
+    console.log(req.query.video);
+    if (!req.session.authenticate){
         res.status(200).render('contribute', {  authenticate :  req.session.authenticate,
                                                 userID       :  req.session.userID,
-                                                userType     :  req.session.userType});
+                                                userType     :  req.session.userType,
+                                                videoFile    :  req.query.video});
     } else {
         res.status(200).redirect("/login");
     }
@@ -298,17 +300,16 @@ app.get('/contribute', (req,res) => {
 
 //RECORDING page + Upload Video
 app.get('/recording', (req,res) => {
-    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
-
-    //res.status(200).render('recording', {    authenticate :  req.session.authenticate,
-    //                                        userID       :  req.session.userID,
-    //                                        userType     :  req.session.userType});
-                                            
+    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
 });
 
-app.post('/upload-video', uploadVideo.single('video-blob'), (req, res) => {
-    console.log("made it into post for video");
-    console.log(req.file);
+app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => {
+    console.log(req.file.path);
+    var file = req.file.path;
+    res.status(200).send(file);
+    //next();
+    //res.redirect("/");
+    
 });
 
 //ADMINISTRATION page
