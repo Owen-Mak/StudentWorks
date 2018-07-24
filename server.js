@@ -304,11 +304,11 @@ app.get('/recording', (req,res) => {
 });
 
 app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => {
-    console.log(req.file.path);
     var file = req.file.path;
-    res.status(200).send(file);
-    //next();
-    //res.redirect("/");
+    //turn video path into readable path on VM
+    var changed = file.replace(/\\/g, '/');
+    //send back the video path
+    res.status(200).send(changed);
     
 });
 
