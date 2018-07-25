@@ -93,6 +93,15 @@ app.use(function (req, res, next) {
     next();
 });
 
+//function call to make sure user is logged in ** USED for recording page**.
+function ensureLogin(req, res, next) {
+    if (!req.session.authenticate) {
+        res.redirect("/login");
+    } else {
+        next();
+    }
+};
+
 // PROJECT UPLOAD page
 app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 1 }, { name: "video", maxCount: 1 }]), (req, res) => {
     // FRONT-END guarantees that all values are present, escept 'category' which is optional;
@@ -285,12 +294,8 @@ app.get('/contribute', (req, res) => {
 });
 
 //RECORDING page
-app.get('/recording', (req, res) => {
-    res.status(200).render('recording', {
-        authenticate: req.session.authenticate,
-        userID: req.session.userID,
-        userType: req.session.userType
-    });
+app.get('/recording', ensureLogin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
 });
 
 //ADMINISTRATION page
