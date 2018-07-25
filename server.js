@@ -9,6 +9,15 @@ const exphbs = require('express-handlebars');
 let Client = require('ssh2-sftp-client');
 let sftp = new Client();
 
+//SSL
+const https = require('https');
+const fs = require('fs');
+
+var sslOptions = {
+    key: fs.readFileSync('./key.pem'),
+    cert: fs.readFileSync('./cert.pem')
+}
+
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var sftpStorage = require('multer-sftp-linux');
@@ -56,6 +65,7 @@ var mediaForProject = multer.diskStorage({
 
 var upload = multer({ storage: storage });
 var uploadContribute = multer({ storage: mediaForProject });
+var uploadVideo = multer({ storage: mediaForProject });
 /*
     Here we are configuring our SMTP Server details.
     STMP is mail server which is responsible for sending and recieving email.
@@ -281,21 +291,30 @@ app.get('/profile', (req, res) => {
 });
 
 //PROJECT UPLOAD page
-app.get('/contribute', (req, res) => {
-    if (req.session.authenticate) {
-        res.status(200).render('contribute', {
-            authenticate: req.session.authenticate,
-            userID: req.session.userID,
-            userType: req.session.userType
-        });
+app.get('/contribute', (req,res) => {
+    console.log(req.query.video);
+    if (!req.session.authenticate){
+        res.status(200).render('contribute', {  authenticate :  req.session.authenticate,
+                                                userID       :  req.session.userID,
+                                                userType     :  req.session.userType,
+                                                videoFile    :  req.query.video});
     } else {
         res.status(200).redirect("/login");
     }
 });
 
-//RECORDING page
-app.get('/recording', ensureLogin, (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));
+//RECORDING page + Upload Video
+app.get('/recording', (req,res) => {
+    res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
+});
+
+app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => {
+    var file = req.file.path;
+    //turn video path into readable path on VM
+    var changed = file.replace(/\\/g, '/');
+    //send back the video path
+    res.status(200).send(changed);
+    
 });
 
 //ADMINISTRATION page
@@ -1078,8 +1097,11 @@ app.use(function (req, res) {
 
 /*--------------------Routing Over----------------------------*/
 
-app.listen(3000, function () {
-    console.log("Express Started on Port 3000");
+
+//Get a proper port
+var port = process.env.PORT || 3000;
+const server = https.createServer(sslOptions, app).listen(port, () => {
+    console.log("Express Listening on port: " + port);
 });
 
 

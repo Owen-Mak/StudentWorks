@@ -219,9 +219,17 @@
                         <td>
                             <label for="video" class="lbl">Video upload</label>
                         </td>
+                        {{#if videoFile}}
+                         <td>
+                         <input required="required" id="videoUpload" type="text" name="videoUpload" value="https://myvmlab.senecacollege.ca:6193/{{videoFile}}" disabled/>
+                         <video src="{{videoFile}}" id="videoPlayer"/>
+                         </td>
+                         {{else}}
                         <td>
                             <input id="video" type="file" name="video" accept=".mp4,.webm,.ogg" required="required" />
                         </td>
+                        {{/if}}
+                        
                     </tr>
                     <tr class="seperator">
                         <td></td>

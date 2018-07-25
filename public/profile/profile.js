@@ -103,8 +103,8 @@ $(document).ready(() => {
 
   let host =  window.location.hostname;
   let port =  window.location.port;
-  let prjUrl = `http://${host}:${port}/api/getProjectsByUser/UserID/` + id;
-  let usrUrl = `http://${host}:${port}/api/getUserByID/id/` + id;
+  let prjUrl = `https://${host}:${port}/api/getProjectsByUser/UserID/` + id;
+  let usrUrl = `https://${host}:${port}/api/getUserByID/id/` + id;
 
   $.getJSON(prjUrl, (jsData) => { renderProjectList(jsData); });
   $.getJSON(usrUrl, (jsData) => { renderUserDetails(jsData); });
