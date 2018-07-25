@@ -214,3 +214,11 @@ margin-bottom: 12px;
   width: 100%;
   height: auto;
 }
+
+textarea {
+  border: 2px solid;
+  padding: 20px; 
+  width: 300px;
+  resize: vertical;
+  overflow: auto;
+}
