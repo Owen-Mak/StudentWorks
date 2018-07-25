@@ -288,7 +288,7 @@ app.get('/profile', (req,res) => {
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
     console.log(req.query.video);
-    if (!req.session.authenticate){
+    if (req.session.authenticate){
         res.status(200).render('contribute', {  authenticate :  req.session.authenticate,
                                                 userID       :  req.session.userID,
                                                 userType     :  req.session.userType,
