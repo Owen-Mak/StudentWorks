@@ -222,6 +222,7 @@
                         {{#if videoFile}}
                          <td>
                          <input required="required" id="videoUpload" type="text" name="videoUpload" value="{{videoFile}}" disabled/>
+                         <video src="{{videoFile}}" id="videoPlayer"/>
                          </td>
                          {{else}}
                         <td>
