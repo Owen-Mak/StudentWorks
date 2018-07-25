@@ -32,7 +32,7 @@
 
 
 .left-container .row {
-    margin-right: 15px;
+    margin-right: 50px;
 }
 
 
@@ -85,18 +85,15 @@ margin: 0 auto;
 }
 
 
-.input-wrapper {
-width: 100%;
-position: relative;
-background-color: #ffffff;
-border: 2px solid #222020;
-border-radius: 5px;
-margin-bottom: 12px;
-}
-
 .left-container {
 width: 700px;
-padding-left: 20px;
+padding-left: 0px;
+padding-top: 20px;
+}
+
+.right-container {
+padding-top: 20px;
+  padding-left: 50px;
 }
 
 /*---------------------------------------------*/
@@ -175,49 +172,6 @@ margin-bottom: 12px;
 }
 
 
-.input {
-color: #2e2e2e;
-font-family: 'Roboto', serif;
-line-height: 1.2;
-font-size: 13px;
-
-display: block;
-width: 100%;
-background: transparent;
-height: 50px;
-padding: 0 25px 0 25px;
-}
-
-
-.focus-input {
-position: absolute;
-display: block;
-width: calc(100% + 2px);
-height: calc(100% + 2px);
-top: -1px;
-left: -1px;
-pointer-events: none;
-border: 3px solid #3f1616;
-border-radius: 3px;
-
-visibility: hidden;
-opacity: 0;
-}
-
-
-
-.container-profile-form-btn {
-width: 100%;
-display: flex;
-flex-wrap: wrap;
-align-content: center;
-align-items: center; 
-margin-bottom: 8px;
-padding-top: 20px;
-padding-left: 250px;
-
-}
-
 .profile-form-btn {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
@@ -237,4 +191,26 @@ padding-left: 250px;
   text-shadow: 1px 1px #1e1e1f;
 }
 
+.avatar {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  
+}
 
+.avatar img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+}
+
+.thumbnail img.portrait {
+  width: 100%;
+  height: auto;
+}

@@ -81,54 +81,61 @@
     <!-- END OF NAV SECTION -->
 
 
+    
     <!-- BODY INPUT...................................................................... -->
     <div class="container">
-        <form class="profile-form validate-form flex-sb" id="profile" name="profile" method="POST"
-            enctype="multipart/form-data">
+        <form onsubmit="return validateForm()" class="profile-form validate-form flex-sb" id="profile" name="profile" method="POST"
+            action="/send">
             <div class="formgroup left-container col-md-6">
+
                 <div class="row">
                     <div class="form-group fname col-md-6">
-                        <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" onchange="validfName()">
+                       <label>First Name</label><span id="errorMsg1" style="color:#D22822; font-size: 14px;"></span>
+                       <input type="text" class="form-control" id="fname" name="fname">
+                       
                     </div>
                     <div class="form-group lname col-md-6">
-                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" onchange="validlName()">
+                        <label>Last Name</label><span id="errorMsg2" style="color:#D22822; font-size: 14px;"></span>
+                        <input type="text" class="form-control" id="lname" name="lname">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group email col-md-6">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="exam@email.com" onchange="validEmail()">
+                        <label>Email Address</label><span id="errorMsg3" style="color:#D22822; font-size: 14px;"></span>
+                        <input type="email" class="form-control" id="email" name="email">
                     </div>
                     <div class="form-group program col-md-6">
-                        <input type="text" class="form-control" id="program" name="program" placeholder="Program of Study">
+                        <label>Program of Study</label> 
+                        <input type="text" class="form-control" id="program" name="program">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group username col-md-6">
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" readonly>
+                        <label>Username</label> 
+                        <input type="text" class="form-control" id="username" name="usernmae" readonly>
                     </div>
-
-                 <!--   <div class="form-group password col-md-6">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" readonly>
+                   <!-- <div class="form-group password col-md-6">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                     </div> -->
 
                 </div>
-
-                <textarea style="resize:none" id="description" name="description" cols="100" rows="5"></textarea>
+                <label>Description</label> 
+                <textarea style="resize:none" name="name" id ="description" cols="100" rows="5"></textarea>
                 <div class="container-profile-form-btn">
-                    <button onsubmit="return validateForm()" type="submit" class="profile-form-btn">Save</button>
+                    <button type="submit" class="profile-form-btn" onclick="return validateForm()">Save</button>
                     <br>
                 </div>
             </div>
 
-            <!-- FILE UPLOAD STARTS HERE -->
+        <!-- FILE UPLOAD STARTS HERE -->
             <div class="formgroup right-container col-md-4">
                 <dd class="avatar-upload-container clearfix">
-                    <div id="img-preview">
-                        <img id="imgPreview" class="avatar rounded-2" src="../images/empty.png" width="180" height="180" />
+                    <div id="img-preview" style="border-radius: 50%;" class="avatar">
+                        <img id="imgPreview" src="../images/avatar.png" style="border-radius: 50%;" />
                     </div>
-                    <img class="avatar rounded-2" width="180" height="180" />
+                    <img class="avatar" width="200" height="200" style="border-radius: 50%;"/>
                     <input type="file" id="img-input" name="img-input"/>
                 </dd>
             </div>

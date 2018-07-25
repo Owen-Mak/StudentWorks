@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>StudentWorks-Login</title>
+	<title>StudentWorks</title>
     <meta charset="UTF-8">
     
 	<link href="https://fonts.googleapis.com/css?family=Bree+Serif|Roboto|Roboto+Slab|Catamaran" rel="stylesheet"> 
@@ -21,45 +21,40 @@
 					<a href="/">
 						<img logo alt="logo" src="../images/logo_graybg.png">
 					</a>
-						<span style="color:#dadada" class="title"> - LOGIN - </span>
-					<span class="txt1" style="font-weight: bold">
-						USERNAME <span id="errorMsg" style="color:#D22822"></span>
-					</span> 
-
+						<span style="border-bottom: 2px solid #c9c9c9; padding-top: 10px; padding-bottom: 20px;"class="title" >Sign In</span>
+					<div class="input-wrapper" style="margin-top: 18px;">
+							<span id="errorMsg" style="color:#D22822"></span>
+						<input class="input" type="text" name="username1" id="username1" onchange="validUser()" autofocus="autofocus"  placeholder="Username" class="input">
+					</span><span class="focus-input"></span>
+					</div>
 
 					<div class="input-wrapper">
-						<input class="input" type="text" name="username1" id="username1" onchange="validUser()" autofocus="autofocus">
+							<span id="errorMsg2" style="color:#D22822"></span>
+						<input class="input" type="password" name="pass" id="pass" onchange="validPass()" placeholder="Password">
 						<span class="focus-input"></span>
 					</div>
 					
-					<span class="txt1" style="font-weight: bold">
-						PASSWORD <span id="errorMsg2" style="color:#D22822"></span>
-					</span>
-
-					<div class="input-wrapper">
-						<input class="input" type="password" name="pass" id="pass" onchange="validPass()">
-						<span class="focus-input"></span>
-					</div>
 					<div>
 						<a href="forgot.html" class="txt3">
-							Forgot Password?
+							I forgot my password
 						</a>
 					</div>
 
 					<div class="container-login-form-btn">
 						<button type="submit" onclick="validateForm()" class="login-form-btn">
-							LOGIN
+							SIGN IN
 						</button>
 					</div>
-					<span class="txt2">Need an account? <a href="/register" class="txt3">Register</a></span>
-					<div class="container-login-form-btn">
+					<div style="width: 100%" >
+						 <a href="/register" class="accTxt">
+							<p style="margin-bottom:-10px;"> Create an account </p>
+						</a>
+					</div>
 				</form>
 			</div>
 		</div>
 	</div>
 	</div>
 	<script src="js/login.js"></script>
-	<div id="dropDownSelect1"></div>
-
 </body>
 </html>

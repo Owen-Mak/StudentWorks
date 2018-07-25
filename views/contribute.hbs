@@ -77,12 +77,12 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <form onsubmit="" method="POST" enctype="multipart/form-data" id="uForm">
+        <form id="uForm" name="uForm" method="POST" enctype="multipart/form-data">
             <table>
                 <tbody>
                     <tr>
                         <td>
-                            <input hidden="hidden" type="text" id="userIDhtml" name="userID" />
+                            <input hidden="hidden" type="text" id="userIDhtml" name="userID" value={{userID}} />
                             <label for="title" class="lbl">Title</label>
                         </td>
                         <td>
@@ -220,7 +220,7 @@
                             <label for="video" class="lbl">Video upload</label>
                         </td>
                         <td>
-                            <input required="required" id="video" type="file" name="video" accept=".mp4,.webm,.ogg" />
+                            <input id="video" type="file" name="video" accept=".mp4,.webm,.ogg" />
                         </td>
                     </tr>
                     <tr class="seperator">
