@@ -11,7 +11,7 @@ $(document).ready(() => {
 
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
-        let videoLink = "http://myvmlab.senecacollege.ca:6193/" + jsData[0].VideoFilePath;
+        let videoLink = "https://myvmlab.senecacollege.ca:6193/" + jsData[0].VideoFilePath;
         let ext = jsData[0].VideoFilePath.substr(jsData[0].VideoFilePath.lastIndexOf('.') + 1);
 
         let contributors = "<br><h4><u>Developers:</u></h4>";
