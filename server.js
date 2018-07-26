@@ -450,7 +450,7 @@ app.post('/send', urlencodedParser, function (req, res) {
     function sendMail() {
         rand = Math.floor((Math.random() * 100000) + 54);
         host = req.get('host');
-        link = "http://" + req.get('host') + "/verify?id=" + rand + "&name=" + req.body.name;;
+        link = "https://" + req.get('host') + "/verify?id=" + rand + "&name=" + req.body.name;;
         mailOptions = {
             to: req.body.email,
             subject: "Please confirm your Email account",
@@ -619,11 +619,11 @@ app.post("/login/forgotpassword", urlencodedParser, (req, res) => {
                     //grab user data
                     var user = JSON.parse(JSON.stringify(data));
                     //send an e-mail for user to access new password.
-                    var passlink = "http://myvmlab.senecacollege.ca:6193/forgotpass/complete";
+                    var passlink = "https://myvmlab.senecacollege.ca:6193/forgotpass/complete";
                     var newMailOptions = {
                         to: user[0].email,
                         subject: "StudentWorks Password Recovery",
-                        html: "Hello,<br> A request has been made to change your password. <br> Your temporary password is: " + tempPass + "<br><a href=" + passlink + ">Click here to change your password</a>"
+                        html: `Hello  ${req.body.name} ,<br> A request has been made to change your password. <br> Your temporary password is: ` + tempPass + ` <br><a href=` + passlink + `>Click here to change your password</a>`
                     }
                     smtpTransport.sendMail(newMailOptions, function (error, response) {
                         console.log('got into /sendMail');
