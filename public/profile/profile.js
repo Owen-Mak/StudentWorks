@@ -137,7 +137,7 @@ function renderUserDetails(jsData) {
   let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
   let description = (jsData[0].userDescription && jsData[0].description != "NULL") ? jsData[0].userDescription : "";
-  let imageHost = "http://myvmlab.senecacollege.ca:6193";
+  let imageHost = "https://myvmlab.senecacollege.ca:6193";
   let imagePath = jsData[0].imagePath ? imageHost + jsData[0].imagePath :"../images/avatar.png";
 
   $("#fname").attr({ "value": fName });
