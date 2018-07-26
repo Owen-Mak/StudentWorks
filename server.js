@@ -300,7 +300,7 @@ app.post('/addComment',  urlencodedParser, (req, res) =>{
    
     var comment = {
         projectID:   req.body.projectID, 
-        authorName:  req.session.userName ? req.session.userName : "anonymouse",
+        authorName:  req.session.userName ? req.session.userName : "Anonymous",
         commentText: req.body.commentText
     }
     commentDB.addComment(comment).then(() => {

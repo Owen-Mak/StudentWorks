@@ -84,10 +84,8 @@
     <script>
         $( document ).ready(function() {
             var url_string = window.location.href;
-            console.log(window.location.href);
             var url = new URL(url_string);
             var projectid = url.searchParams.get("id");
-            console.log(projectid);
             document.getElementById('projectID').value = projectid;
         });
     </script>
