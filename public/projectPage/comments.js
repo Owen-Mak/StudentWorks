@@ -73,3 +73,18 @@ module.exports.addComment = function (data) {
         });
     });
 };
+
+module.exports.addReply = function (data) {
+    return new Promise(function (resolve, reject) {
+        data.repliedDate = Date.now();
+        console.log(data);
+        Comment.update({ _id: data.comment_id }, { $addToSet: { replies: data } })
+            .exec()
+            .then(() => {
+                resolve();
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+}

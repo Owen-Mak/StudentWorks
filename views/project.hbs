@@ -89,10 +89,12 @@
             document.getElementById('projectID').value = projectid;
         });
     </script>
+
+    
     
     <div class="row">
-	<div class="col-md-12">
-		<h3>Leave a Comment</h3>
+	<div class="col-md-4 align-items-center">
+		<h4>Leave a Comment</h4>
 		<div class="well">
 			<div class="row">
 				<div class="col-md-12">
@@ -119,7 +121,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3>All Comments</h3>
+            <h4>All Comments</h4>
               <hr />
             </div>
         </div>
@@ -127,7 +129,7 @@
 
     {{#each comments}}
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-4">
                 {{subject}}
                 <div class="well">
                     <div class="row">
@@ -143,27 +145,19 @@
                             </div>
                         </div>
                         {{/each}}
+                        <!-- Reply button..
                         <div class="row">
                             <div class="col-md-12">
                                 <button class="btn btn-primary btn-sm pull-right" data-toggle="collapse" data-target="#reply-{{_id}}" aria-expanded="false">Reply</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
+
+                    <!-- No reply's yet 
                     <div class="collapse" id="reply-{{_id}}">
                         <div class="col-md-12">
                             <form method="POST" action="/addReply">
                                 <div class="well">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control" placeholder="Name" name="authorName" />
-                                            <br />
-                                        </div>
-                                        <div class="col-md-6">
-
-                                            <input type="email" class="form-control" placeholder="Email" name="authorEmail" />
-                                            <br />
-                                        </div>
-                                    </div>
                                     <div class="row">
                                         <div class="col-md-12">
                                             <textarea class="form-control" rows="8" placeholder="Comment" name="commentText"></textarea>
@@ -185,6 +179,7 @@
             </div>
         </div>
     {{/each}}
+    -->
     <!-- End of BODY.............................................................. -->
 </body>
 </html>

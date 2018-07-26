@@ -272,7 +272,6 @@ app.get("/", (req, res) => {
 
 //PROJECT page
 app.get('/projectPage', urlencodedParser, (req, res) => {
-    console.log(req.query.id);
     commentDB.initialize(req.query.id)
              .then(commentDB.getAllComments, null)
              .then((commentsFromDB)=>{
@@ -312,7 +311,24 @@ app.post('/addComment',  urlencodedParser, (req, res) =>{
         });
 
 });
+
+app.post('/addReply', urlencodedParser, (req, res) =>{
     
+    var comment = {
+        projectID:   req.body.projectID, 
+        authorName:  req.session.userName ? req.session.userName : "Anonymous",
+        commentText: req.body.commentText
+    }
+    console.log(comment);
+    commentDB.addReply(comment).then(() => {
+        res.redirect("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect("/");
+        });
+
+});
 
 //PROFILE page
 app.get('/profile', (req, res) => {
