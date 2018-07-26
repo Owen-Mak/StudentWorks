@@ -2,26 +2,23 @@ let gl_language = "";
 let gl_framework = "";
 let gl_platform = "";
 let gl_category = "";
+let colorCh = "#f5f5f5";
 
 $(document).ready(() => {
-    // Adding userID to the hidden field
-    let userID = $("#userID").text();
-    $("#userIDhtml").val(userID);
 
-    // User Menu - defined in usermenu.js
-    renderUserMenu();
+    renderUserMenu(); // function declaration is in /header/username.js
+    renderColorPick();
 
     // Set the page title
     $("#pageTitleID").html("Project Upload");
 
-    renderEmptyTile();
-
-    $("#titleInput").change(() => {
+    // PROJECT TITLE change
+    $("#titleInput").on("keyup", () => {
         let val = $("#titleInput").val();
         $(".panel-heading").html("<h4>" + val + "</h4>");
     });
 
-    // LANGUAGE CHANGE
+    // LANGUAGE change
     $("#lngList").change(() => {
         let val = $("#lngList option:selected").val();
         gl_language = (val != "default") ? val : "";
@@ -36,7 +33,7 @@ $(document).ready(() => {
 
     });
 
-    // FRAMEWORK CHANGE
+    // FRAMEWORK change
     $("#frmList").change(() => {
         let val = $("#frmList option:selected").val();
         gl_framework = (val == "default") ? "" : val;
@@ -50,7 +47,7 @@ $(document).ready(() => {
         renderFooter();
     });
 
-    // PLATFORM CHANGE
+    // PLATFORM change
     $("#pltList").change(() => {
         let val = $("#pltList option:selected").val();
         gl_platform = (val != "default") ? val : "";
@@ -64,9 +61,9 @@ $(document).ready(() => {
         renderFooter();
     });
 
-    // CATEGORY CHANGE
+    // CATEGORY change
     $("#ctgList").change(() => {
-        let val = $("#ctgList option:selected").val(); 
+        let val = $("#ctgList option:selected").val();
         gl_category = (val != "default") ? val : "";
         $("#ctgInput").val("");
     });
@@ -78,13 +75,13 @@ $(document).ready(() => {
 
     // DISPLAY image
     $("#photo").change(function () {
-        displayImage(this); // add validation to make sure what's passed in is a picture
+        displayImage(this);
         //displayColors();
     });
 
     // DISPLAY video
     $("#video").change(function () {
-        displayVideo(this); // add validation to make sure what's passed in is video
+        displayVideo(this);
     });
 
     // FORM SUBMISSION LOGIC
@@ -167,22 +164,6 @@ window.addEventListener("load", function () {
     });
 });
 
-function renderEmptyTile() {
-    let tileHtml = "" +
-        "<div class='panel panel-default swTile'>" +
-        "  <div class='panel-heading' style='text-align: center;'></div>" +
-        "  <div class='panel-body'>" +
-        "    <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon'/>" +
-        "  </div>" +
-        "  <div class='panel-footer' style='text-align: right;'></div>" +
-        "</div>" +
-        "<div id='colChoice'></div>" +
-        "<div><video id='vd'controls hidden='hidden'><source src='' type='video/mp4'></video>" +
-        "</div>";
-
-    $("#mainBody").html(tileHtml);
-}
-
 // Render Tile footer: Language, gl_framework, Platform
 // TODO to make a dynamic list from DB
 function renderFooter() {
@@ -223,15 +204,42 @@ function displayVideo(input) {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-            $('#vd').removeAttr('hidden');
-            $('#vd').attr('src', e.target.result);
+            videoHtml = "<video id='vd'controls><source src='" +
+                e.target.result + "' type='video/mp4'></video>";
+            $("#videoPrv").html(videoHtml);
         }
 
         reader.readAsDataURL(input.files[0]);
     }
 }
 
-// TODO - to finish
-function displayColors() {
-    console.log("i'm here");
+// TODO
+
+function renderColorPick() {
+    var colRow = $("#colRow");
+    var colorArray = ["#f5f5f5", "#eda3a3", "#efeba0", "#a0efa1", "#a0d9ef", "#cca9d8"];
+    var colHtml = "";
+
+    $.each(colorArray, (key, color) => {
+        colHtml +=
+            "<td class='colTile'>" +
+            "  <button type='button' class='btn colBtn' onclick='changeColor(\"" + color +"\")'" +
+            "    style='background-color:"+color+"; border:solid 0.5px #dcdcdc;'></button>"+
+            "</td>";
+    });
+   colRow.html(colHtml);
+   return;
 }
+
+function changeColor(col) {
+    var styleH = $(".panel-heading").attr("style");
+    var styleF = $(".panel-footer").attr("style");
+
+    $(".panel-heading").attr('style', styleH + "background-color:" + col + ";");
+    $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
+    $(".swTile").attr('style', "border: solid 1px " + col + ";" );
+
+    colorCh = color; // assigning to global var
+    return;
+}
+

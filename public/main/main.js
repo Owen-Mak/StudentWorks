@@ -10,13 +10,10 @@ var allProjects;
 
 // Entry point
 $(document).ready(() => {
-    // LOCAL
+
     let host =  window.location.hostname;
     let port =  window.location.port;
-    let prjUrl = `http://${host}:${port}/api/getAllProjects`;
-
-    // PRODUCTION
-    //let prjUrl = "http://myvmlab.senecacollege.ca:6193/api/getAllProjects";
+    let prjUrl = `https://${host}:${port}/api/getAllProjects`;
 
     $.getJSON(prjUrl, (data) => {
         allProjects = data;
@@ -79,7 +76,7 @@ function renderHeader(data) {
     let yearArr = [];
 
     filterOpt = "";
-    
+
     filterOpt += "<li class='dropdown' id='byLanguageLi'>";
     filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Language<b class='caret'></b></a>";
     filterOpt += "  <ul class='dropdown-menu' id='lngList' role='menu'></ul>";
@@ -94,43 +91,56 @@ function renderHeader(data) {
     filterOpt += "  <a href='#' class='dropdown-toggle' data-toggle='dropdown'>by Year<b class='caret'></b></a>";
     filterOpt += "  <ul class='dropdown-menu yearList' id='yearList' role='menu'></ul>";
     filterOpt += "</li>";
-    filterOpt += "<a href='#'><span class='glyphicon glyphicon-search srchIcon'></span></a>";
+    //filterOpt += "<a href='#'><span class='glyphicon glyphicon-search srchIcon'></span></a>";
 
     $("#optHeader").html(filterOpt);
 
     // Building HTLM for Filtering lists: Framework, Language, Year
     $.each(data, (key, value) => {
         if (value.language) {
-            if (!languageArr.includes(value.language)) {
+            if (!languageArr.includes(value.language))
                 languageArr.push(value.language);
-                languageList += "<li> <a href='#' onclick='filterProjectsBy(\"language\" ,\"" + value.language + "\")'>";
-                languageList += value.language + "</a></li>";
-            }
         }
 
         if (value.framework) {
-            if (!frameworkArr.includes(value.framework)) {
+            if (!frameworkArr.includes(value.framework))
                 frameworkArr.push(value.framework);
-                frameworkList += "<li> <a href='#' onclick='filterProjectsBy(\"framework\" ,\"" + value.framework + "\")'>";
-                frameworkList += value.framework + "</a></li>";
-            }
         }
 
         if (value.creationDate) {
             var year = value.creationDate.substring(0, 4);
             if (!yearArr.includes(year)) {
                 yearArr.push(year);
-                yearList += "<li> <a href='#' onclick='filterProjectsBy(\"year\" ,\"" + year + "\")'>";
-                yearList += year + "</a></li>";
             }
         }
     });
 
+    languageArr.sort();
+    $.each(languageArr, (k, v)=>{
+        languageList += "<li> <a href='#' onclick='filterProjectsBy(\"language\" ,\"" + v + "\")'>";
+        languageList += v + "</a></li>";
+    });
+
+    frameworkArr.sort(function (a, b) {
+        return a.toLowerCase().localeCompare(b.toLowerCase());
+    });
+    $.each(frameworkArr, (k, v)=>{
+        frameworkList += "<li> <a href='#' onclick='filterProjectsBy(\"framework\" ,\"" + v + "\")'>";
+        frameworkList += v + "</a></li>";
+    });
+
+    yearArr.sort();
+    yearArr.reverse();
+    $.each(yearArr, (k, v)=>{
+        yearList += "<li> <a href='#' onclick='filterProjectsBy(\"year\" ,\"" + v + "\")'>";
+        yearList += v + "</a></li>";
+    });
+    
     $("#lngList").append(languageList);
     $("#frmList").append(frameworkList);
     $("#yearList").append(yearList);
 
-    renderUserMenu(); // function declaration is in username.js
+    renderUserMenu(); // function declaration is in /header/username.js
 }
 
 function renderSixProjectTiles(jsData) {
@@ -142,7 +152,7 @@ function renderSixProjectTiles(jsData) {
 
             var title = jsData[start].title;
             var year = jsData[start].creationDate ? jsData[start].creationDate.substring(0, 4) : "";
-            var image = "http://myvmlab.senecacollege.ca:6193/" + jsData[start].ImageFilePath;
+            var image = "https://myvmlab.senecacollege.ca:6193/" + jsData[start].ImageFilePath;
             var language = jsData[start].language;
             var framework = jsData[start].framework;
             var id = jsData[start].projectID;
@@ -181,7 +191,7 @@ function renderTile(title, year, icon, language, framework, id) {
     tileHtml += "<div class='panel panel-default swTile'>";
     tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
     tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
-    tileHtml += "          <div class='panel-body' style='height:250px; '>" + imageShow + "</div>";
+    tileHtml += "          <div class='panel-body' style='height:200px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
     tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
     tileHtml += "</div>";
@@ -198,7 +208,7 @@ function renderEmptyTile() {
     emptyTileHtml += "<div class='panel panel-default swTile swEmptyTile'>";
     emptyTileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>Future Proejct</h4></div>";
     emptyTileHtml += "       <a href='../contribute' class ='tileLinkEmpty'>";
-    emptyTileHtml += "          <div class='panel-body' style='height:250px; '>" + image + "</div>";
+    emptyTileHtml += "          <div class='panel-body' style='height:200px; '>" + image + "</div>";
     emptyTileHtml += "       </a>";
     emptyTileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
     emptyTileHtml += "</div>";
@@ -208,13 +218,20 @@ function renderEmptyTile() {
 
 function renderTileNavigation() {
     let tileNav = "";
-    tileNav += '<div class="row center">';
-    tileNav += '<div style="display: inline;"><button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'; // PREVIOUS Button
-    tileNav += '<span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span></button></div>';
-    tileNav += '<div id="pageId"  style="display: inline; class="center"></div>';
-    tileNav += '<div  style="display: inline;"><button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'; // NEXT Button
-    tileNav += '<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></button><div>';
-    tileNav += '</div>'
+    tileNav += '' +
+        '<div class="row center">' +
+        '  <div style="display: inline;">' +
+        '    <button type="button" class="btn btn-default" id="prevBtn" aria-label="Left Align">'+ // PREVIOUS Button
+        '      <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>'+
+        '    </button>'+
+        '  </div>'+
+        '  <div id="pageId"  style="display: inline; class="center"></div>'+
+        '  <div style="display: inline;">' +
+        '    <button type="button" class="btn btn-default" id="nextBtn" aria-label="Right Align">'+ // NEXT Button
+        '      <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>' +
+        '    </button>'+
+        '  </div>'+
+        '</div>';
 
     $("#tileNav").append(tileNav);
 }
