@@ -7,13 +7,10 @@
         crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/projectPage/project.js"></script>
-    <script src="/projectPage/comment.js"></script>
     <script src="/header/usermenu.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/header/nav.css">
     <link rel="stylesheet" href="/projectPage/project.css">
-    <link rel="stylesheet" href="/projectPage/comment.css">
-
 </head>
 
 <body>
@@ -80,128 +77,8 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <div    class="row" id="projectBody"></div>
+        <div class="row" id="projectBody"></div>
     </div>
     <!-- End of BODY.............................................................. -->
-
-
-    <!-- COMMENT ...................................................................... -->
-
-<div class="container">
-    <hr>
-    <div class="row"style="padding-left: 150px; padding-right: 150px">
-	<div class="col-md-10" style="box-shadow: 5px #888888;">
-		<h3>Leave a Comment</h3>
-			<div class="row" style=" border-radius: 10px ">
-				<div class="col-md-12"> 
-					<form action="" id="comment" class="comment-form" name="comment" method="POST">
-						<div class="well" style=" background-color: #ececec;">
-							<div class="row">
-								<div class="col-md-6">
-                                    <label>Name  </label>
-									<input type="text" class="form-control" name="name" />
-									<br />
-								</div>
-								<div class="col-md-6">
-                                    <label>Email </label>
-									<input type="text" class="form-control" name="username" />
-									<br />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-                                    <label>Subject </label>
-									<input type="text" class="form-control" name="subject" />
-									<br />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-                                    <label>Comment </label>
-									<textarea class="form-control" rows="8" name="comment"></textarea>
-									<br />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-3 col-md-offset-9">
-									<button type="submit" class="comment-form-btn form-control">COMMENT</button>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-	</div>
-</div>
-{{#if data}}
-<div class="row">
-	<div class="col-md-12">
-		<h3>All Comments</h3>
-		<hr />
-	</div>
-</div>
-{{/if}} {{#each data}}
-<div class="row">
-	<div class="col-md-12">
-		{{subject}}
-		<div class="well">
-			<div class="row">
-				<div class="col-md-12">
-					{{commentText}} <br /><br /> Posted on: {{postedDate}} by <a href="{{authorEmail}}">{{authorName}}</a>
-				</div>
-			</div>
-			{{#each replies}}
-			<div class="row">
-				<div class="col-md-12">
-					<div class="well">{{commentText}} <br/>
-						</div> Post on: {{repliedDate}} by <a href="{{authorEmail}}"> {{authorName}}</a>
-					</div>
-				</div>
-				{{/each}}
-				<div class="row">
-					<div class="col-md-12">
-						<button class="comment-form-btn btn-sm pull-right" data-toggle="collapse" data-target="#reply-{{_id}}" aria-expanded="false">Reply</button>
-					</div>
-				</div>
-			</div>
-			<div class="collapse" id="reply-{{_id}}">
-				<div class="col-md-12">
-					<form method="POST" action="/about/addReply">
-						<div class="well">
-							<div class="row">
-								<div class="col-md-6">
-									<input type="text" class="form-control" placeholder="Name" name="authorName" />
-									<br />
-								</div>
-								<div class="col-md-6">
-
-									<input type="email" class="form-control" placeholder="Email" name="authorEmail" />
-									<br />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-12">
-									<textarea  class="form-control" rows="8" placeholder="Comment" name="commentText"></textarea>
-									<br />
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-2 col-md-offset-10">
-									<input type="hidden" value="{{_id}}" name="comment_id" />
-									<button type="submit" class="comment-form-btn form-control">Reply</button>
-
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-    <!-- End of BODY.............................................................. -->
-
-{{/each}}
-</div>
 </body>
 </html>
