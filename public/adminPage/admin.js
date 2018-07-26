@@ -2,15 +2,15 @@
 let host = window.location.hostname;
 let port = window.location.port;
 
-let prjUrl = `http://${host}:${port}/api/getAllProjectsAdmin`;
-let userUrl = `http://${host}:${port}/api/getAllUsers`;
-let aprUrl = `http://${host}:${port}/api/approveProject/`;
-let dwnUrl = `http://${host}:${port}/api/takedownProject/`;
-let serverInfo = `http://${host}:${port}/api/serverInfo`;
-let setAdmin = `http://${host}:${port}/api/setAdmin/`;
-let unsetAdmin = `http://${host}:${port}/api/unsetAdmin/`;
-let delUser = `http://${host}:${port}/api/deleteUser/`;
-let adminLog = `http://${host}:${port}/api/getAdminLog`;
+let prjUrl = `https://${host}:${port}/api/getAllProjectsAdmin`;
+let userUrl = `https://${host}:${port}/api/getAllUsers`;
+let aprUrl = `https://${host}:${port}/api/approveProject/`;
+let dwnUrl = `https://${host}:${port}/api/takedownProject/`;
+let serverInfo = `https://${host}:${port}/api/serverInfo`;
+let setAdmin = `https://${host}:${port}/api/setAdmin/`;
+let unsetAdmin = `https://${host}:${port}/api/unsetAdmin/`;
+let delUser = `https://${host}:${port}/api/deleteUser/`;
+let adminLog = `https://${host}:${port}/api/getAdminLog`;
 
 
 // DATA
