@@ -18,3 +18,4 @@ public/.DS_Store
 #ignore user photos directory
 userPhotos
 
+admin.log

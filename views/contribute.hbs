@@ -77,7 +77,7 @@
 
     <!-- BODY...................................................................... -->
     <div class="container">
-        <form id="uForm" name="uForm" method="POST" enctype="multipart/form-data">
+        <form id="uForm" name="uForm" method="POST" enctype="multipart/form-data" autocomplete="off">
             <table>
                 <tbody>
                     <tr>
@@ -86,7 +86,7 @@
                             <label for="title" class="lbl">Title</label>
                         </td>
                         <td>
-                            <input required="required" id="titleInput" type="text" name="title" class="inpt" autofocus="autofocus" maxlength="50" />
+                            <input autofocus="autofocus" required="required" id="titleInput" type="text" name="title" class="inpt" maxlength="50" />
                         </td>
                     </tr>
                     <tr>
@@ -195,15 +195,7 @@
                             />
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <label for="roles" class="lbl">Roles</label>
-                        </td>
-                        <td>
-                            <input required="required" id="roles" type="text" name="roles" title="Comma separated list matching order of developer names."
-                            />
-                        </td>
-                    </tr>
+                    
                     <tr>
                         <td>
                             <label for="desc" class="lbl">Description</label>
@@ -226,7 +218,7 @@
                          </td>
                          {{else}}
                         <td>
-                            <input id="video" type="file" name="video" accept=".mp4,.webm,.ogg" />
+                            <input id="video" type="file" name="video" accept=".mp4,.webm,.ogg" required="required" />
                         </td>
                         {{/if}}
                         
@@ -266,7 +258,21 @@
                 </tbody>
             </table>
         </form>
-        <div class="row" id="mainBody"></div>
+        <div class="row" id="mainBody">
+            <div class='panel panel-default swTile'>
+                <div class='panel-heading' style='text-align: center;'></div>
+                <div class='panel-body'>
+                    <img src='/images/empty.png' id='img' class='img-responsive center-block swPrjImage' alt='icon' />
+                </div>
+                <div class='panel-footer' style='text-align: right;'></div>
+            </div>
+            <div id='colChoice'>
+                <table id="colTable">
+                    <tr id="colRow"></tr>
+                </table>
+            </div>
+            <div id='videoPrv'></div>
+        </div>
     </div>
     <!-- End of BODY.............................................................. -->
     <hr class="clearfix w-100 d-md-none pb-3">

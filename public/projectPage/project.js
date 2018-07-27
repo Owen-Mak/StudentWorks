@@ -1,13 +1,8 @@
 $(document).ready(() => {
     let id = getQueryStr('id');
-
-    // LOCAL
     let host =  window.location.hostname;
     let port =  window.location.port;
     let url = `https://${host}:${port}/api/getOneProject/id/`+id;
-
-    // PRODUCTION
-    //let url = "http://myvmlab.senecacollege.ca:6193/api/getOneProject/id/"+id;
 
     $.getJSON(url, (jsData) => {
         let year = jsData[0].creationDate ? jsData[0].creationDate.substring(0, 4) : "";
@@ -44,7 +39,7 @@ $(document).ready(() => {
         prjHtml += "   </div>";
         prjHtml += "</div>";
 
-        renderUserMenu();
+        renderUserMenu(); // function declaration is in /header/username.js
         $("#pageTitleID").html(title);
         $("#projectBody").html(prjHtml);
         $("#tileNav").empty();

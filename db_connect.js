@@ -32,7 +32,7 @@ module.exports.connect = function(err) {
         database: connectInfo.database,
         port : connectInfo.port
     });
-      console.log("Connected!");  
+      //console.log("Connected!");  only errors should be displayed, success expected
 };
 
 //-------USERS----------------
@@ -90,6 +90,45 @@ module.exports.getAllProjects = function (callback) {
 	var sql = `SELECT * FROM PROJECTS WHERE status = 'approved';`;
     runQuery(sql, callback);
 };
+
+module.exports.getAllProjectsAdmin = function (callback) {
+	var sql = `SELECT * FROM PROJECTS;`;
+    runQuery(sql, callback);
+};
+
+module.exports.approveProject = function(projectID, callback) {
+    var sql = `UPDATE PROJECTS 
+                SET status='approved'
+                WHERE projectID = ${projectID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.takedownProject = function(projectID, callback) {
+    var sql = `UPDATE PROJECTS 
+                SET status='pending'
+                WHERE projectID = ${projectID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.setAdmin = function(userID, callback) {
+    var sql = `UPDATE USERS 
+                SET userType='Admin'
+                WHERE userID = ${userID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.unsetAdmin = function(userID, callback) {
+    var sql = `UPDATE USERS 
+                SET userType='Contributor'
+                WHERE userID = ${userID}`;
+    runQuery (sql, callback);
+}
+
+module.exports.deleteUser = function(userID, callback){
+    var sql = `DELETE FROM USERS
+                WHERE userID = ${userID}`;
+    runQuery(sql, callback);
+}
 
 module.exports.getAllProjectsFilterByLanguage = function (language, callback){
     var sql = `Select * 
@@ -199,12 +238,10 @@ function runQuery(sql, callback){
 			throw err;
 		} else {
 			callback (null, result);
-			//console.log ("Query success: ", sql);
 		}
 	});
 }
 
 module.exports.end = function (){
-    console.log ("Disconnect!");
     connection.end();
 };
