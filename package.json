@@ -25,6 +25,7 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.6",
     "fs": "0.0.1-security",
+    "mongoose": "^5.2.5",
     "multer": "^1.3.0",
     "multer-sftp": "^0.2.0",
     "multer-sftp-linux": "^0.93.0",
@@ -33,6 +34,7 @@
     "nodemailer": "^4.6.7",
     "nodemon": "^1.17.5",
     "path": "^0.12.7",
+    "query-string": "^6.1.0",
     "ssh2-sftp-client": "^2.3.1"
   }
 }
