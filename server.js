@@ -294,7 +294,7 @@ app.get('/projectPage', urlencodedParser, (req, res) => {
 
             
 });
-//ADDING COMMENTS TO PROFILE PAGE
+//ADDING COMMENTS TO PROJECT PAGE
 app.post('/addComment',  urlencodedParser, (req, res) =>{
    
     var comment = {
@@ -303,12 +303,14 @@ app.post('/addComment',  urlencodedParser, (req, res) =>{
         commentText: req.body.commentText
     }
     commentDB.addComment(comment).then(() => {
-        res.redirect("/");
+        //res.redirect("/");
+        res.redirect(req.get('referer'));
         })
         .catch((err) => {
           console.log(err);
-          res.redirect("/");
-        });
+          res.redirect(req.get('referer'));
+        });    
+
 
 });
 
@@ -321,11 +323,13 @@ app.post('/addReply', urlencodedParser, (req, res) =>{
     }
     console.log(comment);
     commentDB.addReply(comment).then(() => {
-        res.redirect("/");
+        res.redirect(req.get('referer'));
+
         })
         .catch((err) => {
           console.log(err);
-          res.redirect("/");
+          res.redirect(req.get('referer'));
+
         });
 
 });
@@ -1146,7 +1150,7 @@ app.get('/logout', function (req, res) {
 
 /* Catches all unhandled requests */
 app.use(function (req, res) {
-    res.status(404).send("Page not found");
+    res.status(404).send("<h1>ERROR</h1> <h3> Page not found</h3>");
 });
 
 /*--------------------Routing Over----------------------------*/
