@@ -1,5 +1,5 @@
 # StudentWorks
-<img src='/public/images/logo.png'>Not loaded</img>
+<img src='/public/images/logo.png'></img>
 "By the Students, for the Students"
 
 Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAoo), [Owen](https://github.com/Owen-Mak), [Yuriy](https://github.com/YuriyKartuzov)
