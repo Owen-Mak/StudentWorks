@@ -349,12 +349,15 @@ app.get('/profile', (req, res) => {
 
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    console.log(req.query.video);
+    var filePath = req.query.video;
+    //Get rid of project, because it is redundant since app.use(project) already looks in the directory. 
+    filePath = filePath.replace('/project','');
+    console.log(filePath);
     if (req.session.authenticate){
         res.status(200).render('contribute', {  authenticate :  req.session.authenticate,
                                                 userID       :  req.session.userID,
                                                 userType     :  req.session.userType,
-                                                videoFile    :  req.query.video});
+                                                videoFile    :  filePath});
     } else {
         res.status(200).redirect("/login");
     }
