@@ -1,4 +1,3 @@
-# StudentWorks
 <img src='/public/images/logo.png'></img>
 "By the Students, for the Students"
 
