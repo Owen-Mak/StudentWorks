@@ -196,7 +196,8 @@ margin-bottom: 12px;
   width: 200px;
   height: 200px;
   overflow: hidden;
-  
+  max-width: none;
+  object-fit: cover;
 }
 
 .avatar img {
@@ -208,9 +209,20 @@ margin-bottom: 12px;
   -webkit-transform: translate(-50%,-50%);
       -ms-transform: translate(-50%,-50%);
           transform: translate(-50%,-50%);
+          object-fit: cover;
+
 }
 
 .thumbnail img.portrait {
   width: 100%;
   height: auto;
+  object-fit: cover;
+
+}
+
+textarea {
+  border: 2px solid;
+  padding: 20px; 
+  resize: vertical;
+  overflow: auto;
 }

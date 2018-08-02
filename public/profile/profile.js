@@ -130,7 +130,6 @@ function renderProjectList(jsData) {
 }
 
 function renderUserDetails(jsData) {
-  //let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "First Name";
   let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "";
   let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "";
   let email = jsData[0].email ? jsData[0].email : "";
