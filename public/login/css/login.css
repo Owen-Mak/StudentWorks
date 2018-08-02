@@ -108,26 +108,20 @@
     align-items: center;
     background-color: #ffffff;
     width: 100px;
-  height: 100%;
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+    position: absolute;
 
-  margin: auto;
+  margin-top: 50px;
 }
 
 .container {
   width: 100px;
-  height: 100%;
   position: absolute;
   top:0;
   bottom: 0;
   left: 0;
   right: 0;
 
-  margin: auto;
+  margin-top: 50px;
 }
 
 
@@ -144,7 +138,6 @@
     padding-bottom: 25px;
     padding-top: 25px;
     background: linear-gradient(to bottom, #dbdbdb 89%, #f3f3f3 14%);
-    /**border-bottom: 50px solid #f3f3f3; **/
   }
  
   .login-form {

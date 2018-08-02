@@ -108,26 +108,20 @@
     align-items: center;
     background-color: #ffffff;
     width: 100px;
-  height: 100%;
-  position: absolute;
-  top:0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+    position: absolute;
 
-  margin: auto;
+  margin-top: 50px;
 }
 
 .container {
   width: 100px;
-  height: 100%;
   position: absolute;
   top:0;
   bottom: 0;
   left: 0;
   right: 0;
 
-  margin: auto;
+  margin-top: 50px;
 }
 
 
@@ -141,9 +135,8 @@
     font-size:18px;
     padding: 40px;
     width:450px;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
     padding-top: 25px;
-    /**border-bottom: 50px solid #f3f3f3; **/
   }
  
   .register-form {
