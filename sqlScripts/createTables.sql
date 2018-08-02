@@ -41,6 +41,7 @@ CREATE TABLE PROJECTS (
     PRIMARY KEY (projectID))
 engine=innodb;
 
+/* NO Longer used since mongoDB was chosen to store the comments instead */
 CREATE TABLE COMMENTS (
     commentID INT(11) NOT NULL AUTO_INCREMENT,
     userID      INT(11) NOT NULL,
@@ -50,6 +51,7 @@ CREATE TABLE COMMENTS (
     FOREIGN KEY (userID) REFERENCES USERS(userID))
 engine=innodb;
 
+/* No Longer used since mongoDB was chosen to store the comments instead */
 CREATE TABLE BRIDGE_USERS_PROJECTS (
     bridgeId INT(11) PRIMARY KEY AUTO_INCREMENT,
     userID INT(11) NOT NULL,
