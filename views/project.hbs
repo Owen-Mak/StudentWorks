@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/header/nav.css">
     <link rel="stylesheet" href="/projectPage/project.css">
+    <link rel="stylesheet" href="/projectPage/comments.css">
+
 </head>
 
 <body>
@@ -38,7 +40,7 @@
                     <div class="collapse navbar-collapse navbar-ex1-collapse">
                         <ul class="nav navbar-nav js-nav-add-active-class">
                             <li class="">
-                                <a href="/" >
+                                <a href="/">
                                     <space class="glyphicon glyphicon-home"></space>
                                 </a>
                             </li>
@@ -46,7 +48,7 @@
                         <!-- for main page -->
                         <ul class="nav navbar-nav js-nav-add-active-class" id="optHeader"></ul>
                         <!-- for all page to push data into-->
-                        <div id="pageTitleID"></div>      
+                        <div id="pageTitleID"></div>
                         <a href="#">
                             <span class="glyphicon glyphicon-align-justify profilefIcon" data-toggle="modal" data-target="#myModal"></span>
                         </a>
@@ -79,6 +81,83 @@
     <div class="container">
         <div class="row" id="projectBody"></div>
     </div>
-    <!-- End of BODY.............................................................. -->
+    <!-- needed to get projectID passed into the post request -->
+    <script>
+        $(document).ready(function () {
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var projectid = url.searchParams.get("id");
+            document.getElementById('projectID').value = projectid;
+        });
+    </script>
+
+
+    <div class="container">
+        <hr>
+        <div class="row" style="padding-right: 150px">
+            <div class="col-md-12" style="box-shadow: 5px #888888;">
+                <h3>Leave a Comment</h3>
+                <div class="row" style=" border-radius: 10px">
+                    <div class="col-md-12">
+                        <form method="POST" action="/addComment" class="comment-form">
+                            <div class="well" style=" background-color: #ececec;">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <textarea id="comment" class="form-control" rows="8" placeholder="Comment" name="commentText" style="resize:vertical;"></textarea>
+                                        <textarea hidden id="projectID" name="projectID"></textarea>
+                                        <br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 col-md-offset-9">
+                                        <button type="submit" class="btn btn-primary form-control" style="background-color: #881c1c; border: none;">Comment</button>
+                                    </div>
+                                </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+
+            <!-- Comments -->
+            {{#if comments}}
+            <div class="row">
+                <div class="col-md-10" style="box-shadow: 5px #888888;">
+                    <h3>All Comments</h3>
+                </div>
+            </div>
+            {{/if}} {{#each comments}}
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>{{subject}}</h5>
+                    <div class="well" style="box-shadow: 0 0 1px rgb(133, 133, 133);">
+                        <div class="row">
+                            <div class="col-md-12">
+                                {{commentText}}
+                                <br />
+                                <hr> Posted on:
+                                <span style="color: #881c1c">{{postedDate}} </span>by
+                                <a href="{{authorEmail}}" style="color: #881c1c">{{authorName}}</a>
+                            </div>
+                        </div>
+                        {{#each replies}}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="well">{{commentText}}
+                                    <br/>
+                                </div> Post on:
+                                <span style="color: #881c1c;"> {{repliedDate}} </span> by
+                                <a href="{{authorEmail}}" style="color: #881c1c"> {{authorName}}</a>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

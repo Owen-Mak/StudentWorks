@@ -2,10 +2,12 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const app = express();
 const auth = require('./auth');
+const commentDB = require('./public/projectPage/comments.js')
 const dbconnect = require('./db_connect');
 const path = require("path");
 const multer = require('multer');
 const exphbs = require('express-handlebars');
+const queryString = require('query-string');
 let Client = require('ssh2-sftp-client');
 let sftp = new Client();
 
@@ -269,12 +271,67 @@ app.get("/", (req, res) => {
 });
 
 //PROJECT page
-app.get('/projectPage', (req, res) => {
-    res.status(200).render('project', {
-        authenticate: req.session.authenticate,
-        userID: req.session.userID,
-        userType: req.session.userType
-    });
+app.get('/projectPage', urlencodedParser, (req, res) => {
+    commentDB.initialize(req.query.id)
+             .then(commentDB.getAllComments, null)
+             .then((commentsFromDB)=>{
+                res.status(200).render('project', {
+                    authenticate: req.session.authenticate,
+                    userID: req.session.userID,
+                    userType: req.session.userType,
+                    comments: commentsFromDB
+                });
+            })
+            .catch((error)=>{
+                console.log("inside of NO DB CONNECTION");
+                //don't give em comments if the DB doesn't connect.
+                res.status(200).render('project', {
+                    authenticate: req.session.authenticate,
+                    userID: req.session.userID,
+                    userType: req.session.userType
+                });
+            })
+
+            
+});
+//ADDING COMMENTS TO PROJECT PAGE
+app.post('/addComment',  urlencodedParser, (req, res) =>{
+   
+    var comment = {
+        projectID:   req.body.projectID, 
+        authorName:  req.session.userName ? req.session.userName : "Anonymous",
+        commentText: req.body.commentText
+    }
+    commentDB.addComment(comment).then(() => {
+        //res.redirect("/");
+        res.redirect(req.get('referer'));
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect(req.get('referer'));
+        });    
+
+
+});
+
+app.post('/addReply', urlencodedParser, (req, res) =>{
+    
+    var comment = {
+        projectID:   req.body.projectID, 
+        authorName:  req.session.userName ? req.session.userName : "Anonymous",
+        commentText: req.body.commentText
+    }
+    console.log(comment);
+    commentDB.addReply(comment).then(() => {
+        res.redirect(req.get('referer'));
+
+        })
+        .catch((err) => {
+          console.log(err);
+          res.redirect(req.get('referer'));
+
+        });
+
 });
 
 //PROFILE page
@@ -292,19 +349,22 @@ app.get('/profile', (req, res) => {
 
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    console.log(req.query.video);
+    var filePath = req.query.video;
+    //Get rid of project, because it is redundant since app.use(project) already looks in the directory. 
+    filePath = filePath.replace('/project','');
+    console.log(filePath);
     if (req.session.authenticate){
         res.status(200).render('contribute', {  authenticate :  req.session.authenticate,
                                                 userID       :  req.session.userID,
                                                 userType     :  req.session.userType,
-                                                videoFile    :  req.query.video});
+                                                videoFile    :  filePath});
     } else {
         res.status(200).redirect("/login");
     }
 });
 
 //RECORDING page + Upload Video
-app.get('/recording', (req,res) => {
+app.get('/recording', ensureLogin, (req,res) => {
     res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
 });
 
@@ -313,6 +373,7 @@ app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => 
     //turn video path into readable path on VM
     var changed = file.replace(/\\/g, '/');
     //send back the video path
+    changed = "/" + changed;
     res.status(200).send(changed);
     
 });
@@ -1092,7 +1153,7 @@ app.get('/logout', function (req, res) {
 
 /* Catches all unhandled requests */
 app.use(function (req, res) {
-    res.status(404).send("Page not found");
+    res.status(404).send("<h1>ERROR</h1> <h3> Page not found</h3>");
 });
 
 /*--------------------Routing Over----------------------------*/
@@ -1100,8 +1161,8 @@ app.use(function (req, res) {
 
 //Get a proper port
 var port = process.env.PORT || 3000;
-const server = https.createServer(sslOptions, app).listen(port, () => {
-    console.log("Express Listening on port: " + port);
-});
+    const server = https.createServer(sslOptions, app).listen(port, () => {
+        console.log("Express Listening on port: " + port);
+})
 
 
