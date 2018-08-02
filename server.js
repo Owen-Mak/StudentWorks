@@ -353,7 +353,7 @@ app.get('/contribute', (req,res) => {
     var filePath = req.query.video;
     //Get rid of project, because it is redundant since app.use(project) already looks in the directory. 
     
-    if (req.query == null){
+    if (req.query.video){
         filePath = filePath.replace('/project','');
     }
     console.log(filePath);
@@ -378,7 +378,11 @@ app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => 
     var changed = file.replace(/\\/g, '/');
     //send back the video path
     changed = "/" + changed;
-    res.status(200).send(changed);
+    //wiat one second delay to process the video upload
+    setTimeout(function() {
+        res.status(200).send(changed);
+    }, 1000);
+    
     
 });
 

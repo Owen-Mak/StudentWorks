@@ -107,7 +107,6 @@ window.addEventListener("load", function () {
         // Developer processing
         var developers = [];
         var devs = $("#devs").val().split(",");
-        var roles = $("#roles").val().split(",");
         if(devs.length != roles.length){
             $("#devs").focus();
             return;
