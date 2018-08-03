@@ -100,6 +100,7 @@
         <button id="btn-pause-recording">Pause</button>
         <button id="btn-save">Save to Computer</button>
         <button id="btn-upload">Upload to StudentWorks</button>
+        
     </div>
      
 <!-- Start of recording: This code is based off of the open source project: RecordRTC as well as DetectRTC-->
@@ -301,28 +302,6 @@ document.getElementById('recording-player').appendChild(mediaElement);
                     }
                 };
 
-            //used only for screen without audio...
-           /* captureScreen(commonConfig);
-                    button.mediaCapturedCallback = function() {
-                        var options = {
-                            type: type,
-                            mimeType: mimeType,
-                            disableLogs: params.disableLogs || false,
-                            getNativeBlob: false, // enable it for longer recordings
-                            video: recordingPlayer
-                        };
-
-                        options.ignoreMutedMedia = false;
-                        button.recordRTC = RecordRTC(button.stream, options);
-
-                        button.recordingEndedCallback = function(url) {
-                            setVideoURL(url);
-                        };
-
-                        button.recordRTC.startRecording();
-                        btnPauseRecording.style.display = '';
-                    };
-          */  
         
         captureAudioPlusScreen(commonConfig);
 

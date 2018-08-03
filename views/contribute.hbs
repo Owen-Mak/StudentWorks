@@ -213,7 +213,7 @@
                         </td>
                         {{#if videoFile}}
                          <td>
-                        <input required="required" id="videoUpload" type="text" name="videoUpload" value="https://myvmlab.senecacollege.ca:6193{{videoFile}}" disabled/>
+                        <input required="required" id="videoUpload" type="text" name="videoUpload" value="{{videoFile}}" hidden/>
                          <video height="640" width="720"src="{{videoFile}}" id="videoPlayer"/>
                          </td>
                          {{else}}
