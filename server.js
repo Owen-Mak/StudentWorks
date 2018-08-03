@@ -449,7 +449,7 @@ app.get('/contribute', (req,res) => {
 });
 
 //RECORDING page + Upload Video
-app.get('/recording', (req,res) => {
+app.get('/recording', ensureLogin, (req,res) => {
     res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
 });
 
