@@ -2,12 +2,10 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const app = express();
 const auth = require('./auth');
-const commentDB = require('./public/projectPage/comments.js')
 const dbconnect = require('./db_connect');
 const path = require("path");
 const multer = require('multer');
 const exphbs = require('express-handlebars');
-const queryString = require('query-string');
 let Client = require('ssh2-sftp-client');
 let sftp = new Client();
 
@@ -451,7 +449,7 @@ app.get('/contribute', (req,res) => {
 });
 
 //RECORDING page + Upload Video
-app.get('/recording', ensureLogin, (req,res) => {
+app.get('/recording', (req,res) => {
     res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
 });
 
@@ -1252,8 +1250,8 @@ app.use(function (req, res) {
 
 //Get a proper port
 var port = process.env.PORT || 3000;
-    const server = https.createServer(sslOptions, app).listen(port, () => {
-        console.log("Express Listening on port: " + port);
-})
+const server = https.createServer(sslOptions, app).listen(port, () => {
+    console.log("Express Listening on port: " + port);
+});
 
 
