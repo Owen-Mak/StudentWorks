@@ -429,6 +429,33 @@ app.get('/profile', (req, res) => {
     }
 });
 
+app.get('/profile/:userName', (req, res) => {
+    function getUser() {
+        return new Promise(function (resolve, reject) {
+            dbconnect.connect();
+            var user = dbconnect.getOneUser(req.params.userName, function (err, data) {
+                 if (err) {
+                     console.log(err); throw err;
+                } else {
+                //validate the data here!!
+                var userInfo = JSON.parse(JSON.stringify(data));
+                resolve(userInfo);
+            }
+            dbconnect.end();
+            });
+        });
+    }
+    getUser()
+    .then((data)=>{
+        console.log(data[0]);
+        res.render('userProfile', { userInfo: data[0] });
+    })
+    .catch((err) => {
+        res.send("No profile available");
+    })  
+   
+});
+
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
     console.log("contribute:", req.query);
