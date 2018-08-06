@@ -130,21 +130,22 @@ function renderProjectList(jsData) {
 }
 
 function renderUserDetails(jsData) {
+  console.log (jsData[0]);
   let fName = (jsData[0].firstName && jsData[0].firstName != "NULL") ? jsData[0].firstName : "";
   let lName = (jsData[0].lastName && jsData[0].lastName != "NULL") ? jsData[0].lastName : "";
   let email = jsData[0].email ? jsData[0].email : "";
   let program = (jsData[0].program && jsData[0].program != "NULL") ? jsData[0].program : "";
   let username = jsData[0].userName ? jsData[0].userName : "Username";
-  let description = (jsData[0].userDescription && jsData[0].description != "NULL") ? jsData[0].userDescription : "";
+  let description = (jsData[0].userDescription != "NULL") ? jsData[0].userDescription : "";
   let imageHost = "https://myvmlab.senecacollege.ca:6193";
   let imagePath = jsData[0].imagePath ? imageHost + jsData[0].imagePath :"../images/avatar.png";
-
+  console.log (description);
   $("#fname").attr({ "value": fName });
   $("#lname").attr({ "value": lName });
   $("#email").attr({ "value": email });
   $("#program").attr({ "value": program });
   $("#username").attr({ "value": username });
-  $("#description").attr({ "value": description });
+  document.querySelector("#description").innerHTML = description;
   $("#imgPreview").attr({ "src": imagePath });
 }
 

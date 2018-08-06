@@ -228,8 +228,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
                 res.status(400).send("validation error - field length");
             }
         }
-        if (req.files[key] != undefined) {
-            //console.log ("longfileLength:", req.files[key][0].path.length);
+        if (req.files[key] != undefined) {            
             if (req.files[key][0].path.length > value) {
                 validateLength = false;
                 res.status(400).send("validation error - file path length");
@@ -239,8 +238,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
 
     //checks for the required fields in req.files
     function checkFilesFieldExist(key) {
-        if (req.files[key] === undefined || req.files[key] == "") {
-            //console.log ("req.files key:", req.files[key], key);
+        if (req.files[key] === undefined || req.files[key] == "") {            
             validateResult = false;
             res.status(400).send("validation error - file");
         }
@@ -294,6 +292,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
         platform: req.body.platform,
         category: (req.body.category === undefined) ? "" : req.body.category,
         desc: req.body.desc,
+        color: req.body.color,
         imageFilePath: `temp/${req.files['image'][0].filename}`,
         videoFilePath: `temp/${req.files['video'][0].filename}`
     }
@@ -723,7 +722,7 @@ app.get('/verify', function (req, res) {
     }
 
     function validateRegistration(regCode, regCodeExist) {
-        console.log("inside validate registration");
+        //console.log("inside validate registration");
         //Update emailRegistration status in database
         dbconnect.connect();
         dbconnect.validateRegistration(regCode);
@@ -947,7 +946,7 @@ app.post('/complete', urlencodedParser, function (req, res) {
 });
 
 app.post('/profile', upload.single("img-input"), function (req, res) {
-    console.log('got to profile');
+    //console.log('got to profile');
     if (!req.body) {
         return res.sendStatus(400).redirect('/profile');
     }
