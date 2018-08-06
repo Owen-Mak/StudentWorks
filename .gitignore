@@ -19,3 +19,6 @@ public/.DS_Store
 userPhotos
 
 admin.log
+
+#images for the readme 
+public/images/userModal.png
