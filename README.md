@@ -59,7 +59,8 @@ StudentWorks currently runs alongside mysql  (for all the api calls to project a
 
 When installing StudentWorks, you must have a mysql database setup. Scripts are included to create / remove the required tables necessary. You should run these scripts found in ./sqlScripts before continuing on. 
 
-Next you must change lines 18 onwards in the ./db_connect.js file to incorporate 
+Next you must change lines 18 onwards in the `./db_connect.js` file to incorporate 
+
 `
     connectInfo.host = "<hostname>.<domain>";
     
