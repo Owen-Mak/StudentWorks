@@ -6,7 +6,12 @@ Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAo
 ---------------------------------------------------------------------------------------------------------------------------------
 [Installation](https://github.com/steaward/StudentWorks/blob/master/README.md#installation)
 
+[Connecting your own Databases](https://github.com/steaward/StudentWorks/blob/master/README.md#connecting-to-your-own-database)
+
 [Logging Errors](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-errors)
+
+[User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-errors)
+
 
 ## Installation
 
