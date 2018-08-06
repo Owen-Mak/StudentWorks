@@ -214,7 +214,7 @@
                         {{#if videoFile}}
                          <td>
                         <input required="required" id="videoUpload" type="text" name="videoUpload" value="{{videoFile}}" hidden/>
-                         <video height="640" width="720"src="/{{videoFile}}" id="videoPlayer"/>
+                         <video width="720px"src="/{{videoFile}}" id="videoPlayer" controls />
                          </td>
                          {{else}}
                         <td>
@@ -227,14 +227,9 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td>
+                         <td>
                             <label for="recB" class="lbl">Video record</label>
                         </td>
-                        <td>
-                            <button class="btn btn-primary" type="submit" id="sbmBtn">Submit for Review</button>
-                        </td>
-                    </tr>
-                    <tr>
                         <td>
                             <a href="/recording">
                                 <img src="/images/recBtn.png" alt="record" id="recB" name="recB" />
@@ -246,13 +241,9 @@
                     <tr class="seperator">
                         <td></td>
                     </tr>
-                    <tr>
+                     <tr>
                         <td>
-                            <label class="lbl">Instructions</label>
-                        </td>
-                        <td>
-                            <input type="text" name="cs" value="Coming soon" readonly>
-                            <b class='caret'></b>
+                            <button class="btn btn-primary" type="submit" id="sbmBtn">Submit for Review</button>
                         </td>
                     </tr>
                 </tbody>
@@ -275,7 +266,7 @@
         </div>
     </div>
     <!-- End of BODY.............................................................. -->
-    <hr class="clearfix w-100 d-md-none pb-3">
 </body>
+    <hr class="clearfix w-100 d-md-none pb-3">
 
 </html>

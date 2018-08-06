@@ -458,7 +458,6 @@ app.get('/profile/:userName', (req, res) => {
 
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    console.log("contribute:", req.query);
     var filePath = req.query.video;
     //Get rid of project, because it is redundant since app.use(project) already looks in the directory. 
     
