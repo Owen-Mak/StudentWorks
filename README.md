@@ -108,3 +108,26 @@ using their project and contributing their project to the website. The signup pr
 	- User's can now login and are able to access the contribute page. This page details how to record a video of 
 	
 	their project, and upload to either their computers, or directly to StudentWorks. 
+
+<img src='/public/images/userModal.png'></img>
+
+	- The user will see links respective to their account status. The image above shows how an adminstrative user has
+
+	to the admin page. 
+	
+#### Admin Status
+
+StudentWorks is intended to be run by others. That is, trusted user's can be given admin status by other admins. 
+
+Administration consists of the following: 
+
+1. Ability to add (accept a pending project) or remove projects which showcase abuse, NSFW content, ect. 
+
+2. Ability to give other user's admin status, or remove admin status. 
+
+3. Access an interactive shell (the terminal belonging to the server hosting nodeJs)
+
+4. View server statistics
+
+<img src='/public/images/adminPage.png'></img>
+
