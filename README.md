@@ -107,22 +107,22 @@ However, users can sign up and create accounts to access other features of the s
 
 using their project and contributing their project to the website. The signup process is as follows:
 
-	-Through the registration link, a username, password and email are entered. The account reamains dormant 
+	-Through the registration link, a username, password and email are entered. The account reamains
 	
-	until the verification link is clicked. This link is sent, by StudentWorks, to the given email address during 
+	dormant until the verification link is clicked. This link is sent, by StudentWorks, to the given 
 	
-	registration.
+	email address during registration.
 	
 	
-	- User's can now login and are able to access the contribute page. This page details how to record a video of 
+	- User's can now login and are able to access the contribute page. This page details how to record 
 	
-	their project, and upload to either their computers, or directly to StudentWorks. 
+	a video of their project, and upload to either their computers, or directly to StudentWorks. 
 
 <img src='/public/images/userModal.png'></img>
 
-	- The user will see links respective to their account status. The image above shows how an adminstrative user has
-
-	to the admin page. 
+	- The user will see links respective to their account status. The image above shows how an 
+	
+	adminstrative user has access to the admin page. 
 	
 #### Admin Status
 
