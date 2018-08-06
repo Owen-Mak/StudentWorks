@@ -53,6 +53,34 @@ In order to start the server, we have chosen a Process Manager script called For
  
 After running the Forever script, you can view the website by going to your localhost:3000 in the browser. It is assumed that port 3000 is a free port on the remote computer. If it is not, the port can be changed within the server1.js file. 
 
+## Connecting to your own Database
+
+StudentWorks currently runs alongside mysql  (for all the api calls to project and user information) as well as MongoDB for the comment section of the project page.
+
+When installing StudentWorks, you must have a mysql database setup. Scripts are included to create / remove the required tables necessary. You should run these scripts found in ./sqlScripts before continuing on. 
+
+Next you must change lines 18 onwards in the ./db_connect.js file to incorporate 
+`
+    connectInfo.host = "<hostname>.<domain>";
+    
+    connectInfo.user = "<username on host>";
+    
+    connectInfo.password = "<password>";
+    
+    connectInfo.port = <port number used by the database>;
+`
+
+Once you have filled these out, all video, images and text will be stored through your mysql server. 
+
+User comments are stored using MongoDB, as the schema for the tables can be quickly created using JavaScript. 
+
+This js file can be found at `/public/projectPage/comments.js` 
+
+Through using a site such a mlab.com, you can create your own free account and link it in the code here:
+
+` db = mongoose.createConnection("mongodb://<username>:<password>@<mlab.connection>", { useNewUrlParser : true });`
+
+Mlab will automatically create a table for the comments if you do not create one before starting up this connection. 
 
 ## Logging Errors 
 
