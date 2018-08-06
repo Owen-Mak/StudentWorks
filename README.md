@@ -3,6 +3,11 @@
 
 Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAoo), [Owen](https://github.com/Owen-Mak), [Yuriy](https://github.com/YuriyKartuzov)
 
+---------------------------------------------------------------------------------------------------------------------------------
+[Installation](https://github.com/steaward/StudentWorks/blob/master/README.md#installation)
+
+[Logging Errors](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-errors)
+
 ## Installation
 
 This web application is built using NodeJS. 
