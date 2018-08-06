@@ -90,4 +90,21 @@ To find the log, simply type forever list, and look under the log column for the
 You can then run the cat command to view the file and see what went wrong.
 
 
+### <--------------------------------------------------     User Guide     --------------------------------------------------> 
 
+StudentWorks is setup so anyone can view the website, browse profiles, and make comments on projects. 
+
+However, users can sign up and create accounts to access other features of the site, such as recording a video of themselves
+
+using their project and contributing their project to the website. The signup process is as follows:
+
+	-Through the registration link, a username, password and email are entered. The account reamains dormant 
+	
+	until the verification link is clicked. This link is sent, by StudentWorks, to the given email address during 
+	
+	registration.
+	
+	
+	- User's can now login and are able to access the contribute page. This page details how to record a video of 
+	
+	their project, and upload to either their computers, or directly to StudentWorks. 
