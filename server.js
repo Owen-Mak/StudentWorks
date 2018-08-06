@@ -724,7 +724,7 @@ app.get('/verify', function (req, res) {
     }
 
     function validateRegistration(regCode, regCodeExist) {
-        console.log("inside validate registration");
+        //console.log("inside validate registration");
         //Update emailRegistration status in database
         dbconnect.connect();
         dbconnect.validateRegistration(regCode);
@@ -948,7 +948,7 @@ app.post('/complete', urlencodedParser, function (req, res) {
 });
 
 app.post('/profile', upload.single("img-input"), function (req, res) {
-    console.log('got to profile');
+    //console.log('got to profile');
     if (!req.body) {
         return res.sendStatus(400).redirect('/profile');
     }

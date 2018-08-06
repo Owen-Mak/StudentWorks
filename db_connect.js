@@ -195,7 +195,7 @@ module.exports.validateRegistration = function (registrationCode) {
             console.log ("Failed SQL:", sql);
             throw err;
         } else {
-            console.log (`registration code ${registrationCode} is updated to database`);
+            //console.log (`registration code ${registrationCode} is updated to database`);
         }
     });
 }
