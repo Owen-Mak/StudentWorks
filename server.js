@@ -80,7 +80,7 @@ var smtpTransport = nodemailer.createTransport({
 /*------------------SMTP Over-----------------------------*/
 
 //File usage
-app.use(auth); // For authenticating, please do not comment out until the project is done.
+//app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public'));
 app.use(express.static('project'));
 app.use(session({
