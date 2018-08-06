@@ -2,6 +2,7 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const app = express();
 const auth = require('./auth');
+const commentDB = require('./public/projectPage/comments.js')
 const dbconnect = require('./db_connect');
 const path = require("path");
 const multer = require('multer');
