@@ -189,11 +189,11 @@ function renderTile(title, year, icon, language, framework, id) {
     let tileHtml = "";
     tileHtml += "<div class='col-md-4'>";
     tileHtml += "<div class='panel panel-default swTile'>";
-    tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
+    tileHtml += "   <div class='panel-heading' style='text-align: center;background-color:#eda3a3;'><h4>" + titleShow + "</h4></div>";
     tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
     tileHtml += "          <div class='panel-body' style='height:200px; '>" + imageShow + "</div>";
     tileHtml += "       </a>";
-    tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
+    tileHtml += "   <div class='panel-footer' style='text-align: right;background-color:#eda3a3;'> " + footer + "</div>";
     tileHtml += "</div>";
 
     return tileHtml;
