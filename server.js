@@ -81,7 +81,7 @@ var smtpTransport = nodemailer.createTransport({
 /*------------------SMTP Over-----------------------------*/
 
 //File usage
-app.use(auth); // For authenticating, please do not comment out until the project is done.
+//app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public'));
 app.use(express.static('project'));
 app.use(session({
@@ -427,6 +427,33 @@ app.get('/profile', (req, res) => {
     } else {
         res.status(200).redirect("/login");
     }
+});
+
+app.get('/profile/:userName', (req, res) => {
+    function getUser() {
+        return new Promise(function (resolve, reject) {
+            dbconnect.connect();
+            var user = dbconnect.getOneUser(req.params.userName, function (err, data) {
+                 if (err) {
+                     console.log(err); throw err;
+                } else {
+                //validate the data here!!
+                var userInfo = JSON.parse(JSON.stringify(data));
+                resolve(userInfo);
+            }
+            dbconnect.end();
+            });
+        });
+    }
+    getUser()
+    .then((data)=>{
+        console.log(data[0]);
+        res.render('userProfile', { userInfo: data[0] });
+    })
+    .catch((err) => {
+        res.send("No profile available");
+    })  
+   
 });
 
 //PROJECT UPLOAD page
