@@ -20,8 +20,8 @@ In order to run the application, node v 8.1 must be installed on your computer.
 Our web server is currently Ubuntu 16.04:
 To install node on Ubuntu, run these two commmands:
 
-	-`curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash `
-	-`sudo apt-get install -y nodejs`
+	curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash `
+	sudo apt-get install -y nodejs
 
 Once you have installed node, the command: node --version , will confirm the installation. You should see version 8.x
 
@@ -130,13 +130,13 @@ StudentWorks is intended to be run by others. That is, trusted user's can be giv
 
 Administration consists of the following: 
 
-1. Ability to add (accept a pending project) or remove projects which showcase abuse, NSFW content, ect. 
+`1. Ability to add (accept a pending project) or remove projects which showcase abuse, NSFW content, ect.`
 
-2. Ability to give other user's admin status, or remove admin status. 
+`2. Ability to give other user's admin status, or remove admin status. ` 
 
-3. Access an interactive shell (the terminal belonging to the server hosting nodeJs)
+`3. Access an interactive shell (the terminal belonging to the server hosting nodeJs)`
 
-4. View server statistics
+`4. View server statistics`
 
 <img src='/public/images/adminPage.png'></img>
 
