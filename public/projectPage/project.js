@@ -11,7 +11,7 @@ $(document).ready(() => {
 
         let contributors = "<br><h4><u>Developers:</u></h4>";
         $.each(jsData[0].users, (key, value) => {
-            contributors += " <p>" + value.firstName + " " + value.lastName + "</p>";
+            contributors += "<a href=/profile/" + value.userName + ">" + value.firstName + " " + value.lastName + "</a><br/>";
         });
 
         let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";

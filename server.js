@@ -2,6 +2,7 @@ const express = require('express');
 const nodemailer = require("nodemailer");
 const app = express();
 const auth = require('./auth');
+const commentDB = require('./public/projectPage/comments.js')
 const dbconnect = require('./db_connect');
 const path = require("path");
 const multer = require('multer');
@@ -80,7 +81,7 @@ var smtpTransport = nodemailer.createTransport({
 /*------------------SMTP Over-----------------------------*/
 
 //File usage
-app.use(auth); // For authenticating, please do not comment out until the project is done.
+//app.use(auth); // For authenticating, please do not comment out until the project is done.
 app.use(express.static('public'));
 app.use(express.static('project'));
 app.use(session({
@@ -111,6 +112,89 @@ function ensureLogin(req, res, next) {
         next();
     }
 };
+
+// VIDEO RECORDING UPLOAD page
+app.post("/upload-recording", uploadContribute.fields([{ name: "image", maxCount: 1 }]), (req, res) => {
+    // FRONT-END guarantees that all values are present, escept 'category' which is optional;
+    // Project image and video is in /project/temp folder and of proper format
+
+    // flags for validating fields
+    var validateResult = true;
+    var validateLength = true;
+    //checks for the required text fields in req.body
+    function checkTextFieldExist(key) {
+        if (req.body[key] === undefined || req.body[key] == "") {
+            //console.log ("req.body key:", req.body[key], key);
+            validateResult = false;
+            res.status(400).send("validation error");
+        }
+        // ensure userID is a number greater than 0
+        if (key == 'userID') {
+            if (isNaN(req.body[key]) || req.body[key] < 0) {
+                validateResult = false;
+                res.status(400).send("validation error");
+            }
+        }
+    }
+
+    // creates a project object that stores all the validated fields
+    console.log(req.body.videoUpload);
+    var project = {
+        userID: req.body.userID,
+        title: req.body.title,
+        language: req.body.language,
+        framework: req.body.framework,
+        platform: req.body.platform,
+        category: (req.body.category === undefined) ? "" : req.body.category,
+        desc: req.body.desc,
+        imageFilePath: `temp/${req.files['image'][0].filename}`,
+        videoFilePath: req.body.videoUpload
+    }
+    //console.log ("project object", project);
+
+    // Updating DB with the data in project object
+    var result;
+    async function addProjectInDB(project) {
+        dbconnect.connect();
+        let promise = new Promise((resolve, reject) => {
+            dbconnect.createProjectFromContribute(project, function (err, data) {
+                if (err) {
+                    reject(err);
+                    throw err;
+                } else {
+                    // returns the projectID of the newly created project
+                    resolve(data.insertId);
+                }
+            });
+        });
+        // waits and captures the projectId
+        result = await promise;
+        dbconnect.end();
+
+        return new Promise(function (resolve, reject) {
+            // console.log ("projectId:", result);
+            // Note: can only return one object back to next function, which is result
+            resolve(result);
+        });
+    }
+
+    function assocociateUserToProjectInDB(projectId) {
+        dbconnect.connect();
+        dbconnect.associateUserToProject(project, projectId, (err, data) => {
+            if (err) {
+                throw err;
+            }
+        });
+        dbconnect.end();
+    }
+
+    addProjectInDB(project)
+        .then(assocociateUserToProjectInDB, null)
+        .catch(function (rejectMsg) {
+            // stuff
+        });
+    res.status(200).send('success');
+});
 
 // PROJECT UPLOAD page
 app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 1 }, { name: "video", maxCount: 1 }]), (req, res) => {
@@ -144,8 +228,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
                 res.status(400).send("validation error - field length");
             }
         }
-        if (req.files[key] != undefined) {
-            //console.log ("longfileLength:", req.files[key][0].path.length);
+        if (req.files[key] != undefined) {            
             if (req.files[key][0].path.length > value) {
                 validateLength = false;
                 res.status(400).send("validation error - file path length");
@@ -155,8 +238,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
 
     //checks for the required fields in req.files
     function checkFilesFieldExist(key) {
-        if (req.files[key] === undefined || req.files[key] == "") {
-            //console.log ("req.files key:", req.files[key], key);
+        if (req.files[key] === undefined || req.files[key] == "") {            
             validateResult = false;
             res.status(400).send("validation error - file");
         }
@@ -210,6 +292,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
         platform: req.body.platform,
         category: (req.body.category === undefined) ? "" : req.body.category,
         desc: req.body.desc,
+        color: req.body.color,
         imageFilePath: `temp/${req.files['image'][0].filename}`,
         videoFilePath: `temp/${req.files['video'][0].filename}`
     }
@@ -345,14 +428,40 @@ app.get('/profile', (req, res) => {
     }
 });
 
+app.get('/profile/:userName', (req, res) => {
+    function getUser() {
+        return new Promise(function (resolve, reject) {
+            dbconnect.connect();
+            var user = dbconnect.getOneUser(req.params.userName, function (err, data) {
+                 if (err) {
+                     console.log(err); throw err;
+                } else {
+                //validate the data here!!
+                var userInfo = JSON.parse(JSON.stringify(data));
+                resolve(userInfo);
+            }
+            dbconnect.end();
+            });
+        });
+    }
+    getUser()
+    .then((data)=>{
+        console.log(data[0]);
+        res.render('userProfile', { userInfo: data[0] });
+    })
+    .catch((err) => {
+        res.send("No profile available");
+    })  
+   
+});
+
 //PROJECT UPLOAD page
 app.get('/contribute', (req,res) => {
-    console.log("contribute:", req.query);
     var filePath = req.query.video;
     //Get rid of project, because it is redundant since app.use(project) already looks in the directory. 
     
-    if (req.query == null){
-        filePath = filePath.replace('/project','');
+    if (req.query.video){
+        filePath = filePath.replace('/project/','');
     }
     console.log(filePath);
     if (req.session.authenticate){
@@ -366,7 +475,7 @@ app.get('/contribute', (req,res) => {
 });
 
 //RECORDING page + Upload Video
-app.get('/recording', (req,res) => {
+app.get('/recording', ensureLogin, (req,res) => {
     res.sendFile(path.join(__dirname, 'public/recording/recording.html'));                                  
 });
 
@@ -375,7 +484,12 @@ app.post('/upload-video', uploadVideo.single('video-blob'), (req, res, next) => 
     //turn video path into readable path on VM
     var changed = file.replace(/\\/g, '/');
     //send back the video path
-    res.status(200).send(changed);
+    changed = "/" + changed;
+    //wiat one second delay to process the video upload
+    setTimeout(function() {
+        res.status(200).send(changed);
+    }, 1000);
+    
     
 });
 
@@ -608,7 +722,7 @@ app.get('/verify', function (req, res) {
     }
 
     function validateRegistration(regCode, regCodeExist) {
-        console.log("inside validate registration");
+        //console.log("inside validate registration");
         //Update emailRegistration status in database
         dbconnect.connect();
         dbconnect.validateRegistration(regCode);
@@ -685,7 +799,7 @@ app.post("/login/forgotpassword", urlencodedParser, (req, res) => {
                     var newMailOptions = {
                         to: user[0].email,
                         subject: "StudentWorks Password Recovery",
-                        html: `Hello  ${req.body.name} ,<br> A request has been made to change your password. <br> Your temporary password is: ` + tempPass + ` <br><a href=` + passlink + `>Click here to change your password</a>`
+                        html: `Hello  ${user[0].userName} ,<br> A request has been made to change your password. <br> Your temporary password is: ` + tempPass + ` <br><a href=` + passlink + `>Click here to change your password</a>`
                     }
                     smtpTransport.sendMail(newMailOptions, function (error, response) {
                         console.log('got into /sendMail');
@@ -832,7 +946,7 @@ app.post('/complete', urlencodedParser, function (req, res) {
 });
 
 app.post('/profile', upload.single("img-input"), function (req, res) {
-    console.log('got to profile');
+    //console.log('got to profile');
     if (!req.body) {
         return res.sendStatus(400).redirect('/profile');
     }
