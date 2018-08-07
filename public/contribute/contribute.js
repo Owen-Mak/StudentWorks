@@ -118,8 +118,8 @@ window.addEventListener("load", function () {
 
         // Developer processing
         var developers = [];
-        var color = document.getElementById("colChoice");
-
+        //var color = document.getElementById("colChoice").value;
+        var color = colorCh;
         // Image processing
         var date = new Date().getTime();        
         var image = document.getElementById("photo").files[0];
@@ -146,7 +146,7 @@ window.addEventListener("load", function () {
             formData.append("videoUpload", recordedVideoPath);
         }
         formData.append("image", image);
-
+        //console.log(formData);
         // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){
@@ -254,7 +254,7 @@ function changeColor(col) {
     $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
     $(".swTile").attr('style', "border: solid 1px " + col + ";" );
 
-    colorCh = color; // assigning to global var
+    colorCh = col; // assigning to global var
     return;
 }
 

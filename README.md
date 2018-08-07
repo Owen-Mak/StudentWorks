@@ -4,15 +4,17 @@
 Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAoo), [Owen](https://github.com/Owen-Mak), [Yuriy](https://github.com/YuriyKartuzov)
 
 ---------------------------------------------------------------------------------------------------------------------------------
-[Installation](https://github.com/steaward/StudentWorks/blob/master/README.md#installation)
+[Deployment](https://github.com/steaward/StudentWorks/blob/master/README.md#deployment)
 - [Connecting your own Databases](https://github.com/steaward/StudentWorks/blob/master/README.md#connecting-to-your-own-database)
 - [Logging Errors](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-errors)
+- [Logging Admin Files](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-the-admin-files)
 
-[User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#-------------------------------------------------------user-guide-------------------------------------------------------)
+
+[User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#------------------------------------------------user-guide------------------------------------------------)
 - [Administration](https://github.com/steaward/StudentWorks/blob/master/README.md#admin-status)
 
 
-## Installation
+## Deployment
 
 This web application is built using NodeJS. 
 In order to run the application, node v 8.1 must be installed on your computer.
@@ -70,7 +72,7 @@ When installing StudentWorks, you must have a mysql database setup. Scripts are 
 
 Next you must change lines 18 onwards in the `./db_connect.js` file to incorporate 
 
-`
+
     connectInfo.host = "<hostname>.<domain>";
     
     connectInfo.user = "<username on host>";
@@ -78,7 +80,7 @@ Next you must change lines 18 onwards in the `./db_connect.js` file to incorpora
     connectInfo.password = "<password>";
     
     connectInfo.port = <port number used by the database>;
-`
+
 
 Once you have filled these out, all video, images and text will be stored through your mysql server. 
 
@@ -98,8 +100,16 @@ If the server goes down, you can check an error log which is attriubuted to the 
 To find the log, simply type forever list, and look under the log column for the directory which stores the log file.
 You can then run the cat command to view the file and see what went wrong.
 
+## Logging The Admin Files
 
-### <--------------------------------------------------     User Guide     --------------------------------------------------> 
+StudentWorks also comes equipped with a logging system written in C. This system is used purely for the adminstration side of the site. It logs upload/remove activity, as well as records when the logging system has been tampered with.
+
+In order to have this logging system active, and available for use in the web browser (under Admininstration) the following must be run on the server host:
+
+`gcc ./logger.c -o logger`
+
+
+## <------------------------------------     User Guide     ------------------------------------> 
 
 StudentWorks is setup so anyone can view the website, browse profiles, and make comments on projects. 
 
