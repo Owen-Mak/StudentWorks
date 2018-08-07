@@ -146,7 +146,7 @@ window.addEventListener("load", function () {
             formData.append("videoUpload", recordedVideoPath);
         }
         formData.append("image", image);
-        console.log(formData);
+        //console.log(formData);
         // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){

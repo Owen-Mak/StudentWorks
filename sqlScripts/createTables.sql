@@ -1,13 +1,13 @@
-use studentworks;
 /*
-ALTER TABLE USERS
-    drop FOREIGN KEY USERS_ibfk_1;
-*/
-drop table BRIDGE_USERS_PROJECTS;
-drop table PROJECTS;
-drop table COMMENTS;
-drop table USERS;
+Group 7 - StudentWorks
+Last Modified - August 6th, 2018
 
+The following script creates the four tables, USERS, PROJECTS, COMMENTS and BRIDGE_USERS_PROJECTS
+in mysql server for StudentWorks project.
+Note that there was a change last minute, and the COMMENTS data are hosted on a MongoDB instead.
+*/
+
+use sw;
 
 CREATE TABLE USERS (
     userID      INT(11) NOT NULL AUTO_INCREMENT,
@@ -35,6 +35,8 @@ CREATE TABLE PROJECTS (
     framework   VARCHAR(30),
     courses     VARCHAR(20),
     category    VARCHAR(20), 
+    platform    VARCHAR(20),
+    color       VARCHAR(20),
     ImageFilePath CHAR(255),
     VideoFilePath CHAR(255),
     status      ENUM('approved', 'pending'),

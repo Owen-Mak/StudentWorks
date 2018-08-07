@@ -16,9 +16,10 @@ $(document).ready(() => {
 
         let languageShow = (jsData[0].language) ? "<p><b>Language: </b>" + jsData[0].language + "</p>" : "";
         let frameworkShow = (jsData[0].framework) ? "<p><b>Framework: </b> " + jsData[0].framework + "</p>" : "";
+        let platformShow = (jsData[0].platform) ? "<p><b>Platform: </b> " + jsData[0].platform + "</p>" : "";
         let category = (jsData[0].category) ? "<p><b>Category: </b> " + jsData[0].category + "</p>" : "";
         let desc = (jsData[0].description) ? "<p>" + jsData[0].description + "</p>" : "";
-
+        
         // Title
         let title = jsData[0].title + " (" + year + ")";
 
@@ -31,7 +32,7 @@ $(document).ready(() => {
         prjHtml += "      </div>";
         prjHtml += "      <div class='col-md-4' id='infoCol'";
         prjHtml += contributors;
-        prjHtml += "         <br><br><h4 class='prjTitle'><u>Project info:</u></h4>" + languageShow + frameworkShow + category;
+        prjHtml += "         <br><br><h4 class='prjTitle'><u>Project info:</u></h4>" + languageShow + frameworkShow + platformShow + category;
         prjHtml += "      </div>";
         prjHtml += "   </div>";
         prjHtml += "   <div class='row'>";
