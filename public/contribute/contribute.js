@@ -118,7 +118,7 @@ window.addEventListener("load", function () {
 
         // Developer processing
         var developers = [];
-        var color = document.getElementById("colChoice");
+        var color = document.getElementById("colChoice").value;
 
         // Image processing
         var date = new Date().getTime();        
@@ -254,7 +254,7 @@ function changeColor(col) {
     $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
     $(".swTile").attr('style', "border: solid 1px " + col + ";" );
 
-    colorCh = color; // assigning to global var
+    colorCh = col; // assigning to global var
     return;
 }
 

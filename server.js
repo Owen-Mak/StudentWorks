@@ -147,6 +147,7 @@ app.post("/upload-recording", uploadContribute.fields([{ name: "image", maxCount
         platform: req.body.platform,
         category: (req.body.category === undefined) ? "" : req.body.category,
         desc: req.body.desc,
+        color: req.body.color,
         imageFilePath: `temp/${req.files['image'][0].filename}`,
         videoFilePath: req.body.videoUpload
     }
@@ -282,7 +283,7 @@ app.post("/upload-project", uploadContribute.fields([{ name: "image", maxCount: 
             console.log(err, 'Contribute: sftp error');
         })
     }
-
+        
     // creates a project object that stores all the validated fields
     var project = {
         userID: req.body.userID,
