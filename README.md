@@ -109,7 +109,7 @@ In order to have this logging system active, and available for use in the web br
 `gcc ./logger.c -o logger`
 
 
-## <--------------------------------------------------     User Guide     --------------------------------------------------> 
+## <-------------------------------------------     User Guide     -------------------------------------------> 
 
 StudentWorks is setup so anyone can view the website, browse profiles, and make comments on projects. 
 
