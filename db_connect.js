@@ -162,9 +162,9 @@ module.exports.getProjectsByUser = function (userID, callback){
 
 //creates a new project from fields supplied in contribute page
 module.exports.createProjectFromContribute = function (project, callback){
-    var sql = `INSERT INTO PROJECTS (title, description, creationDate, language, framework, category, ImageFilePath, VideoFilePath, status)  \
+    var sql = `INSERT INTO PROJECTS (title, description, creationDate, language, framework, category, ImageFilePath, VideoFilePath, status, color, platform)  \
                 VALUES ('${project.title}','${project.desc}', now(),'${project.language}','${project.framework}','${project.category}','${project.imageFilePath}',\
-                '${project.videoFilePath}', 'pending');\
+                '${project.videoFilePath}', 'pending', '${project.color}', '${project.platform}');\
                 `;   
     connection.query(sql, (err, result) => {
         if (err) {
@@ -195,7 +195,7 @@ module.exports.validateRegistration = function (registrationCode) {
             console.log ("Failed SQL:", sql);
             throw err;
         } else {
-            console.log (`registration code ${registrationCode} is updated to database`);
+            //console.log (`registration code ${registrationCode} is updated to database`);
         }
     });
 }

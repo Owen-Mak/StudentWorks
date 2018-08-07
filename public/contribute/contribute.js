@@ -90,6 +90,18 @@ $(document).ready(() => {
 });
 window.addEventListener("load", function () {
     function submitProject() {
+        console.log("in submitting");
+        var recordedVideo = document.getElementById("videoUpload");
+        if (recordedVideo){
+            var recordedVideoPath = document.getElementById("videoUpload").value;
+        }
+        if(recordedVideoPath){
+            
+            console.log("submission: ", recordedVideoPath);
+        }
+        else{
+            console.log("even if it is not present, it still goes into else", recordedVideoPath);
+        }
         var XHR = new XMLHttpRequest();
         //Validation
         
@@ -106,24 +118,15 @@ window.addEventListener("load", function () {
 
         // Developer processing
         var developers = [];
-        var devs = $("#devs").val().split(",");
-        if(devs.length != roles.length){
-            $("#devs").focus();
-            return;
-        }
-        for(var i = 0; i<devs.length; i++){
-            developers.push(devs[i]+':'+roles[i]);
-        }
-        
+        //var color = document.getElementById("colChoice").value;
+        var color = colorCh;
         // Image processing
-        var date = new Date().getTime();
-        //var media = [];
-        //media.push (document.getElementById("photo").files[0]);
-        //media.push (document.getElementById("video").files[0]);
+        var date = new Date().getTime();        
         var image = document.getElementById("photo").files[0];
-
         // Video processing
-        var video = document.getElementById("video").files[0];
+        if(!recordedVideoPath) {
+            var video = document.getElementById("video").files[0];
+        }
     
         // Creating a processed form
         var formData = new FormData();
@@ -135,10 +138,15 @@ window.addEventListener("load", function () {
         formData.append("category", gl_category);
         formData.append("desc", $("#desc").val());
         formData.append("developers", developers);
-
+        formData.append("color", color);
+        if(!recordedVideoPath) {
+            formData.append("video", video);
+        }
+        else{
+            formData.append("videoUpload", recordedVideoPath);
+        }
         formData.append("image", image);
-        formData.append("video", video);
-
+        //console.log(formData);
         // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){
@@ -154,8 +162,16 @@ window.addEventListener("load", function () {
         });
 
         // Sending a form
-        XHR.open("POST", "/upload-project");
-        XHR.send(formData);
+        if(!recordedVideoPath){
+            console.log("uploading project");
+            XHR.open("POST", "/upload-project");
+            XHR.send(formData);
+        }
+        else {
+            console.log("uploading recorded video");
+            XHR.open("POST", "/upload-recording");
+            XHR.send(formData);
+        }
     }
     document.getElementById("uForm").addEventListener("submit", function (event) {
         event.preventDefault();
@@ -238,7 +254,7 @@ function changeColor(col) {
     $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
     $(".swTile").attr('style', "border: solid 1px " + col + ";" );
 
-    colorCh = color; // assigning to global var
+    colorCh = col; // assigning to global var
     return;
 }
 
