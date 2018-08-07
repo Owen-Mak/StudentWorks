@@ -7,6 +7,8 @@ Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAo
 [Installation](https://github.com/steaward/StudentWorks/blob/master/README.md#installation)
 - [Connecting your own Databases](https://github.com/steaward/StudentWorks/blob/master/README.md#connecting-to-your-own-database)
 - [Logging Errors](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-errors)
+- [Logging Admin Files](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-the-admin-files)
+
 
 [User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#-------------------------------------------------------user-guide-------------------------------------------------------)
 - [Administration](https://github.com/steaward/StudentWorks/blob/master/README.md#admin-status)
@@ -97,6 +99,14 @@ Mlab will automatically create a table for the comments if you do not create one
 If the server goes down, you can check an error log which is attriubuted to the NodeJS process. Any console.logs, or throw messages will appear in this log.
 To find the log, simply type forever list, and look under the log column for the directory which stores the log file.
 You can then run the cat command to view the file and see what went wrong.
+
+## Logging The Admin Files
+
+StudentWorks also comes equipped with a logging system written in C. This system is used purely for the adminstration side of the site. It logs upload/remove activity, as well as records when the logging system has been tampered with.
+
+In order to have this logging system active, and available for use in the web browser (under Admininstration) the following must be run on the server host:
+
+`gcc ./logger.c -o logger`
 
 
 ### <--------------------------------------------------     User Guide     --------------------------------------------------> 
