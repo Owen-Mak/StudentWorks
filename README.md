@@ -72,7 +72,7 @@ When installing StudentWorks, you must have a mysql database setup. Scripts are 
 
 Next you must change lines 18 onwards in the `./db_connect.js` file to incorporate 
 
-`
+
     connectInfo.host = "<hostname>.<domain>";
     
     connectInfo.user = "<username on host>";
@@ -80,7 +80,7 @@ Next you must change lines 18 onwards in the `./db_connect.js` file to incorpora
     connectInfo.password = "<password>";
     
     connectInfo.port = <port number used by the database>;
-`
+
 
 Once you have filled these out, all video, images and text will be stored through your mysql server. 
 
