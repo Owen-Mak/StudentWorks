@@ -10,7 +10,7 @@ Authors: [Stephen](https://github.com/steaward), [Huda](https://github.com/ooHAo
 - [Logging Admin Files](https://github.com/steaward/StudentWorks/blob/master/README.md#logging-the-admin-files)
 
 
-[User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#-------------------------------------------------------user-guide-------------------------------------------------------)
+[User guide](https://github.com/steaward/StudentWorks/blob/master/README.md#------------------------------------------------user-guide------------------------------------------------)
 - [Administration](https://github.com/steaward/StudentWorks/blob/master/README.md#admin-status)
 
 
