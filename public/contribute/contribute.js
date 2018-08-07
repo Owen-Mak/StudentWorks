@@ -91,7 +91,10 @@ $(document).ready(() => {
 window.addEventListener("load", function () {
     function submitProject() {
         console.log("in submitting");
-        var recordedVideoPath = document.getElementById("videoUpload").value;
+        var recordedVideo = document.getElementById("videoUpload");
+        if (recordedVideo){
+            var recordedVideoPath = document.getElementById("videoUpload").value;
+        }
         if(recordedVideoPath){
             
             console.log("submission: ", recordedVideoPath);
@@ -115,14 +118,11 @@ window.addEventListener("load", function () {
 
         // Developer processing
         var developers = [];
-
+        //var color = document.getElementById("colChoice").value;
+        var color = colorCh;
         // Image processing
-        var date = new Date().getTime();
-        //var media = [];
-        //media.push (document.getElementById("photo").files[0]);
-        //media.push (document.getElementById("video").files[0]);
+        var date = new Date().getTime();        
         var image = document.getElementById("photo").files[0];
-
         // Video processing
         if(!recordedVideoPath) {
             var video = document.getElementById("video").files[0];
@@ -138,7 +138,7 @@ window.addEventListener("load", function () {
         formData.append("category", gl_category);
         formData.append("desc", $("#desc").val());
         formData.append("developers", developers);
-
+        formData.append("color", color);
         if(!recordedVideoPath) {
             formData.append("video", video);
         }
@@ -146,7 +146,7 @@ window.addEventListener("load", function () {
             formData.append("videoUpload", recordedVideoPath);
         }
         formData.append("image", image);
-
+        console.log(formData);
         // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){
@@ -254,7 +254,7 @@ function changeColor(col) {
     $(".panel-footer").attr('style', styleF + "background-color:" + col + ";");
     $(".swTile").attr('style', "border: solid 1px " + col + ";" );
 
-    colorCh = color; // assigning to global var
+    colorCh = col; // assigning to global var
     return;
 }
 

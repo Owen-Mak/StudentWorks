@@ -156,8 +156,8 @@ function renderSixProjectTiles(jsData) {
             var language = jsData[start].language;
             var framework = jsData[start].framework;
             var id = jsData[start].projectID;
-
-            var prjHtml = renderTile(title, year, image, language, framework, id);
+            var color = jsData[start].color;
+            var prjHtml = renderTile(title, year, image, language, framework, id, color);
             $("#mainBody").append(prjHtml);
 
             start++;
@@ -179,7 +179,7 @@ function renderSixProjectTiles(jsData) {
 
 }
 
-function renderTile(title, year, icon, language, framework, id) {
+function renderTile(title, year, icon, language, framework, id, color) {
     let imageShow = '<img src="' + icon + '" class="img-responsive center-block swPrjImage" alt="icon" >';
     let titleShow = title + " (<strong>" + year + "</strong>) ";
     let languageShow = (language) ? "<b>Language: </b>" + language : "";
@@ -189,11 +189,11 @@ function renderTile(title, year, icon, language, framework, id) {
     let tileHtml = "";
     tileHtml += "<div class='col-md-4'>";
     tileHtml += "<div class='panel panel-default swTile'>";
-    tileHtml += "   <div class='panel-heading' style='text-align: center;'><h4>" + titleShow + "</h4></div>";
+    tileHtml += `   <div class='panel-heading' style='text-align: center;background-color:${color}'><h4> ${titleShow} </h4></div>`;
     tileHtml += "       <a href='/projectPage?id=" + id + "' class ='tileLink'>";
-    tileHtml += "          <div class='panel-body' style='height:200px; '>" + imageShow + "</div>";
+    tileHtml += "          <div class='panel-body' style='height:200px;'>" + imageShow + "</div>";
     tileHtml += "       </a>";
-    tileHtml += "   <div class='panel-footer' style='text-align: right;'> " + footer + "</div>";
+    tileHtml += `   <div class='panel-footer' style='text-align: right;background-color:${color}'>  ${footer} </div>`;
     tileHtml += "</div>";
 
     return tileHtml;
