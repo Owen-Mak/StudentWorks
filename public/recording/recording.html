@@ -100,7 +100,9 @@
         <button id="btn-pause-recording">Pause</button>
         <button id="btn-save">Save to Computer</button>
         <button id="btn-upload">Upload to StudentWorks</button>
-        
+    </div>
+    <div id="media-progress" style="visibility:hidden;">
+        <p style="text-align: center; margin: auto; width: 50%;">Uploaded progress: </p><p id="percentComplete"></p>
     </div>
      
 <!-- Start of recording: This code is based off of the open source project: RecordRTC as well as DetectRTC-->
@@ -606,6 +608,9 @@ document.getElementById('recording-player').appendChild(mediaElement);
                          type: mimeType
                     });
                     
+                    //create progress report
+                    var progressElement = document.getElementById("media-progress");
+                    progressElement.style.visibility = "visible";
                     
                     
 
@@ -615,6 +620,19 @@ document.getElementById('recording-player').appendChild(mediaElement);
                     formData.append('video-blob', blob);
                     //make a post call to the server
                     var XHR = new XMLHttpRequest();
+
+                    XHR.addEventListener("progress", function(event){
+                        if (event.lengthComputable){
+                        var percentComplete = (event.loaded/event.total) * 100;
+                        var divElement = document.getElementById("percentComplete");
+                        divElement.value = "..." + percentComplete + "%";
+                        console.log(divElement.value);
+                        }
+                        else {
+                            alert("Not uploaded properly.");
+                        }
+                    });
+                   
                     XHR.addEventListener("load", function(event){
                         if (XHR.status == 200){
                         window.location.assign("/contribute?video=" + event.target.responseText);
@@ -623,6 +641,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                             alert("Not uploaded properly.");
                         }
                     });
+
                 
                     XHR.open("POST", "/upload-video");
                     XHR.onprogress = function (event) {
