@@ -635,7 +635,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                    
                     XHR.addEventListener("load", function(event){
                         if (XHR.status == 200){
-                        //window.location.assign("/contribute?video=" + event.target.responseText);
+                        window.location.assign("/contribute?video=" + event.target.responseText);
                         }
                         else {
                             alert("Not uploaded properly.");
