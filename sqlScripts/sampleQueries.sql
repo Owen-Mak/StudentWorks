@@ -48,10 +48,14 @@ SET firstName = 'Owen2',
     program = 'CPA',
     imagePath = '/userPhotos/temp.jpg'
 WHERE userName = 'johns'; 
-*/
-UPDATE PROJECTS
-set status = 'approved';
 
+UPDATE PROJECTS
+set status = 'approved'
+where projectID = 13;
+*/
+INSERT INTO BRIDGE_USERS_PROJECTS (userID, projectID)
+VALUES
+(14, 8);
 /*
 UPDATE USERS
                 SET firstName = 'Owen',

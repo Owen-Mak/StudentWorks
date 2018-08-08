@@ -18,8 +18,9 @@ VALUES
     ('Solitary', 'This is a 2D platformer with various puzzles. The object of the game is to reach the end point of the 2D stage.', now(), 'C++', 'Unity', 'PRJ666', NULL, '3/img/solitaryThumbnail.jpg', '3/video/Solitary_-new.mp4', 'approved', '#a0efa1', 'Windows'),
     ('Kitchen Modeller', 'An app to accurrately design the kitchen', '2004-05-01', 'Visual Basic', NULL, NULL, 'utility', '4/img/kitchen.png', '4/video/Kitchen.mp4', 'approved', '#a0d9ef', 'Windows'),
     ('Arcanoid Game', 'A version of the popular arcanoid game from the 80s', '2005-05-01', 'C++', NULL, NULL, 'game','5/img/arcanoid1.png', '5/video/Arcanoid.mp4', 'approved', '#cca9d8', 'Windows'),       
-    ('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'C++', 'Chai', 'JAC444', 'android', 'images/empty.png', null, 'approved', '#f5f5f5', 'Windows'),
-    ('Chess App', 'This is a chess app with a very smart AI', now(), 'C++', 'nginx', 'JAC444', 'linux', 'images/empty.png', null, 'approved',  '#eda3a3', 'Windows');
+    ('Calculator App', 'This is a calculator meant for doing simple arithmetic', now(), 'C++', 'Chai', 'JAC444', 'android', '6/img/calculatorAppThumbnail.jpg', '6/video/calculator videos - exponents.mp4', 'approved', '#f5f5f5', 'Windows'),
+    ('Chess App', 'This is a chess app with a very smart AI', now(), 'C++', 'nginx', 'JAC444', 'linux', 'images/empty.png', null, 'approved',  '#eda3a3', 'Windows'),
+    ('StudentWorks', 'This is our school project for PRJ666. The attached instructional video recorded using StudentWorks', now(), 'JavaScript', 'Express.js', null, 'Content management', '8/img/logo-1533678847447.png','8/video/how_to_StudentWorks-1533678312817.webm', 'approved', '#a0d9ef', 'Windows');
     /*
     ('Language filter project#1', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'Visual Studio', 'OOP244', 'linux', 'images/empty.png', null),
     ('Language filter project#2', 'This is a project to test the language filter using C++ as the language value.', now(), 'C++', 'GNU', 'IPC144', 'windows', 'images/empty.png', null),
@@ -49,7 +50,7 @@ VALUES
     ('Charlotte', 'Baptist', 'MyNameIsCB12','cbaptist@myseneca.ca', 'cbaptist', 'Contributor', 'DDA', TRUE, now(), '234', null, null),
     ('Huda', 'Al Dallal', 'myPassw0rd4', 'hal-dallal@myseneca.ca', 'huda_a', 'Admin', 'CPA', TRUE, now(), '345', null, null),
     ('John','Smith', 'pass1234', 'johnsmith12@myseneca.ca', 'johns', 'Contributor', 'CPD', FALSE, '2017-12-25', '456', null, null),
-    ('Owen', 'Mak', '123', 'omak@myseneca.ca', 'omak', 'Admin', 'CPA', TRUE, now(), '567', null, null),
+    ('Owen', 'Mak', 'asdf1234', 'omak@myseneca.ca', 'omak', 'Admin', 'CPA', TRUE, now(), '567', null, null),
     ('Jon', 'Snow', 'Winterfell', 'john@gmail.com', 'jsnow', 'Contributor', null, FALSE, '2016-01-01', '678', null, null),
     ('John', 'Doe', 'm1ss1ng', 'unknown@nowhere.com', 'jDoe', 'Contributor', null, FALSE, '2013-06-06', '789', null, null),
     ('Vasia', 'Jopovych', 'vj123', 'vjopovych@hotmail.com', 'vJopovych', 'Contributor', null, TRUE, '2018-01-01', '890', null, null),
@@ -74,15 +75,19 @@ VALUES
     (3, 1),
     (3, 2),
     (5, 3),
+    (11, 4),
+    (5, 5),
     (4, 6),
     (5, 6),
     (6, 4),
     (7, 4),    
     (8, 1),
     (9, 1),
-    (9, 5),
     (10, 1),
-    (2, 6);
+    (2, 6),
+    (3, 8),
+    (5, 8),
+    (11, 8);
 
 INSERT INTO COMMENTS (userID, commentContent, date)
 VALUES
@@ -91,5 +96,4 @@ VALUES
     (2, 'Wow, great job! Can I pm you for some questions', now()),
     (1, 'Yes, go ahead', now()),
     (3, 'Thanks for your contribution!', now());
-    
     
