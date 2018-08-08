@@ -150,7 +150,7 @@ window.addEventListener("load", function () {
 
          //create progress report
          var progressElement = document.getElementById("media-progress");
-         progressElement.style.visibility = "block";
+         progressElement.style.visibility = "visible";
          
          XHR.addEventListener("progress", function(event){
             if (event.lengthComputable){
