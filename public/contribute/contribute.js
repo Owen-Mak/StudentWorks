@@ -147,6 +147,26 @@ window.addEventListener("load", function () {
         }
         formData.append("image", image);
         //console.log(formData);
+
+         //create progress report
+         var progressElement = document.getElementById("media-progress");
+         progressElement.style.visibility = "block";
+         
+         XHR.addEventListener("progress", function(event){
+            if (event.lengthComputable){
+                var percentComplete = (event.loaded/event.total) * 100;
+                var pElement = document.getElementById("percentComplete");
+                var text = "..." + percentComplete + "%";
+                pElement.value = text;
+                }
+                else {
+                    alert("Not uploaded properly.");
+                }
+        });
+
+
+
+
         // listening for server response to the POST request
         XHR.addEventListener("load", function(event) {        
             if (event.target.responseText == "success"){
