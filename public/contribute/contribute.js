@@ -154,14 +154,14 @@ window.addEventListener("load", function () {
          
          XHR.addEventListener("progress", function(event){
             if (event.lengthComputable){
-            var percentComplete = (event.loaded/event.total) * 100;
-            var divElement = document.getElementById("percentComplete");
-            divElement.value = "..." + percentComplete + "%";
-            console.log(divElement.value);
-            }
-            else {
-                alert("Not uploaded properly.");
-            }
+                var percentComplete = (event.loaded/event.total) * 100;
+                var pElement = document.getElementById("percentComplete");
+                var text = "..." + percentComplete + "%";
+                pElement.value = text;
+                }
+                else {
+                    alert("Not uploaded properly.");
+                }
         });
 
 

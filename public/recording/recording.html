@@ -101,8 +101,8 @@
         <button id="btn-save">Save to Computer</button>
         <button id="btn-upload">Upload to StudentWorks</button>
     </div>
-    <div id="media-progress" style="visibility:hidden;">
-        <p style="text-align: center; margin: auto; width: 50%;">Uploaded progress: </p><p id="percentComplete"></p>
+    <div id="media-progress" style="visibility:hidden; text-align: center; margin: auto;">
+        Upload Progress  <input align="y"; type="text" id="percentComplete" value="" style="text-align: center; margin: auto;" disabled/>
     </div>
      
 <!-- Start of recording: This code is based off of the open source project: RecordRTC as well as DetectRTC-->
@@ -624,9 +624,9 @@ document.getElementById('recording-player').appendChild(mediaElement);
                     XHR.addEventListener("progress", function(event){
                         if (event.lengthComputable){
                         var percentComplete = (event.loaded/event.total) * 100;
-                        var divElement = document.getElementById("percentComplete");
-                        divElement.value = "..." + percentComplete + "%";
-                        console.log(divElement.value);
+                        var pElement = document.getElementById("percentComplete");
+                        var text = "..." + percentComplete + "%";
+                        pElement.value = text;
                         }
                         else {
                             alert("Not uploaded properly.");
@@ -635,7 +635,7 @@ document.getElementById('recording-player').appendChild(mediaElement);
                    
                     XHR.addEventListener("load", function(event){
                         if (XHR.status == 200){
-                        window.location.assign("/contribute?video=" + event.target.responseText);
+                        //window.location.assign("/contribute?video=" + event.target.responseText);
                         }
                         else {
                             alert("Not uploaded properly.");
