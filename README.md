@@ -29,8 +29,6 @@ Once you have installed node, the command: node --version , will confirm the ins
 
 This project uses an array of node packages. NPM (node package manager) comes pre-installed so long as you have followed the above instructions. 
 
-Firstly, run the command `npm init` to initialize the directory for Node.
-
 In order for StudentWorks to properly work remotely, it's package depencies must also be installed. 
 
 The quickest way to install these packages is through the included package-lock.json file. 
