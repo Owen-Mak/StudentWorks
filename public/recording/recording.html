@@ -348,7 +348,7 @@
         // Main function to gather user's screen + microphone blob data
         function captureAudioPlusScreen(config) {
 
-            window.getScreenId = function (chromeMediaSource, chromeMediaSourceId) {
+            window.getScreenId = function () {
                 if (DetectRTC.browser.name === 'Firefox') {
                     screenConstraints = {
                         video: {
@@ -381,17 +381,7 @@
                         config.onMediaCapturingFailed(error);
                     });
                 }, function (error) {
-                    config.onMediaCapturingFailed(error);
-
-                    if (isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
-
-                        alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
-                    }
-
-                    if (isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
-
-                        alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
-                    }
+                        alert('Please enable screen capturing for FireFox. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
                 });
             };
 
@@ -402,50 +392,7 @@
             window.postMessage('get-sourceId', '*');
         }
 
-        function captureScreen(config) {
-
-
-            window.getScreenId = function (chromeMediaSource, chromeMediaSourceId) {
-
-
-                if (DetectRTC.browser.name === 'Firefox') {
-                    console.log("using firefox!");
-                    screenConstraints = {
-                        video: {
-                            //ask firefox to select a window from user's desktop
-                            mediaSource: 'window'
-                        },
-                        audio: false
-                    }
-                }
-
-                captureUserMedia(screenConstraints, function (screenStream) {
-                    config.onMediaCaptured(screenStream);
-
-                    addStreamStopListener(screenStream, function () {
-                        // config.onMediaStopped();
-
-                        btnStartRecording.onclick();
-                    });
-                }, function (error) {
-                    config.onMediaCapturingFailed(error);
-
-                    if (isMyOwnDomain() === false && DetectRTC.browser.name === 'Chrome') {
-                        alert('Please enable this command line flag: "--enable-usermedia-screen-capturing"');
-                    }
-
-                    if (isMyOwnDomain() === false && DetectRTC.browser.name === 'Firefox') {
-                        alert('Please enable screen capturing for your domain. Open "about:config" and search for "media.getusermedia.screensharing.allowed_domains"');
-                    }
-                });
-            };
-
-            if (DetectRTC.browser.name === 'Firefox' || isLocalHost()) {
-                window.getScreenId();
-            }
-
-            window.postMessage('get-sourceId', '*');
-        }
+       
 
 
         function captureUserMedia(mediaConstraints, successCallback, errorCallback) {
